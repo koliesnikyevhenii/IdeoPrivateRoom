@@ -1,0 +1,6 @@
+@IdeoPrivateRoom.WebApi_HostAddress = http://localhost:5038
+
+GET {{IdeoPrivateRoom.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
