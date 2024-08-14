@@ -1,0 +1,37 @@
+version: '3.4'
+
+services:
+  ideoprivateroom.webapi:
+    image: ${DOCKER_REGISTRY-}ideoprivateroomwebapi
+    depends_on:
+      - "ideoprivateroom.database"
+    container_name: ideoprivateroom.webapi
+    build:
+      context: .
+      dockerfile: IdeoPrivateRoom.WebApi/Dockerfile
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+
+  ideoprivateroom.database:
+    image: postgres:latest
+    container_name: ideoprivateroom.database 
+    environment:
+      - POSTGRES_DB=IdeoPrivateRoom
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./.containers/ideoprivateroom-db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  pgadmin4:
+    image: dpage/pgadmin4
+    container_name: lde.pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: test@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: postgres
+    depends_on:
+      - "ideoprivateroom.database"
+    ports:
+      - 8001:80 
