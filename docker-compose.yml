@@ -13,6 +13,15 @@ services:
       - "5000:5000"
       - "5001:5001"
 
+  ideoprivateroom.angular:
+    image: ${DOCKER_REGISTRY-}ideoprivateroomangular
+    container_name: ideoprivateroom.front
+    build:
+      context: .
+      dockerfile: IdeoPrivateRoom.WebApi/ideo-private-room/Dockerfile
+    ports:
+      - "8080:4000"
+
   ideoprivateroom.database:
     image: postgres:latest
     container_name: ideoprivateroom.database 
