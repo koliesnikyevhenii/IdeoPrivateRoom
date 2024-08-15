@@ -84,7 +84,7 @@ namespace IdeoPrivateRoom.WebApi.Migrations
                     b.ToTable("User", (string)null);
                 });
 
-            modelBuilder.Entity("IdeoPrivateRoom.WebApi.Data.Entities.UserHasRole", b =>
+            modelBuilder.Entity("IdeoPrivateRoom.WebApi.Data.Entities.UserRoleMapping", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -108,7 +108,7 @@ namespace IdeoPrivateRoom.WebApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserHasRoles", (string)null);
+                    b.ToTable("UserRoleMapping", (string)null);
                 });
 
             modelBuilder.Entity("IdeoPrivateRoom.WebApi.Data.Entities.Vocation", b =>
@@ -136,10 +136,10 @@ namespace IdeoPrivateRoom.WebApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Vocations", (string)null);
+                    b.ToTable("Vocation", (string)null);
                 });
 
-            modelBuilder.Entity("IdeoPrivateRoom.WebApi.Data.Entities.UserHasRole", b =>
+            modelBuilder.Entity("IdeoPrivateRoom.WebApi.Data.Entities.UserRoleMapping", b =>
                 {
                     b.HasOne("IdeoPrivateRoom.WebApi.Data.Entities.Role", "Role")
                         .WithMany()

@@ -29,9 +29,9 @@ services:
     image: dpage/pgadmin4
     container_name: lde.pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: test@gmail.com
+      PGADMIN_DEFAULT_EMAIL: user@domain.com
       PGADMIN_DEFAULT_PASSWORD: postgres
     depends_on:
       - "ideoprivateroom.database"
     ports:
-      - 8001:80 
+      - 8001:80

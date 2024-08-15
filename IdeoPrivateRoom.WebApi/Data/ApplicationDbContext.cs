@@ -13,14 +13,14 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Role> Roles { get; set; }
     public DbSet<User> Users { get; set; }
-    public DbSet<UserHasRole> UserHasRoles { get; set; }
+    public DbSet<UserRoleMapping> UserRoleMappings { get; set; }
     public DbSet<Vocation> Vocations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new RoleEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new UserHasRoleEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new UserRoleMappingEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new VocationEntityTypeConfiguration());
     }
 }
