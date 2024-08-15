@@ -397,4 +397,41 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
+# Compiled output
+/IdeoPrivateRoom.WebApi/ideo-private-room//dist
+/IdeoPrivateRoom.WebApi/ideo-private-room//tmp
+/IdeoPrivateRoom.WebApi/ideo-private-room//out-tsc
+/IdeoPrivateRoom.WebApi/ideo-private-room//bazel-out
+/IdeoPrivateRoom.WebApi/ideo-private-room/# Node
+/IdeoPrivateRoom.WebApi/ideo-private-room//node_modules
+/IdeoPrivateRoom.WebApi/ideo-private-room/npm-debug.log
+/IdeoPrivateRoom.WebApi/ideo-private-room/yarn-error.log
+
+/IdeoPrivateRoom.WebApi/ideo-private-room/# IDEs and editors
+/IdeoPrivateRoom.WebApi/ideo-private-room/.idea/
+/IdeoPrivateRoom.WebApi/ideo-private-room/.project
+/IdeoPrivateRoom.WebApi/ideo-private-room/.classpath
+/IdeoPrivateRoom.WebApi/ideo-private-room/.c9/
+/IdeoPrivateRoom.WebApi/ideo-private-room/*.launch
+/IdeoPrivateRoom.WebApi/ideo-private-room/.settings/
+/IdeoPrivateRoom.WebApi/ideo-private-room/*.sublime-workspace
+/IdeoPrivateRoom.WebApi/ideo-private-room/.vscode/*
+/IdeoPrivateRoom.WebApi/ideo-private-room/!.vscode/settings.json
+/IdeoPrivateRoom.WebApi/ideo-private-room/!.vscode/tasks.json
+/IdeoPrivateRoom.WebApi/ideo-private-room/!.vscode/launch.json
+/IdeoPrivateRoom.WebApi/ideo-private-room/!.vscode/extensions.json
+/IdeoPrivateRoom.WebApi/ideo-private-room/.history/*
+/IdeoPrivateRoom.WebApi/ideo-private-room/# Miscellaneous
+/IdeoPrivateRoom.WebApi/ideo-private-room//.angular/cache
+/IdeoPrivateRoom.WebApi/ideo-private-room/.sass-cache/
+/IdeoPrivateRoom.WebApi/ideo-private-room//connect.lock
+/IdeoPrivateRoom.WebApi/ideo-private-room//coverage
+/IdeoPrivateRoom.WebApi/ideo-private-room//libpeerconnection.log
+/IdeoPrivateRoom.WebApi/ideo-private-room/testem.log
+
+/IdeoPrivateRoom.WebApi/ideo-private-room/# System files
+/IdeoPrivateRoom.WebApi/ideo-private-room/.DS_Store
+/IdeoPrivateRoom.WebApi/ideo-private-room/Thumbs.db
+
 .containers/
+/IdeoPrivateRoom.WebApi/ideo-private-room/.vscode
