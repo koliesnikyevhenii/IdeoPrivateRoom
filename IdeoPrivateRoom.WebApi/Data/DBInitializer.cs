@@ -1,4 +1,5 @@
 ﻿using IdeoPrivateRoom.WebApi.Data.Entities;
+using IdeoPrivateRoom.WebApi.Models.Enums;
 
 namespace IdeoPrivateRoom.WebApi.Data;
 
@@ -13,6 +14,8 @@ public class DBInitializer
         var roles = SeedRoles();
         var roleMapping = SeedUserRoleMapping(users, roles);
         var vocations = SeedVocations(users);
+        var linkedUsers = SeedLinkedUsers(users);
+        var userApprovalResponses = SeedUserApprovalResponses(users, vocations);
 
         if (context == null)
             return;
@@ -35,9 +38,21 @@ public class DBInitializer
             await context.SaveChangesAsync();
         }
 
-        if (!context.Vocations.Any())
+        if (!context.VocationRequests.Any())
         {
-            await context.Vocations.AddRangeAsync(vocations);
+            await context.VocationRequests.AddRangeAsync(vocations);
+            await context.SaveChangesAsync();
+        }
+
+        if (!context.LinkedUsers.Any())
+        {
+            await context.LinkedUsers.AddRangeAsync(linkedUsers);
+            await context.SaveChangesAsync();
+        }
+
+        if (!context.UserApprovalResponses.Any())
+        {
+            await context.UserApprovalResponses.AddRangeAsync(userApprovalResponses);
             await context.SaveChangesAsync();
         }
     }
@@ -108,6 +123,7 @@ public class DBInitializer
                 Email = "john.doe@example.com",
                 FirstName = "John",
                 LastName = "Doe",
+                UserIcon = "https://cdn-icons-png.flaticon.com/512/9187/9187604.png",
                 PasswordHash = "hashedpassword1",
                 IsEmailConfirmed = true,
                 CreatedDate = DateTime.UtcNow,
@@ -119,6 +135,7 @@ public class DBInitializer
                 Email = "jane.smith@example.com",
                 FirstName = "Jane",
                 LastName = "Smith",
+                UserIcon = "https://cdn-icons-png.flaticon.com/512/9187/9187604.png",
                 PasswordHash = "hashedpassword2",
                 IsEmailConfirmed = true,
                 CreatedDate = DateTime.UtcNow,
@@ -130,6 +147,7 @@ public class DBInitializer
                 Email = "alice.jones@example.com",
                 FirstName = "Alice",
                 LastName = "Jones",
+                UserIcon = "https://cdn-icons-png.flaticon.com/512/9187/9187604.png",
                 PasswordHash = "hashedpassword3",
                 IsEmailConfirmed = false,
                 CreatedDate = DateTime.UtcNow,
@@ -141,6 +159,7 @@ public class DBInitializer
                 Email = "bob.brown@example.com",
                 FirstName = "Bob",
                 LastName = "Brown",
+                UserIcon = "https://cdn-icons-png.flaticon.com/512/9187/9187604.png",
                 PasswordHash = "hashedpassword4",
                 IsEmailConfirmed = true,
                 CreatedDate = DateTime.UtcNow,
@@ -152,6 +171,7 @@ public class DBInitializer
                 Email = "charlie.miller@example.com",
                 FirstName = "Charlie",
                 LastName = "Miller",
+                UserIcon = "https://cdn-icons-png.flaticon.com/512/9187/9187604.png",
                 PasswordHash = "hashedpassword5",
                 IsEmailConfirmed = false,
                 CreatedDate = DateTime.UtcNow,
@@ -163,6 +183,7 @@ public class DBInitializer
                 Email = "diana.wilson@example.com",
                 FirstName = "Diana",
                 LastName = "Wilson",
+                UserIcon = "https://cdn-icons-png.flaticon.com/512/9187/9187604.png",
                 PasswordHash = "hashedpassword6",
                 IsEmailConfirmed = true,
                 CreatedDate = DateTime.UtcNow,
@@ -174,6 +195,7 @@ public class DBInitializer
                 Email = "edward.davis@example.com",
                 FirstName = "Edward",
                 LastName = "Davis",
+                UserIcon = "https://cdn-icons-png.flaticon.com/512/9187/9187604.png",
                 PasswordHash = "hashedpassword7",
                 IsEmailConfirmed = true,
                 CreatedDate = DateTime.UtcNow,
@@ -185,6 +207,7 @@ public class DBInitializer
                 Email = "fiona.moore@example.com",
                 FirstName = "Fiona",
                 LastName = "Moore",
+                UserIcon = "https://cdn-icons-png.flaticon.com/512/9187/9187604.png",
                 PasswordHash = "hashedpassword8",
                 IsEmailConfirmed = false,
                 CreatedDate = DateTime.UtcNow,
@@ -294,34 +317,135 @@ public class DBInitializer
         ];
     }
 
-    private static List<Vocation> SeedVocations(List<User> users)
+    private static List<VocationRequest> SeedVocations(List<User> users)
     {
         return
         [
-            new Vocation
+            new VocationRequest
             {
+                Id = Guid.NewGuid(),
                 UserId = users[0].Id,
                 User = users[0],
                 StartDate = new DateTime(2024, 9, 1, 0, 0, 0, DateTimeKind.Utc),
                 EndDate = new DateTime(2024, 9, 14, 0, 0, 0, DateTimeKind.Utc),
+                Title = "John Doe - Vocation",
                 CreatedDate = DateTime.UtcNow,
-                UpdatedDate = DateTime.UtcNow
+                UpdatedDate = DateTime.UtcNow,
+                VocationStatus = ApprovalStatus.Pending
             },
-            new Vocation
+            new VocationRequest
             {
+                Id = Guid.NewGuid(),
                 UserId = users[1].Id,
                 User = users[1],
                 StartDate = new DateTime(2024, 10, 15, 0, 0, 0, DateTimeKind.Utc),
                 EndDate = new DateTime(2024, 10, 22, 0, 0, 0, DateTimeKind.Utc),
+                Title = "Jane Smith - Vocation",
                 CreatedDate = DateTime.UtcNow,
-                UpdatedDate = DateTime.UtcNow
+                UpdatedDate = DateTime.UtcNow,
+                VocationStatus = ApprovalStatus.Rejected
             },
-            new Vocation
+            new VocationRequest
             {
+                Id = Guid.NewGuid(),
                 UserId = users[2].Id,
                 User = users[2],
                 StartDate = new DateTime(2024, 11, 5, 0, 0, 0, DateTimeKind.Utc),
-                EndDate = new DateTime(2024, 11, 12, 0, 0, 0, DateTimeKind.Utc),
+                EndDate = new DateTime(2024, 11, 6, 0, 0, 0, DateTimeKind.Utc),
+                Title = "Alice Jones - Day Off",
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow,
+                VocationStatus = ApprovalStatus.Approved
+            },
+            new VocationRequest
+            {
+                Id = Guid.NewGuid(),
+                UserId = users[3].Id,
+                User = users[3],
+                StartDate = new DateTime(2024, 11, 10, 0, 0, 0, DateTimeKind.Utc),
+                EndDate = new DateTime(2024, 11, 19, 0, 0, 0, DateTimeKind.Utc),
+                Title = "Bob Brown - Vocation",
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow,
+                VocationStatus = ApprovalStatus.Approved
+            }
+        ];
+    }
+
+    private static List<LinkedUser> SeedLinkedUsers(List<User> users)
+    {
+        return
+        [
+            new LinkedUser
+            {
+                UserId = users[0].Id,
+                LinkedUserId = users[6].Id,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            },
+            new LinkedUser
+            {
+                UserId = users[0].Id,
+                LinkedUserId = users[7].Id,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            },
+            new LinkedUser
+            {
+                UserId = users[2].Id,
+                LinkedUserId = users[3].Id,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            },
+            new LinkedUser
+            {
+                UserId = users[4].Id,
+                LinkedUserId = users[6].Id,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            },
+            new LinkedUser
+            {
+                UserId = users[4].Id,
+                LinkedUserId = users[7].Id,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            }
+        ];
+    }
+    private static List<UserApprovalResponse> SeedUserApprovalResponses(List<User> users, List<VocationRequest> vocations)
+    {
+        return
+        [
+            new UserApprovalResponse
+            {
+                VocationRequestId = vocations[0].Id,
+                UserId = users[6].Id,
+                ApprovalStatus = ApprovalStatus.Approved,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            },
+            new UserApprovalResponse
+            {
+                VocationRequestId = vocations[0].Id,
+                UserId = users[7].Id,
+                ApprovalStatus = ApprovalStatus.Rejected,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            },
+            new UserApprovalResponse
+            {
+                VocationRequestId = vocations[2].Id,
+                UserId = users[6].Id,
+                ApprovalStatus = ApprovalStatus.Approved,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            },
+            new UserApprovalResponse
+            {
+                VocationRequestId = vocations[3].Id,
+                UserId = users[6].Id,
+                ApprovalStatus = ApprovalStatus.Approved,
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             }

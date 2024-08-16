@@ -14,7 +14,7 @@ public class RoleEntityTypeConfiguration : IEntityTypeConfiguration<Role>
 
         builder.Property(r => r.Name)
             .IsRequired()
-            .HasMaxLength(256);
+            .HasMaxLength(255);
 
         builder.Property(r => r.CreatedDate)
             .IsRequired();

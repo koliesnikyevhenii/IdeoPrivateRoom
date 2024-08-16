@@ -3,12 +3,12 @@ version: '3.4'
 services:
   ideoprivateroom.webapi:
     image: ${DOCKER_REGISTRY-}ideoprivateroomwebapi
-    depends_on:
-      - "ideoprivateroom.database"
     container_name: ideoprivateroom.webapi
     build:
       context: .
       dockerfile: IdeoPrivateRoom.WebApi/Dockerfile
+    depends_on:
+      - ideoprivateroom.database
     ports:
       - "5000:5000"
       - "5001:5001"
@@ -41,6 +41,6 @@ services:
       PGADMIN_DEFAULT_EMAIL: user@domain.com
       PGADMIN_DEFAULT_PASSWORD: postgres
     depends_on:
-      - "ideoprivateroom.database"
+      - ideoprivateroom.database
     ports:
       - 8001:80

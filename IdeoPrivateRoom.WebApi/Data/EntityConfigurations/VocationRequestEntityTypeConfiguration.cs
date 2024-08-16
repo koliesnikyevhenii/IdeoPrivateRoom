@@ -1,15 +1,14 @@
 ﻿using IdeoPrivateRoom.WebApi.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Security.Cryptography.X509Certificates;
 
 namespace IdeoPrivateRoom.WebApi.Data.EntityConfigurations;
 
-public class VocationEntityTypeConfiguration : IEntityTypeConfiguration<Vocation>
+public class VocationRequestEntityTypeConfiguration : IEntityTypeConfiguration<VocationRequest>
 {
-    public void Configure(EntityTypeBuilder<Vocation> builder)
+    public void Configure(EntityTypeBuilder<VocationRequest> builder)
     {
-        builder.ToTable("Vocation");
+        builder.ToTable("VocationRequest");
 
         builder.HasKey(v => v.Id);
 
@@ -22,14 +21,22 @@ public class VocationEntityTypeConfiguration : IEntityTypeConfiguration<Vocation
         builder.Property(v => v.EndDate)
             .IsRequired();
 
+        builder.Property(v => v.Title)
+            .IsRequired()
+            .HasMaxLength(50);
+
         builder.Property(v => v.CreatedDate)
             .IsRequired();
 
         builder.Property(v => v.UpdatedDate)
             .IsRequired();
 
+        builder.Property(v => v.VocationStatus)
+            .HasConversion<string>()
+            .HasMaxLength(15);
+
         builder.HasOne(v => v.User)
-            .WithMany()
+            .WithMany(u => u.VocationRequests)
             .HasForeignKey(v => v.UserId);
 
     }
