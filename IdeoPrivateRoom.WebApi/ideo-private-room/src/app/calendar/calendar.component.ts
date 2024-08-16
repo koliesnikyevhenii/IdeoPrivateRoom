@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { CalendarHeaderComponent } from './calendar-header/calendar-header.component';
 import { CalendarEventTimesChangedEvent, CalendarModule, CalendarView } from 'angular-calendar';
 import { Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { collapseAnimation } from 'angular-calendar';
 import { CalendarService } from './calendar.service';
+import { EventModel } from './calendar.models';
 
 @Component({
   selector: 'app-calendar',
@@ -14,15 +15,28 @@ import { CalendarService } from './calendar.service';
   animations: [collapseAnimation],
   styleUrl: './calendar.component.scss'
 })
-export class CalendarComponent {
+export class CalendarComponent implements OnInit {
   private calendarService = inject(CalendarService)
+  private destroyRef = inject(DestroyRef)
   
-  events = this.calendarService.allEvents()
+  events = signal<EventModel[]>([]);
   view: CalendarView = CalendarView.Month;
 
   viewDate = new Date();
 
   refresh = new Subject<void>();
+
+  ngOnInit(): void {
+    const sub = this.calendarService.allEvents.subscribe({
+      next: (events) => {
+        this.events.set(events)
+      }
+    })
+
+    this.destroyRef.onDestroy(() => {
+      sub.unsubscribe()
+    })
+  }
 
   eventTimesChanged({
     event,

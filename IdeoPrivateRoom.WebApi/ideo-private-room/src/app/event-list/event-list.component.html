@@ -1,5 +1,7 @@
 <app-event-list-header />
 
 <div class="container mt-5 d-flex justify-content-around flex-wrap">
-    <app-event-card />
+    @for(card of cards(); track card.id) {
+        <app-event-card [card]="card" />
+    }
 </div>

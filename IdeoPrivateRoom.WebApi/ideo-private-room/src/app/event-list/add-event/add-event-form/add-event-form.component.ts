@@ -5,16 +5,16 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { endsBeforeStart, validDate } from './add-event-form.validators';
-import { User } from '../../event-list.models';
+import { endsBeforeStart, isADate, validDate } from './add-event-form.validators';
 import {
   NgbActiveModal,
   NgbDateAdapter,
   NgbDateNativeAdapter,
   NgbDatepickerModule,
 } from '@ng-bootstrap/ng-bootstrap';
-import { error } from 'console';
 import { DatePipe } from '@angular/common';
+import { CalendarService } from '../../../calendar/calendar.service';
+import { UserService } from '../../../user/user.service';
 
 @Component({
   selector: 'app-add-event-form',
@@ -26,39 +26,25 @@ import { DatePipe } from '@angular/common';
 })
 export class AddEventFormComponent {
   modalService = inject(NgbActiveModal);
+  userService = inject(UserService)
+  calendarService = inject(CalendarService)
 
-  employees: User[] = [
-    {
-      id: '1',
-      name: 'John',
-      role: 'developer',
-    },
-    {
-      id: '2',
-      name: 'Mike',
-      role: 'designer',
-    },
-    {
-      id: '3',
-      name: 'Steve',
-      role: 'tester',
-    },
-  ];
+  employees = this.userService.allUsers();
 
   form = new FormGroup({
-    employee: new FormControl('', {
+    employee: new FormControl<string>('', {
       validators: [Validators.required],
     }),
-    title: new FormControl('', {
+    title: new FormControl<string>('', {
       validators: [Validators.required],
     }),
     dates: new FormGroup(
       {
-        startDate: new FormControl(new Date(), {
-          validators: [validDate('startDate')],
+        startDate: new FormControl<Date>(new Date(), {
+          validators: [validDate()],
         }),
-        endDate: new FormControl(new Date(), {
-          validators: [validDate('endDate')],
+        endDate: new FormControl<Date>(new Date(), {
+          validators: [validDate()],
         }),
       },
       {
@@ -82,12 +68,12 @@ export class AddEventFormComponent {
 
   get invalidStartDate() {
     const startDate = this.form.controls.dates.get('startDate');
-    return startDate?.errors && startDate.errors['dateBeforeToday'] == true;
+    return (startDate?.touched && startDate?.errors) || this.form.controls.dates.errors?.['startDateNotADate']
   }
 
   get invalidEndDate() {
     const endDate = this.form.controls.dates.get('endDate');
-    return endDate?.errors && endDate.errors['dateBeforeToday'] == true;
+    return endDate?.touched && endDate?.errors || this.form.controls.dates.errors?.['endDateNotADate']
   }
 
   get endDateBeforeStartDate() {
@@ -108,11 +94,18 @@ export class AddEventFormComponent {
     this.form.markAllAsTouched();
 
     if (this.form.invalid) {
-      console.log(this.form);
       return;
     }
 
-    console.log(this.form);
+    const userId = this.form.controls.employee.value;
+    const title = this.form.controls.title.value;
+    const startDate = this.form.controls.dates.controls.startDate.value;
+    const endDate = this.form.controls.dates.controls.endDate.value;
+
+    if(userId && title && startDate && endDate) {
+      this.calendarService.addEvent(userId, title, startDate, endDate)
+      this.modalService.close();
+    }
   }
 
   onCancel() {

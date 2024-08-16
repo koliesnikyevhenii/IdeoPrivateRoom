@@ -16,8 +16,8 @@ export const colors: any = {
 };
 
 export enum EventStatus {
-  Confirmed,
   Pending,
+  Confirmed,
   Declined
 }
 

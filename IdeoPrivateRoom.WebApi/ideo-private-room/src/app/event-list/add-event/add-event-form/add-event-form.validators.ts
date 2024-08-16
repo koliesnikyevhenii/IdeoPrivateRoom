@@ -1,17 +1,28 @@
 import { AbstractControl } from '@angular/forms';
-import { isBefore } from 'date-fns'
+import { isBefore } from 'date-fns';
 
-export function validDate(dateControl: string) {
+export function isADate(dateValue: any) {
+  if (typeof dateValue.setHours !== 'function') {
+    return false
+  }
+
+  return true;
+}
+
+export function validDate() {
   return (control: AbstractControl) => {
-    const controlValue = control.value
-    const newDate = new Date()
-    controlValue.setHours(0, 0, 0, 0)
-    newDate.setHours(0, 0, 0, 0)
+    const controlValue = control.value;
 
-    if (
-      controlValue === null ||
-      isBefore(controlValue, newDate)
-    ) {
+    if(!isADate(controlValue)) {
+      return { notADate: true }
+    }
+
+    const newDate = new Date();
+
+    controlValue.setHours(0, 0, 0, 0);
+    newDate.setHours(0, 0, 0, 0);
+
+    if (controlValue === null || isBefore(controlValue, newDate)) {
       return { dateBeforeToday: true };
     }
 
@@ -21,14 +32,23 @@ export function validDate(dateControl: string) {
 
 export function endsBeforeStart(startControl: string, endControl: string) {
   return (control: AbstractControl) => {
-    const startControlValue = control.get(startControl)?.value as Date;
-    const endControlValue = control.get(endControl)?.value as Date;
-    startControlValue.setHours(0, 0, 0, 0)
-    endControlValue.setHours(0, 0, 0, 0)
-    
-    if (
-      isBefore(endControlValue, startControlValue)
-    ) {
+    const startControlObject = control.get(startControl);
+    const endControlObject = control.get(endControl);
+    const startControlValue = startControlObject?.value;
+    const endControlValue = endControlObject?.value;
+
+    if(!isADate(startControlValue)) {
+      return { startDateNotADate: true }
+    }
+
+    if(!isADate(endControlValue)) {
+      return { endDateNotADate: true }
+    }
+
+    startControlValue.setHours(0, 0, 0, 0);
+    endControlValue.setHours(0, 0, 0, 0);
+
+    if (isBefore(endControlValue, startControlValue)) {
       return { endsBeforeStart: true };
     }
 

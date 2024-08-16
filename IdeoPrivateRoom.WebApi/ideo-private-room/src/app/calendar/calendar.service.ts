@@ -1,5 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { colors, EventModel, EventStatus } from './calendar.models';
+import { isEqual } from 'date-fns';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
@@ -20,13 +22,14 @@ export class CalendarService {
       start: new Date(),
       id: '2',
       userId: '2',
-      status: EventStatus.Pending,
+      status: EventStatus.Confirmed,
     },
   ]);
 
-  allEvents = this.events.asReadonly();
+  allEvents = toObservable(this.events)
 
   addEvent(userId: string, title: string, start: Date, end: Date) {
+    const sameDayEvent = isEqual(start, end)
     this.events.update((events) => [
       ...events,
       {
@@ -34,7 +37,7 @@ export class CalendarService {
         userId: userId,
         title: title,
         start: start,
-        end: end,
+        end: sameDayEvent ? undefined : end,
         status: EventStatus.Pending,
       },
     ]);
