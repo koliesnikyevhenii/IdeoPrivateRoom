@@ -1,0 +1,68 @@
+.user-card {
+  width: 320px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: center;
+  padding: 20px;
+  margin-bottom: 20px;
+  color: white;
+
+  img.profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+  }
+
+  .user-name {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+
+  .vacation-details {
+    margin: 10px 0;
+  }
+
+  .description {
+    font-size: 0.9rem;
+  }
+}
+
+.approval-icons {
+  display: flex;
+  justify-content: center;
+  margin: 15px 0;
+
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 5px;
+    border: 2px solid white;
+
+    &.approval-pending {
+      border-color: #ffc107;
+    }
+
+    &.approval-rejected {
+      border-color: #dc3545;
+    }
+
+    &.approval-approved {
+      border-color: #28a745;
+    }
+  }
+}
+
+.pending-bg {
+  background-color: #e0c67a;
+}
+.rejected-bg {
+  background-color: #dd727c;
+}
+.approved-bg {
+  background-color: #7fcb91;
+}

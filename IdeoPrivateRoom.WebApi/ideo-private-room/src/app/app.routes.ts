@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-// import { eventListRoutes } from './event-list/event-list.routes';
+import { eventListRoutes } from './event-list/event-list.routes';
 import { CalendarComponent } from './calendar/calendar.component';
 
 export const routes: Routes = [
-    // ...eventListRoutes,
+    ...eventListRoutes,
     {
         path: '',
         redirectTo: 'calendar',
