@@ -2,6 +2,7 @@
 using IdeoPrivateRoom.WebApi.Data;
 using IdeoPrivateRoom.WebApi.Data.Entities;
 using IdeoPrivateRoom.WebApi.Models.Dtos;
+using IdeoPrivateRoom.WebApi.Models.Enums;
 using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -58,4 +59,61 @@ public class VocationRepository(ApplicationDbContext _dbContext, IMapper _mapper
 
         return id;
     }
+
+    public async Task<List<VocationRequestDtoVTest>> GetAllVocations()
+    {
+        return await _dbContext.VocationRequests
+            .AsNoTracking()
+            .Include(v => v.UserApprovalResponses)
+                .ThenInclude(u => u.User)
+            .Select(v => new VocationRequestDtoVTest
+            {
+                Id = v.Id,
+                StartDate = v.StartDate,
+                EndDate = v.EndDate,
+                Title = v.Title,
+                VocationStatus = v.VocationStatus,
+                User = new UserVocationDtoTest
+                {
+                    Id = v.User.Id,
+                    Name = $"{v.User.FirstName} {v.User.LastName}",
+                    Icon = v.User.UserIcon
+                },
+                UserApprovalResponses = v.UserApprovalResponses.Select(u => new UserApprovalResponseDtoTest
+                {
+                    Id = u.Id,
+                    User = new UserVocationDtoTest
+                    {
+                        Id = u.User.Id,
+                        Name = $"{u.User.FirstName} {u.User.LastName}",
+                        Icon = u.User.UserIcon
+                    },
+                    ApprovalStatus = u.ApprovalStatus
+                })
+            }).ToListAsync();
+    }
+}
+
+public class VocationRequestDtoVTest
+{
+    public Guid Id { get; set; }
+    public UserVocationDtoTest User { get; set; } = null!;
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public ApprovalStatus VocationStatus { get; set; }
+
+    public IEnumerable<UserApprovalResponseDtoTest> UserApprovalResponses { get; set; }
+}
+public class UserApprovalResponseDtoTest
+{
+    public Guid Id { get; set; }
+    public UserVocationDtoTest User { get; set; } = null!;
+    public ApprovalStatus ApprovalStatus { get; set; }
+}
+public class UserVocationDtoTest
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Icon { get; set; } = string.Empty;
 }

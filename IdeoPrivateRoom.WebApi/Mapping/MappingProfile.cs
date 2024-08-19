@@ -14,13 +14,19 @@ public class MappingProfile : Profile
         CreateMap<UserDto, User>();
         CreateMap<UserRequest, UserDto>();
         CreateMap<UserDto, UserResponse>()
-            .ForMember(u => u.UserName, conf => conf.MapFrom(scr => $"{scr.FirstName} {scr.LastName}"));
+            .ForMember(u => u.Name, conf => conf.MapFrom(scr => $"{scr.FirstName} {scr.LastName}"))
+            .ForMember(u => u.Icon, conf => conf.MapFrom(scr => scr.UserIcon));
 
         CreateMap<RoleDto, RoleResponse>();
         CreateMap<UserRoleMapping, UserRoleMappingDto>();
 
         CreateMap<VocationRequest, VocationRequestDto>();
         CreateMap<VocationRequestDto, VocationRequest>();
+
+        CreateMap<VocationRequestDto, VocationResponse>()
+            .ForMember(r => r.Start, conf => conf.MapFrom(scr => scr.StartDate))
+            .ForMember(r => r.End, conf => conf.MapFrom(scr => scr.EndDate))
+            .ForMember(r => r.Status, conf => conf.MapFrom(scr => scr.VocationStatus));
 
     }
 }

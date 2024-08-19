@@ -1,17 +1,26 @@
-import { Injectable, signal } from '@angular/core';
-import { colors, EventModel, EventStatus } from './calendar.models';
-import { isEqual } from 'date-fns';
+import { Observable } from 'rxjs';
+import { inject, Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { isEqual } from 'date-fns';
+
+import { colors, EventModel, EventStatus } from './calendar.models';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CalendarService {
+  private baseUrl = environment.apiUrl;
+  private http = inject(HttpClient);
+
+
   private events = signal<EventModel[]>([
     {
       title: 'Draggable event',
       color: colors['yellow'],
       start: new Date(),
+      end: new Date(),
       id: '1',
       userId: '1',
       status: EventStatus.Pending,
@@ -20,6 +29,7 @@ export class CalendarService {
       title: 'A non draggable event',
       color: colors['blue'],
       start: new Date(),
+      end: new Date(),
       id: '2',
       userId: '2',
       status: EventStatus.Confirmed,
@@ -27,6 +37,10 @@ export class CalendarService {
   ]);
 
   allEvents = toObservable(this.events)
+
+  fetchAllEvents(): Observable<EventModel[]>{
+    return this.http.get<EventModel[]>(this.baseUrl + '/vocations');
+  }
 
   addEvent(userId: string, title: string, start: Date, end: Date) {
     const sameDayEvent = isEqual(start, end)
