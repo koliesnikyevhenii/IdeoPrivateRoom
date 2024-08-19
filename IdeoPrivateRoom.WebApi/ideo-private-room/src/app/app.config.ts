@@ -14,6 +14,7 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,7 +29,8 @@ export const appConfig: ApplicationConfig = {
       CalendarModule.forRoot({
         provide: DateAdapter,
         useFactory: adapterFactory,
-      })
+      }),
+      NgMultiSelectDropDownModule.forRoot()
     ),
     provideAnimations()
   ],
