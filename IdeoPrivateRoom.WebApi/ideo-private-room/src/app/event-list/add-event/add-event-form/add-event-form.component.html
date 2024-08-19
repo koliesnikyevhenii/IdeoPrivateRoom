@@ -1,0 +1,95 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="mb-3">
+    <label for="employee" class="form-label">Employee</label>
+    <select
+      id="employee"
+      name="employee"
+      class="form-select"
+      aria-label="employee"
+      formControlName="employee"
+    >
+      <option value="" disabled selected>Select employee</option>
+      @for (employee of employees; track employee.id) {
+      <option [value]="employee.id">{{ employee.name }}</option>
+      }
+    </select>
+    @if(invalidEmployee) {
+      <div class="invalid">
+        Select an employee.
+      </div>
+    }
+  </div>
+  <div class="mb-3">
+    <label for="title" class="form-label">Title</label>
+    <input
+      type="text"
+      class="form-control"
+      id="title"
+      formControlName="title"
+    />
+    @if(invalidTitle) {
+      <div class="invalid">
+        Provide a Title.
+      </div>
+    }
+  </div>
+  <div class="row mb-3" formGroupName="dates">
+    <div class="col-6">
+      <label for="startDate" class="form-label">Start</label>
+      <div class="input-group">
+        <input
+          ngbDatepicker
+          #startDate="ngbDatepicker"
+          class="form-control"
+          id="startDate"
+          formControlName="startDate"
+        />
+        <button
+          class="btn btn-outline-secondary bi bi-calendar3"
+          (click)="startDate.toggle()"
+          type="button"
+        >
+          <img src="date-select-ico.svg" width="24px" height="24px" />
+        </button>
+      </div>
+      @if(invalidStartDate) {
+        <div class="invalid">
+          Start date is invalid.
+        </div>
+      } @else if (endDateBeforeStartDate) {
+        <div class="invalid">
+          End date should be greater or equal to start date.
+        </div>
+      }
+    </div>
+    <div class="col-6">
+      <label for="endDate" class="form-label">End</label>
+      <div class="input-group">
+        <input
+          ngbDatepicker
+          #endDate="ngbDatepicker"
+          class="form-control"
+          id="endDate"
+          formControlName="endDate"
+        />
+        <button
+          class="btn btn-outline-secondary bi bi-calendar3"
+          (click)="endDate.toggle()"
+          type="button"
+        >
+          <img src="date-select-ico.svg" width="24px" height="24px" />
+        </button>
+      </div>
+      @if(invalidEndDate) {
+        <div class="invalid">
+          End date is invalid.
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end">
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="button" class="btn btn-secondary ms-2" (click)="onCancel()">Cancel</button>
+  </div>
+</form>

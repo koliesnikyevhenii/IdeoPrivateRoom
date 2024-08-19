@@ -1,0 +1,38 @@
+<div class="user-card mb-3 me-2" [class]="cardStatus()?.class">
+  <div class="row float-end">
+    <button type="button" class="btn-close text-end" (click)="removeCard()"></button>
+  </div>
+  <div class="user-name">{{ card().name }}</div>
+
+  <img
+    src="https://via.placeholder.com/100"
+    alt="User Profile Picture"
+    class="profile-img"
+  />
+  <div class="card-status">{{ cardStatus()?.name }}</div>
+  <div class="vacation-details">
+    {{ card().startDate | date : "M.d.yyyy" }}
+    @if(card().endDate) { - {{ card().endDate | date : "M.d.yyyy" }}
+    }
+  </div>
+
+  <div class="approval-icons">
+    <img
+      src="https://via.placeholder.com/40?text=👤"
+      alt="User Photo 1"
+      class="approval-pending"
+    />
+    <img
+      src="https://via.placeholder.com/40?text=👤"
+      alt="User Photo 2"
+      class="approval-approved"
+    />
+    <img
+      src="https://via.placeholder.com/40?text=👤"
+      alt="User Photo 3"
+      class="approval-pending"
+    />
+  </div>
+
+  <a href="#" class="btn btn-light">View More</a>
+</div>
