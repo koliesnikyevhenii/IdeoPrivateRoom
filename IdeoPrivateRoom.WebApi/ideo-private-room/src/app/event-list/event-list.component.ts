@@ -19,6 +19,7 @@ export class EventListComponent {
   private destroyRef = inject(DestroyRef)
 
   cards = signal<EventCardModel[]>([])
+  loading = signal<boolean>(true)
 
   constructor() {
     afterNextRender(() => {
@@ -28,7 +29,7 @@ export class EventListComponent {
           const constructedArray = events.map<EventCardModel>((event => {
             const user = users.find(f => f.id === event.userId)
             return {
-              id: crypto.randomUUID(),
+              id: event.id,
               name: user?.name,
               title: event.title,
               icon: user?.icon,
@@ -39,6 +40,7 @@ export class EventListComponent {
           }))
       
           this.cards.set([...constructedArray])
+          this.loading.set(false)
         }
       })
   
