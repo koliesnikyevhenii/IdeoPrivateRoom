@@ -14,7 +14,7 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(u => u.Email)
             .IsRequired()
-            .HasMaxLength(256);
+            .HasMaxLength(255);
 
         builder.Property(u => u.FirstName)
             .IsRequired()
@@ -24,12 +24,13 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
             .IsRequired()
             .HasMaxLength(100);
 
+        builder.Property(u => u.UserIcon)
+            .IsRequired()
+            .HasMaxLength(255);
+
         builder.Property(u => u.PasswordHash)
             .IsRequired()
             .HasMaxLength(512);
-
-        builder.Property(u => u.UpdatedDate)
-        .IsRequired();
 
         builder.Property(u => u.CreatedDate)
             .IsRequired();

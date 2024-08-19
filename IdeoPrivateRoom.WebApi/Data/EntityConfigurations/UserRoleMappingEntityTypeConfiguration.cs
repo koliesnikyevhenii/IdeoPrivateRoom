@@ -25,11 +25,11 @@ public class UserRoleMappingEntityTypeConfiguration : IEntityTypeConfiguration<U
             .IsRequired();
 
         builder.HasOne(u => u.User)
-            .WithMany()
+            .WithMany(u => u.RoleMappings)
             .HasForeignKey(u => u.UserId);
 
         builder.HasOne(u => u.Role)
-            .WithMany()
+            .WithMany(u => u.RoleMappings)
             .HasForeignKey(u => u.RoleId);
     }
 }

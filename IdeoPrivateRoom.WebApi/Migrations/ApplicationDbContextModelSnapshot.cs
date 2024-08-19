@@ -22,6 +22,33 @@ namespace IdeoPrivateRoom.WebApi.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("IdeoPrivateRoom.WebApi.Data.Entities.LinkedUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("LinkedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LinkedUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("LinkedUser", (string)null);
+                });
+
             modelBuilder.Entity("IdeoPrivateRoom.WebApi.Data.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
@@ -33,8 +60,8 @@ namespace IdeoPrivateRoom.WebApi.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -55,8 +82,8 @@ namespace IdeoPrivateRoom.WebApi.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -79,9 +106,46 @@ namespace IdeoPrivateRoom.WebApi.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("UserIcon")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
                     b.HasKey("Id");
 
                     b.ToTable("User", (string)null);
+                });
+
+            modelBuilder.Entity("IdeoPrivateRoom.WebApi.Data.Entities.UserApprovalResponse", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ApprovalStatus")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("VocationRequestId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("VocationRequestId");
+
+                    b.ToTable("UserApprovalResponse", (string)null);
                 });
 
             modelBuilder.Entity("IdeoPrivateRoom.WebApi.Data.Entities.UserRoleMapping", b =>
@@ -111,7 +175,7 @@ namespace IdeoPrivateRoom.WebApi.Migrations
                     b.ToTable("UserRoleMapping", (string)null);
                 });
 
-            modelBuilder.Entity("IdeoPrivateRoom.WebApi.Data.Entities.Vocation", b =>
+            modelBuilder.Entity("IdeoPrivateRoom.WebApi.Data.Entities.VocationRequest", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -126,29 +190,77 @@ namespace IdeoPrivateRoom.WebApi.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("VocationStatus")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Vocation", (string)null);
+                    b.ToTable("VocationRequest", (string)null);
+                });
+
+            modelBuilder.Entity("IdeoPrivateRoom.WebApi.Data.Entities.LinkedUser", b =>
+                {
+                    b.HasOne("IdeoPrivateRoom.WebApi.Data.Entities.User", "AssociatedUser")
+                        .WithMany("AssociatedUsers")
+                        .HasForeignKey("LinkedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IdeoPrivateRoom.WebApi.Data.Entities.User", "User")
+                        .WithMany("LinkedUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AssociatedUser");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("IdeoPrivateRoom.WebApi.Data.Entities.UserApprovalResponse", b =>
+                {
+                    b.HasOne("IdeoPrivateRoom.WebApi.Data.Entities.User", "User")
+                        .WithMany("UserApprovalResponses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IdeoPrivateRoom.WebApi.Data.Entities.VocationRequest", "VocationRequest")
+                        .WithMany("UserApprovalResponses")
+                        .HasForeignKey("VocationRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("VocationRequest");
                 });
 
             modelBuilder.Entity("IdeoPrivateRoom.WebApi.Data.Entities.UserRoleMapping", b =>
                 {
                     b.HasOne("IdeoPrivateRoom.WebApi.Data.Entities.Role", "Role")
-                        .WithMany()
+                        .WithMany("RoleMappings")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("IdeoPrivateRoom.WebApi.Data.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("RoleMappings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -158,15 +270,38 @@ namespace IdeoPrivateRoom.WebApi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("IdeoPrivateRoom.WebApi.Data.Entities.Vocation", b =>
+            modelBuilder.Entity("IdeoPrivateRoom.WebApi.Data.Entities.VocationRequest", b =>
                 {
                     b.HasOne("IdeoPrivateRoom.WebApi.Data.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("VocationRequests")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("IdeoPrivateRoom.WebApi.Data.Entities.Role", b =>
+                {
+                    b.Navigation("RoleMappings");
+                });
+
+            modelBuilder.Entity("IdeoPrivateRoom.WebApi.Data.Entities.User", b =>
+                {
+                    b.Navigation("AssociatedUsers");
+
+                    b.Navigation("LinkedUsers");
+
+                    b.Navigation("RoleMappings");
+
+                    b.Navigation("UserApprovalResponses");
+
+                    b.Navigation("VocationRequests");
+                });
+
+            modelBuilder.Entity("IdeoPrivateRoom.WebApi.Data.Entities.VocationRequest", b =>
+                {
+                    b.Navigation("UserApprovalResponses");
                 });
 #pragma warning restore 612, 618
         }
