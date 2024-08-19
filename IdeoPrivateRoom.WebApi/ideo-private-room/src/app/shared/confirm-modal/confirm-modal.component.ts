@@ -5,8 +5,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   selector: 'app-confirm-modal',
   standalone: true,
   imports: [],
-  templateUrl: './confirm-modal.component.html',
-  styleUrl: './confirm-modal.component.scss',
+  templateUrl: './confirm-modal.component.html'
 })
 export class ConfirmModalComponent {
   modalService = inject(NgbActiveModal)
