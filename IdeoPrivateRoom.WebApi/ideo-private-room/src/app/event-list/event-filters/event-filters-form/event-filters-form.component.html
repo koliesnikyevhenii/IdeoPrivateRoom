@@ -4,6 +4,7 @@
     <label for="employee" class="form-label">Employee</label>
     <ng-multiselect-dropdown
       formControlName="employee"
+      id="employee"
       name="employee"
       placeholder="Select employees"
       [settings]="employeeDropdownSettings"
@@ -15,12 +16,17 @@
     <label for="employee" class="form-label">Employee</label>
     <ng-multiselect-dropdown
       formControlName="status"
+      id="status"
       name="status"
       placeholder="Select status"
       [settings]="statusDropdownSettings"
       [data]="statuses"
     >
     </ng-multiselect-dropdown>
+  </div>
+  <div class="mb-3">
+    <label for="dates" class="form-label">Event dates</label>
+    <app-range-datepicker id="dates" name="dates" formControlName="dates" />
   </div>
   <div class="d-flex justify-content-end">
     <button type="submit" class="btn btn-danger btn-action">Apply</button>

@@ -19,6 +19,6 @@ export class EventListHeaderComponent {
   }
 
   openFiltersMenu() {
-    this.offcanvasService.open(EventFiltersComponent)
+    this.offcanvasService.open(EventFiltersComponent, { backdrop: 'static' })
   }
 }
