@@ -1,15 +1,14 @@
 <div class="offcanvas-header">
-    <h5 class="offcanvas-title">Offcanvas</h5>
-    <button
-        type="button"
-        class="btn-close text-reset"
-        aria-label="Close"
-        (click)="close()"
-    ></button>
+  <h5 class="offcanvas-title">Offcanvas</h5>
+  <button
+    type="button"
+    class="btn-close text-reset"
+    aria-label="Close"
+    (click)="onClose()"
+  ></button>
 </div>
 <div class="offcanvas-body">
-    <div>Set filters</div>
-    <button type="button" class="btn btn-outline-secondary" (click)="close()">
-        Close
-    </button>
+  <div class="row mb-2">
+    <app-event-filters-form />
+  </div>
 </div>
