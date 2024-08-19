@@ -21,7 +21,6 @@ import { RangeDatepickerModel } from '../../../shared/range-datepicker/range-dat
 export class EventFiltersFormComponent {
   private userService = inject(UserService);
   private offCanvasService = inject(NgbActiveOffcanvas);
-  // private calendarDateService = inject(NgbCalendar)
 
   employeeDropdownSettings = {
     singleSelection: false,
