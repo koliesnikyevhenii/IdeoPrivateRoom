@@ -1,7 +1,10 @@
-import { Component, computed, input, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, input, OnInit, signal, TemplateRef } from '@angular/core';
 import { EventCardModel } from './event-card.models';
 import { DatePipe } from '@angular/common';
 import { EventStatus } from '../../calendar/calendar.models';
+import { CalendarService } from '../../calendar/calendar.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmModalComponent } from '../../shared/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-event-card',
@@ -11,6 +14,10 @@ import { EventStatus } from '../../calendar/calendar.models';
   styleUrl: './event-card.component.scss',
 })
 export class EventCardComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+  private calendarService = inject(CalendarService);
+  private modalService = inject(NgbModal)
+
   card = input.required<EventCardModel>();
   cardStatus = signal<{class: string, name: string} | undefined>(undefined);
 
@@ -35,5 +42,23 @@ export class EventCardComponent implements OnInit {
         })
         break;
     }
+  }
+
+  removeCard() {
+    const modal = this.modalService.open(ConfirmModalComponent);
+    modal.componentInstance.confirmationTitle = "Confirm Deletion"
+    modal.componentInstance.confirmationText = "Are you sure you want to delete this vacation request?"
+
+    const sub = (modal.componentInstance).confirmationStatus.subscribe({
+      next: (result: any) => {
+        if(result === true) {
+          this.calendarService.deleteEvent(this.card().id);
+        }
+      }
+    })
+
+    this.destroyRef.onDestroy(() => {
+      sub.unsubscribe()
+    })
   }
 }

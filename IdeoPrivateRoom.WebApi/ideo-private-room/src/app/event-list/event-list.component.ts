@@ -19,6 +19,7 @@ export class EventListComponent {
   private destroyRef = inject(DestroyRef)
 
   cards = signal<EventCardModel[]>([])
+  loading = signal<boolean>(true)
 
   constructor() {
     afterNextRender(() => {
@@ -59,6 +60,7 @@ export class EventListComponent {
 
           forkJoin(userObservables).subscribe((constructedArray) => {
             this.cards.set([...constructedArray]);
+            this.loading.set(true)
           });
         },
       });

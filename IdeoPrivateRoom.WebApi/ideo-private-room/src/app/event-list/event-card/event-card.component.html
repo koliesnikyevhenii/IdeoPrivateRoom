@@ -1,4 +1,7 @@
 <div class="user-card mb-3 me-2" [class]="cardStatus()?.class">
+  <div class="row float-end">
+    <button type="button" class="btn-close text-end" (click)="removeCard()"></button>
+  </div>
   <div class="user-name">{{ card().name }}</div>
 
   <img
