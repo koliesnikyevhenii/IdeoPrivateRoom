@@ -5,7 +5,6 @@ using IdeoPrivateRoom.WebApi.Models.Dtos;
 using IdeoPrivateRoom.WebApi.Models.Enums;
 using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata.Ecma335;
 
 namespace IdeoPrivateRoom.WebApi.Repositories;
 
@@ -13,7 +12,7 @@ public class UserRepository(ApplicationDbContext _dbContext, IMapper _mapper) : 
 {
     public async Task<Guid> Create(UserDto user)
     {
-        var createdUser = await _dbContext.Users.AddAsync(_mapper.Map<User>(user));
+        var createdUser = await _dbContext.Users.AddAsync(_mapper.Map<UserEntity>(user));
         await _dbContext.SaveChangesAsync();
 
         return createdUser.Entity.Id;

@@ -7,7 +7,7 @@ public static class Users
 {
     public static void RegisterUserEndpoints(this IEndpointRouteBuilder routes)
     {
-        var users = routes.MapGroup("/api/v1/users")
+        var users = routes.MapGroup("/api/users")
             .WithTags("Users");
 
         users.MapGet("", (IUserService userService) =>

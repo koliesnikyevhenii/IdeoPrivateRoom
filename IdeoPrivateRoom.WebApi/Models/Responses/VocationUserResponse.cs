@@ -1,4 +1,6 @@
-﻿namespace IdeoPrivateRoom.WebApi.Models.Responses;
+﻿using IdeoPrivateRoom.WebApi.Models.Dtos;
+
+namespace IdeoPrivateRoom.WebApi.Models.Responses;
 
 public class VocationUserResponse
 {
