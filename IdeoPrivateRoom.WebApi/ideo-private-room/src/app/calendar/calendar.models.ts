@@ -1,4 +1,5 @@
 import { CalendarEvent } from "angular-calendar";
+import { User } from "../user/user.models";
 
 export const colors: any = {
   red: {
@@ -22,7 +23,14 @@ export enum EventStatus {
 }
 
 export interface EventModel extends CalendarEvent {
-  id: string,
-  userId: string,
-  status: EventStatus
+  id: string;
+  user: User;
+  status: EventStatus;
+  userApprovalResponses: EventApproval[];
+}
+
+export interface EventApproval {
+    id: string;
+    user: User;
+    approvalStatus: EventStatus;
 }

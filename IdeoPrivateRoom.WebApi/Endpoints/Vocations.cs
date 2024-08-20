@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using IdeoPrivateRoom.WebApi.Models.Dtos;
-using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
-using IdeoPrivateRoom.WebApi.Services.Interfaces;
+﻿using IdeoPrivateRoom.WebApi.Services.Interfaces;
 
 namespace IdeoPrivateRoom.WebApi.Endpoints;
 
@@ -12,21 +9,15 @@ public static class Vocations
         var vocations = routes.MapGroup("/api/v1/vocations")
             .WithTags("Vocations");
 
-        vocations.MapGet("", async (IVocationService vocationService) =>
+        vocations.MapGet("", (IVocationService vocationService) =>
         {
-            return await vocationService.GetAll();
+            return vocationService.GetAll();
         })
         .WithOpenApi();
 
-        vocations.MapGet("/all", async (IVocationRepository vocationRepository) =>
+        vocations.MapGet("/{id}", (Guid id, IVocationService vocationService) =>
         {
-            return await vocationRepository.GetAllVocations();
-        })
-        .WithOpenApi();
-
-        vocations.MapGet("/{id}", async (Guid id, IVocationService vocationService) =>
-        {
-            return await vocationService.GetByUserId(id);
+            return vocationService.GetByUserId(id);
         })
         .WithOpenApi();
 

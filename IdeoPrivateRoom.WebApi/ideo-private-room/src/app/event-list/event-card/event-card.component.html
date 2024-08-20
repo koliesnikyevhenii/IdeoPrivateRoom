@@ -14,7 +14,15 @@
   </div>
 
   <div class="approval-icons">
-    <img
+    @for (item of card().userApprovalResponses; track item.id){
+      <img
+      [src]="item.user.icon"
+      alt="User Photo 1"
+      class="approval-pending"
+    />
+    <span>{{ item.approvalStatus.toString()}}</span>
+    }
+    <!-- <img
       src="https://via.placeholder.com/40?text=👤"
       alt="User Photo 1"
       class="approval-pending"
@@ -28,7 +36,7 @@
       src="https://via.placeholder.com/40?text=👤"
       alt="User Photo 3"
       class="approval-pending"
-    />
+    /> -->
   </div>
 
   <a href="#" class="btn btn-light">View More</a>

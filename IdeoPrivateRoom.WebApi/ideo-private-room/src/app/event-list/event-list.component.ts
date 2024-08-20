@@ -22,46 +22,45 @@ export class EventListComponent {
 
   constructor() {
     afterNextRender(() => {
-      // const sub = this.calendarService.allEvents.subscribe({
-      //   next: (events) => {
-      //     const users = this.userService.allUsers()
-      //     const constructedArray = events.map<EventCardModel>((event => {
-      //       const user = users.find(f => f.id === event.userId)
-      //       return {
-      //         id: crypto.randomUUID(),
-      //         name: user?.name,
-      //         title: event.title,
-      //         icon: user?.icon,
-      //         startDate: event.start,
-      //         endDate: event.end,
-      //         status: event.vocationStatus,
-      //       };
-      //     }))
-
-      //     this.cards.set([...constructedArray])
-      //   }
-      // })
       const sub = this.calendarService.fetchAllEvents().subscribe({
         next: (events) => {
-          const userObservables = events.map((event) =>
-            this.userService.getUserById(event.userId).pipe(
-              map((user) => ({
-                id: event.id,
-                name: user?.name,
-                title: event.title,
-                icon: user?.icon,
-                startDate: event.start,
-                endDate: event.end,
-                status: event.status,
-              }))
-            )
-          );
+          const constructedArray = events.map<EventCardModel>((event => {
+            return {
+              id: crypto.randomUUID(),
+              name: event.user?.name,
+              title: event.title,
+              icon: event.user?.icon,
+              startDate: event.start,
+              endDate: event.end,
+              status: event.status,
+              userApprovalResponses: event.userApprovalResponses
+            };
+          }))
 
-          forkJoin(userObservables).subscribe((constructedArray) => {
-            this.cards.set([...constructedArray]);
-          });
-        },
-      });
+          this.cards.set([...constructedArray])
+        }
+      })
+      // const sub = this.calendarService.fetchAllEvents().subscribe({
+      //   next: (events) => {
+      //     const userObservables = events.map((event) =>
+      //       this.userService.getUserById(event.userId).pipe(
+      //         map((user) => ({
+      //           id: event.id,
+      //           name: user?.name,
+      //           title: event.title,
+      //           icon: user?.icon,
+      //           startDate: event.start,
+      //           endDate: event.end,
+      //           status: event.status,
+      //         }))
+      //       )
+      //     );
+
+      //     forkJoin(userObservables).subscribe((constructedArray) => {
+      //       this.cards.set([...constructedArray]);
+      //     });
+      //   },
+      // });
 
       this.destroyRef.onDestroy(() => {
         sub.unsubscribe();

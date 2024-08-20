@@ -11,6 +11,7 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<User, UserDto>();
+        CreateMap<User, VocationUserDto>();
         CreateMap<UserDto, User>();
         CreateMap<UserRequest, UserDto>();
         CreateMap<UserDto, UserResponse>()
@@ -21,8 +22,11 @@ public class MappingProfile : Profile
         CreateMap<UserRoleMapping, UserRoleMappingDto>();
 
         CreateMap<VocationRequest, VocationRequestDto>();
+  
         CreateMap<VocationRequestDto, VocationRequest>();
-
+        CreateMap<VocationUserDto, VocationUserResponse>();
+        CreateMap<VocationRequestDto, VocationResponse>();
+        CreateMap<VocationUserApprovalDto, VocationUserApprovalResponse>();
         CreateMap<VocationRequestDto, VocationResponse>()
             .ForMember(r => r.Start, conf => conf.MapFrom(scr => scr.StartDate))
             .ForMember(r => r.End, conf => conf.MapFrom(scr => scr.EndDate))

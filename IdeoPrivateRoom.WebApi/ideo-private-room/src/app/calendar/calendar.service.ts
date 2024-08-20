@@ -16,24 +16,24 @@ export class CalendarService {
 
 
   private events = signal<EventModel[]>([
-    {
-      title: 'Draggable event',
-      color: colors['yellow'],
-      start: new Date(),
-      end: new Date(),
-      id: '1',
-      userId: '1',
-      status: EventStatus.Pending,
-    },
-    {
-      title: 'A non draggable event',
-      color: colors['blue'],
-      start: new Date(),
-      end: new Date(),
-      id: '2',
-      userId: '2',
-      status: EventStatus.Confirmed,
-    },
+    // {
+    //   title: 'Draggable event',
+    //   color: colors['yellow'],
+    //   start: new Date(),
+    //   end: new Date(),
+    //   id: '1',
+    //   userId: '1',
+    //   status: EventStatus.Pending,
+    // },
+    // {
+    //   title: 'A non draggable event',
+    //   color: colors['blue'],
+    //   start: new Date(),
+    //   end: new Date(),
+    //   id: '2',
+    //   userId: '2',
+    //   status: EventStatus.Confirmed,
+    // },
   ]);
 
   allEvents = toObservable(this.events)
@@ -46,14 +46,14 @@ export class CalendarService {
     const sameDayEvent = isEqual(start, end)
     this.events.update((events) => [
       ...events,
-      {
-        id: crypto.randomUUID(),
-        userId: userId,
-        title: title,
-        start: start,
-        end: sameDayEvent ? undefined : end,
-        status: EventStatus.Pending,
-      },
+      // {
+      //   id: crypto.randomUUID(),
+      //   userId: userId,
+      //   title: title,
+      //   start: start,
+      //   end: sameDayEvent ? undefined : end,
+      //   status: EventStatus.Pending,
+      // },
     ]);
   }
 
