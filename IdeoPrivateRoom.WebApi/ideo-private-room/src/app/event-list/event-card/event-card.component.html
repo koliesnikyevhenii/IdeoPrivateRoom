@@ -2,28 +2,28 @@
   <div class="row float-end">
     <button type="button" class="btn-close text-end" (click)="removeCard()"></button>
   </div>
-  <div class="user-name">{{ card().name }}</div>
+  <div class="user-name">{{ card().userName }}</div>
 
   <img
-    [src]="card().icon"
+    [src]="card().userIcon"
     alt="User Profile Picture"
     class="profile-img"
   />
   <div class="card-status">{{ cardStatus()?.name }}</div>
   <div class="vacation-details">
-    {{ card().startDate | date : "M.d.yyyy" }}
-    @if(card().endDate) { - {{ card().endDate | date : "M.d.yyyy" }}
+    {{ card().start | date : "M.d.yyyy" }}
+    @if(card().end) { - {{ card().end | date : "M.d.yyyy" }}
     }
   </div>
 
   <div class="approval-icons">
     @for (item of card().userApprovalResponses; track item.id){
       <img
-      [src]="item.user.icon"
+      [src]="item.userIcon"
       alt="User Photo 1"
       class="approval-pending"
     />
-    <span>{{ item.approvalStatus.toString()}}</span>
+    <span>{{ item.approvalStatus}}</span>
     }
     <!-- <img
       src="https://via.placeholder.com/40?text=👤"

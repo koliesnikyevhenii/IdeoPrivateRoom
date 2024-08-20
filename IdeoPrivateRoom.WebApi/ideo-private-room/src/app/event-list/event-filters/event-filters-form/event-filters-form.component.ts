@@ -4,12 +4,12 @@ import {
   FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { EventStatus } from '../../../calendar/calendar.models';
 import { UserService } from '../../../user/user.service';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { NgbActiveOffcanvas, NgbCalendar, NgbDate, NgbDateParserFormatter, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { RangeDatepickerComponent } from "../../../shared/range-datepicker/range-datepicker.component";
 import { RangeDatepickerModel } from '../../../shared/range-datepicker/range-datepicker.model';
+import { EventStatus } from '../../event-list.models';
 
 @Component({
   selector: 'app-event-filters-form',

@@ -1,72 +1,43 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { EventCardComponent } from './event-card/event-card.component';
-import { EventListHeaderComponent } from "./event-list-header/event-list-header.component";
-import { EventCardModel } from './event-card/event-card.models';
-import { CalendarService } from '../calendar/calendar.service';
-import { UserService } from '../user/user.service';
-import { forkJoin, map } from 'rxjs';
+import { EventListHeaderComponent } from './event-list-header/event-list-header.component';
+import { EventListService } from './event-list.service';
 @Component({
   selector: 'app-event-list',
   standalone: true,
   imports: [EventCardComponent, EventListHeaderComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './event-list.component.html',
-  styleUrl: './event-list.component.scss'
+  styleUrl: './event-list.component.scss',
 })
-export class EventListComponent {
-  private calendarService = inject(CalendarService)
-  private userService = inject(UserService)
-  private destroyRef = inject(DestroyRef)
+export class EventListComponent implements OnInit {
+  private eventListService = inject(EventListService);
+  private destroyRef = inject(DestroyRef);
 
-  cards = signal<EventCardModel[]>([])
-  loading = signal<boolean>(true)
+  cards = this.eventListService.loadedEvents;
+  isFetching = signal<boolean>(false);
+  error = signal<string>('');
 
-  constructor() {
-    afterNextRender(() => {
-      const sub = this.calendarService.fetchAllEvents().subscribe({
-        next: (events) => {
-          const constructedArray = events.map<EventCardModel>((event => {
-            return {
-              id: crypto.randomUUID(),
-              name: event.user?.name,
-              title: event.title,
-              icon: event.user?.icon,
-              startDate: event.start,
-              endDate: event.end,
-              status: event.status,
-              userApprovalResponses: event.userApprovalResponses
-            };
-          }))
+  ngOnInit() {
+    this.isFetching.set(true);
+    const sub = this.eventListService.loadEvents().subscribe({
+      complete: () => {
+        this.isFetching.set(false);
+      },
+      error: (error: Error) => {
+        this.error.set(error.message);
+      },
+    });
 
-              this.cards.set([...constructedArray])
-              this.loading.set(true)
-        }
-      })
-      // const sub = this.calendarService.fetchAllEvents().subscribe({
-      //   next: (events) => {
-      //     const userObservables = events.map((event) =>
-      //       this.userService.getUserById(event.userId).pipe(
-      //         map((user) => ({
-      //           id: event.id,
-      //           name: user?.name,
-      //           title: event.title,
-      //           icon: user?.icon,
-      //           startDate: event.start,
-      //           endDate: event.end,
-      //           status: event.status,
-      //         }))
-      //       )
-      //     );
-
-      //     forkJoin(userObservables).subscribe((constructedArray) => {
-      //       this.cards.set([...constructedArray]);
-      //     });
-      //   },
-      // });
-
-      this.destroyRef.onDestroy(() => {
-        sub.unsubscribe();
-      });
-    })
+    this.destroyRef.onDestroy(() => {
+      sub.unsubscribe();
+    });
   }
 }

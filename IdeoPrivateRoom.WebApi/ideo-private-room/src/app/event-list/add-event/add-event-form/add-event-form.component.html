@@ -20,18 +20,13 @@
     }
   </div>
   <div class="mb-3">
-    <label for="title" class="form-label">Title</label>
+    <label for="title" class="form-label">Comment (Optional)</label>
     <input
       type="text"
       class="form-control"
       id="title"
       formControlName="title"
     />
-    @if(invalidTitle) {
-      <div class="invalid">
-        Provide a Title.
-      </div>
-    }
   </div>
   <div class="row mb-3" formGroupName="dates">
     <div class="col-6">
