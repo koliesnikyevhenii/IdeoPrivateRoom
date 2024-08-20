@@ -6,12 +6,12 @@ namespace IdeoPrivateRoom.WebApi.Data;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
-    public DbSet<Role> Roles { get; set; }
-    public DbSet<User> Users { get; set; }
-    public DbSet<UserRoleMapping> UserRoleMappings { get; set; }
-    public DbSet<VocationRequest> VocationRequests { get; set; }
-    public DbSet<LinkedUser> LinkedUsers { get; set; }
-    public DbSet<UserApprovalResponse> UserApprovalResponses { get; set; }
+    public DbSet<RoleEntity> Roles { get; set; }
+    public DbSet<UserEntity> Users { get; set; }
+    public DbSet<UserRoleMappingEntity> UserRoleMappings { get; set; }
+    public DbSet<VocationRequestEntity> VocationRequests { get; set; }
+    public DbSet<LinkedUserEntity> LinkedUsers { get; set; }
+    public DbSet<UserApprovalResponseEntity> UserApprovalResponses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

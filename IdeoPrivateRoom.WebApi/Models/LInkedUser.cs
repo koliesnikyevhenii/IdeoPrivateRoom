@@ -1,9 +1,8 @@
-﻿namespace IdeoPrivateRoom.WebApi.Data.Entities;
+﻿namespace IdeoPrivateRoom.WebApi.Models;
 
-public class LinkedUser
+public class LInkedUser
 {
     public Guid Id { get; set; }
-    public Guid UserId { get; set; }
     public User User { get; set; } = null!;
     public Guid LinkedUserId { get; set; }
     public User AssociatedUser { get; set; } = null!;

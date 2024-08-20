@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace IdeoPrivateRoom.WebApi.Data.EntityConfigurations;
 
-public class LinkedUserEntityTypeConfiguration : IEntityTypeConfiguration<LinkedUser>
+public class LinkedUserEntityTypeConfiguration : IEntityTypeConfiguration<LinkedUserEntity>
 {
-    public void Configure(EntityTypeBuilder<LinkedUser> builder)
+    public void Configure(EntityTypeBuilder<LinkedUserEntity> builder)
     {
         builder.ToTable("LinkedUser");
 

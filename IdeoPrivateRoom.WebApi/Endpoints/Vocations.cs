@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using IdeoPrivateRoom.WebApi.Models.Dtos;
+using IdeoPrivateRoom.WebApi.Models.Requests;
 using IdeoPrivateRoom.WebApi.Services.Interfaces;
 
 namespace IdeoPrivateRoom.WebApi.Endpoints;
@@ -8,30 +8,24 @@ public static class Vocations
 {
     public static void RegisterVocationEndpoints(this IEndpointRouteBuilder routes)
     {
-        var vocations = routes.MapGroup("/api/v1/vocations")
+        var vocations = routes.MapGroup("/api/vocations")
             .WithTags("Vocations");
 
-        vocations.MapGet("", async (IVocationService vocationService) =>
+        vocations.MapGet("", (IVocationService vocationService) =>
         {
-            return await vocationService.GetAll();
+            return vocationService.GetAll();
         })
         .WithOpenApi();
 
-        vocations.MapGet("/{id}", async (Guid id, IVocationService vocationService) =>
+        vocations.MapGet("/{id}", (Guid id, IVocationService vocationService) =>
         {
-            return await vocationService.GetByUserId(id);
+            return vocationService.GetByUserId(id);
         })
         .WithOpenApi();
 
-        /*vocations.MapPost("", async (VocationRequestDto request, IVocationService vocationService, IMapper mapper) =>
+        vocations.MapPost("", async (CreateVocationRequest request, IVocationService vocationService, IMapper mapper) =>
         {
             return await vocationService.Create(request);
-        })
-        .WithOpenApi();
-
-        vocations.MapPut("/{id}", async (Guid id, VocationRequestDto request, IVocationService vocationService, IMapper mapper) =>
-        {
-            return await vocationService.Update(id, request);
         })
         .WithOpenApi();
 
@@ -39,6 +33,6 @@ public static class Vocations
         {
             return await vocationService.Delete(id);
         })
-        .WithOpenApi();*/
+        .WithOpenApi();
     }
 }

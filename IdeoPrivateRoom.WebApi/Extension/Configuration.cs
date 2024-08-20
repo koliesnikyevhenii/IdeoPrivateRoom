@@ -41,6 +41,6 @@ public static class Configuration
 
         app.UseHttpsRedirection();
 
-        app.UseCors(builder => builder.WithOrigins("http://localhost:8080"));
+        app.UseCors(builder => builder.WithOrigins("http://localhost:8080", "http://localhost:4200"));
     }
 }

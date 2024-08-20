@@ -1,9 +1,13 @@
-<header class="d-flex justify-content-center py-3">
-  <ul class="nav nav-pills">
-    <li class="nav-item">
-      <button (click)="onAddEvent()" class="btn btn-action">
-        Add Event
+<div class="px-3 py-2 border-bottom mb-3">
+  <div class="container d-flex flex-wrap justify-content-center">
+    <div class="col-12 col-lg-auto mb-lg-0 me-lg-auto">
+      <button (click)="openFiltersMenu()" type="button" class="btn btn-dark btn-menu">
+        <img src="event-filter-ico.svg" width="24px" height="24px" />
       </button>
-    </li>
-  </ul>
-</header>
+    </div>
+
+    <div class="text-end">
+      <button type="button" (click)="onAddEvent()" class="btn btn-action btn-dark me-2">Add Event</button>
+    </div>
+  </div>
+</div>

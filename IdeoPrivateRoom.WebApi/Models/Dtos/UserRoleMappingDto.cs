@@ -5,8 +5,8 @@ namespace IdeoPrivateRoom.WebApi.Models.Dtos;
 public class UserRoleMappingDto
 {
     public Guid Id { get; set; }
-    public User User { get; set; } = null!;
-    public Role Role { get; set; } = null!;
+    public UserEntity User { get; set; } = null!;
+    public RoleEntity Role { get; set; } = null!;
     public DateTime CreatedDate { get; set; }
     public DateTime UpdatedDate { get; set; }
 }

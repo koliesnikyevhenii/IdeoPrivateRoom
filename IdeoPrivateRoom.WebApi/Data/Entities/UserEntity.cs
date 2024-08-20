@@ -1,6 +1,6 @@
 ﻿namespace IdeoPrivateRoom.WebApi.Data.Entities;
 
-public class User
+public class UserEntity
 {
     public Guid Id { get; set; }
     public string Email { get; set; } = string.Empty;
@@ -11,9 +11,9 @@ public class User
     public DateTime CreatedDate { get; set; }
     public string PasswordHash { get; set; } = string.Empty;
     public bool IsEmailConfirmed { get; set; }
-    public ICollection<UserRoleMapping> RoleMappings { get; set; } = [];
-    public ICollection<VocationRequest> VocationRequests { get; set; } = [];
-    public ICollection<LinkedUser> LinkedUsers { get; set; } = [];
-    public ICollection<LinkedUser> AssociatedUsers { get; set; } = [];
-    public ICollection<UserApprovalResponse> UserApprovalResponses { get; set; } = [];
+    public ICollection<UserRoleMappingEntity> RoleMappings { get; set; } = [];
+    public ICollection<VocationRequestEntity> VocationRequests { get; set; } = [];
+    public ICollection<LinkedUserEntity> LinkedUsers { get; set; } = [];
+    public ICollection<LinkedUserEntity> AssociatedUsers { get; set; } = [];
+    public ICollection<UserApprovalResponseEntity> UserApprovalResponses { get; set; } = [];
 }

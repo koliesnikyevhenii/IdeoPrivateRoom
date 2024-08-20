@@ -5,7 +5,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { endsBeforeStart, isADate, validDate } from './add-event-form.validators';
+import { endsBeforeStart, isADate, validDate } from '../../event-validators/add-event-form.validators';
 import {
   NgbActiveModal,
   NgbDateAdapter,
@@ -13,8 +13,8 @@ import {
   NgbDatepickerModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
-import { CalendarService } from '../../../calendar/calendar.service';
 import { UserService } from '../../../user/user.service';
+import { EventListService } from '../../event-list.service';
 
 @Component({
   selector: 'app-add-event-form',
@@ -27,7 +27,7 @@ import { UserService } from '../../../user/user.service';
 export class AddEventFormComponent {
   modalService = inject(NgbActiveModal);
   userService = inject(UserService)
-  calendarService = inject(CalendarService)
+  eventListService = inject(EventListService)
 
   employees = this.userService.allUsers();
 
@@ -35,9 +35,7 @@ export class AddEventFormComponent {
     employee: new FormControl<string>('', {
       validators: [Validators.required],
     }),
-    title: new FormControl<string>('', {
-      validators: [Validators.required],
-    }),
+    comment: new FormControl<string>(''),
     dates: new FormGroup(
       {
         startDate: new FormControl<Date>(new Date(), {
@@ -55,11 +53,6 @@ export class AddEventFormComponent {
       }
     ),
   });
-
-  get invalidTitle() {
-    const titleField = this.form.controls.title;
-    return titleField.touched && titleField.invalid;
-  }
 
   get invalidEmployee() {
     const employeeField = this.form.controls.employee;
@@ -98,12 +91,12 @@ export class AddEventFormComponent {
     }
 
     const userId = this.form.controls.employee.value;
-    const title = this.form.controls.title.value;
+    const comment = this.form.controls.comment.value;
     const startDate = this.form.controls.dates.controls.startDate.value;
     const endDate = this.form.controls.dates.controls.endDate.value;
 
-    if(userId && title && startDate && endDate) {
-      this.calendarService.addEvent(userId, title, startDate, endDate)
+    if(userId && comment && startDate && endDate) {
+      this.eventListService.addEvent(userId, startDate, endDate, comment)
       this.modalService.close();
     }
   }
