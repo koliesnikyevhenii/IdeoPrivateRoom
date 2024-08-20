@@ -13,13 +13,15 @@ export enum EventStatus {
   Declined = 2,
 }
 
-export interface EventModel extends CalendarEvent {
+export interface EventModel {
   id: string;
   userId: string,
   userName: string,
   userIcon: string,
   status: EventStatus | undefined;
   userApprovalResponses: EventApproval[];
+  fromDate: Date,
+  toDate: Date | undefined
 }
 
 export interface EventApproval {

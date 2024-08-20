@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { CalendarHeaderComponent } from './calendar-header/calendar-header.component';
 import {
+  CalendarEvent,
   CalendarEventTimesChangedEvent,
   CalendarModule,
   CalendarView,
@@ -30,11 +31,13 @@ export class CalendarComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   events = computed(() => {
-    return this.eventListService.loadedEvents().map((event) => ({
-      ...event,
-      color: this.eventListService.mapColorToEventStatus(event.status),
-      title: '123',
-    }));
+    return this.eventListService.loadedEvents().map((event) => <CalendarEvent> {
+      id: event.id,
+      title: event.userName,
+      start: event.fromDate,
+      end: event.toDate,
+      color: this.eventListService.mapColorToEventStatus(event.status)
+    });
   });
 
   view: CalendarView = CalendarView.Month;
@@ -45,14 +48,14 @@ export class CalendarComponent implements OnInit {
   isFetching = signal<boolean>(false);
   error = signal<string>('');
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.isFetching.set(true);
     const sub = this.eventListService.loadEvents().subscribe({
       complete: () => {
         this.isFetching.set(false);
       },
       error: (error: Error) => {
-        console.log(error)
+        console.error(error.message)
         this.error.set(error.message);
       },
     });

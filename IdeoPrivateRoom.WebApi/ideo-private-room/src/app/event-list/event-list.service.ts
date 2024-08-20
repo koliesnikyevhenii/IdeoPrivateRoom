@@ -2,15 +2,16 @@ import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { ApiEvent } from '../api-models/event';
-import { EventApproval, EventModel, EventStatus } from './event-list.models';
+import { ApiEvent } from '../api-models/event.model';
+import { EventModel, EventStatus } from './event-list.models';
+import { mapEvent } from './event-list.mapping';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EventListService {
-  private baseUrl = environment.apiUrl;
   private http = inject(HttpClient);
+  private eventsUrl = `${environment.apiUrl}/vocations`;
 
   private events = signal<EventModel[]>([]);
 
@@ -19,108 +20,82 @@ export class EventListService {
   loadEvents() {
     return this.fetchEvents(
       'Something gone wrong trying to load events...'
-    ).pipe(
-      tap({
-        next: (events) => this.events.set(events),
+    ).pipe(tap((events) => this.events.set(events)));
+  }
+
+  // TODO: deal with api foreign key exception
+  createEvent(
+    userId: string,
+    startDate: Date,
+    endDate: Date,
+    comment?: string | null
+  ) {
+    const eventPayload = {
+      userId: userId,
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+    };
+    return this.http.post(this.eventsUrl, eventPayload).pipe(
+      tap(() => {
+        this.refreshEvents('Failed to fetch events after adding one.');
+      }),
+      catchError(() => {
+        console.log('failure');
+        return throwError(() => new Error('Failed to add a new event.'));
       })
     );
   }
 
-  addEvent(
-    userId: string,
-    start: Date,
-    end: Date,
-    comment: string | undefined
-  ) {
-    // const sameDayEvent = isEqual(start, end);
-    // this.events.update((events) => [
-    //   ...events,
-    // {
-    //   id: crypto.randomUUID(),
-    //   userId: userId,
-    //   title: title,
-    //   start: start,
-    //   end: sameDayEvent ? undefined : end,
-    //   status: EventStatus.Pending,
-    // },
-    // ]);
+  // TODO: deal with cors restriction for testing
+  deleteEvent(eventId: string) {
+    const prevEvents = this.events();
+
+    if (prevEvents.some((event) => event.id === eventId)) {
+      this.events.set(prevEvents.filter((event) => event.id !== eventId));
+    }
+
+    return this.http.delete(`${this.eventsUrl}/${eventId}`).pipe(
+      catchError(() => {
+        this.events.set(prevEvents);
+        return throwError(() => new Error('Failed to delete an event.'));
+      })
+    );
   }
 
-  //   deleteEvent(id: string) {
-  //     this.events.update((items) => items.filter((item) => item.id !== id));
-  //   }
+  mapColorToEventStatus(status?: number): {
+    primary: string;
+    secondary: string;
+  } {
+    const statusColors: Record<number, { primary: string; secondary: string }> =
+      {
+        [EventStatus.Confirmed]: { primary: '#28a745', secondary: '#28a745' },
+        [EventStatus.Declined]: { primary: '#dc3545', secondary: '#dc3545' },
+      };
 
-  //   updateEvent(id: string, title: string, start: Date, end: Date) {
-  //     this.events.update((items) =>
-  //       items.map((item) =>
-  //         item.id == id ? { ...item, title: title, start: start, end: end } : item
-  //       )
-  //     );
-  //   }
-
-  //   getEvent(id: string): EventModel | undefined {
-  //     return this.events().find((event) => event.id === id);
-  //   }
-
-  mapColorToEventStatus(status: number | undefined) {
-    switch (status) {
-      case EventStatus.Confirmed:
-        return {
-          primary: '#28a745',
-          secondary: '#28a745',
-        };
-      case EventStatus.Declined:
-        return {
-          primary: '#dc3545',
-          secondary: '#dc3545',
-        };
-      default:
-        return {
-          primary: '#ffc107',
-          secondary: '#ffc107',
-        };
-    }
+    return (
+      statusColors[status ?? -1] || { primary: '#ffc107', secondary: '#ffc107' }
+    );
   }
 
   private fetchEvents(errorMessage: string): Observable<EventModel[]> {
-    return this.http.get<ApiEvent[]>(this.baseUrl + '/vocations').pipe(
-      map((resData) =>
-        resData.map((event) => {
-          return <EventModel>{
-            id: event.id,
-            userId: event.user.id,
-            userName: event.user.name,
-            userIcon: event.user.icon,
-            status: this.getEventStatusByValue(event.status),
-            start: new Date(event.start),
-            end: event.end ? new Date(event.end) : undefined,
-            userApprovalResponses: event.userApprovalResponses.map(
-              (approval) =>
-                <EventApproval>{
-                  id: approval.id,
-                  userId: approval.user.id,
-                  userName: approval.user.name,
-                  userIcon: approval.user.icon,
-                  approvalStatus: this.getEventStatusByValue(
-                    approval.approvalStatus
-                  ),
-                }
-            ),
-          };
-        })
-      ),
+    return this.http.get<ApiEvent[]>(this.eventsUrl).pipe(
+      map((events) => {
+        console.log(events)
+        return events.map(mapEvent)
+      }),
       catchError((error) => {
-        console.log(error);
-        return throwError(() => new Error(errorMessage));
+        console.log(error)
+        return throwError(() => {
+          return new Error(errorMessage)
+        })
       })
     );
   }
 
-  private getEventStatusByValue(
-    statusCode: number
-  ): keyof typeof EventStatus | undefined {
-    return Object.keys(EventStatus).find(
-      (key) => EventStatus[key as keyof typeof EventStatus] === statusCode
-    ) as keyof typeof EventStatus | undefined;
+  private refreshEvents(errorMessage: string): void {
+    this.fetchEvents(errorMessage).subscribe({
+      next: (events) => this.events.set(events),
+      error: (err) => console.error(err),
+    });
   }
 }

@@ -3,44 +3,39 @@ import { HttpClient } from '@angular/common/http';
 
 import { User } from './user.models';
 import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
+import { ApiUser } from '../api-models/user.model';
+import { mapUser } from './user.mapping';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private baseUrl = environment.apiUrl;
+  private usersUrl = `${environment.apiUrl}/users`;
   private http = inject(HttpClient);
 
-  private users = signal<User[]>([
-    {
-      id: '1',
-      icon: '',
-      name: 'John',
-    },
-    {
-      id: '2',
-      icon: '',
-      name: 'Mike',
-    },
-    {
-      id: '3',
-      icon: '',
-      name: 'Steve',
-    },
-  ]);
+  private users = signal<User[]>([]);
 
   allUsers = this.users.asReadonly();
 
-  allUser(): Observable<User[]> {
-    return this.http.get<User[]>(this.baseUrl + '/users');
+  loadUsers() {
+    return this.fetchUsers(
+      'Something gone wrong trying to load users...'
+    ).pipe(tap((users) => this.users.set(users)));
   }
 
-  getUserById(userId: string): Observable<User> {
-    return this.http.get<User>(this.baseUrl + '/users/' + userId);
+  private fetchUsers(errorMessage: string): Observable<User[]> {
+    return this.http.get<ApiUser[]>(this.usersUrl).pipe(
+      map((users) => users.map(mapUser)),
+      catchError(() => throwError(() => new Error(errorMessage)))
+    );
   }
 
-  getUser(userId: string) {
-    return this.users().find((f) => f.id === userId);
-  }
+  // TODO: add user interaction functionality
+  // private refreshUsers(errorMessage: string): void {
+  //   this.fetchUsers(errorMessage).subscribe({
+  //     next: (users) => this.users.set(users),
+  //     error: (err) => console.error(err),
+  //   });
+  // }
 }

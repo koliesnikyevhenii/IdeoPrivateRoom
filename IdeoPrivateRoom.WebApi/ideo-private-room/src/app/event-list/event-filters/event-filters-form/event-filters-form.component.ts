@@ -6,7 +6,7 @@ import {
 } from '@angular/forms';
 import { UserService } from '../../../user/user.service';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { NgbActiveOffcanvas, NgbCalendar, NgbDate, NgbDateParserFormatter, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveOffcanvas, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { RangeDatepickerComponent } from "../../../shared/range-datepicker/range-datepicker.component";
 import { RangeDatepickerModel } from '../../../shared/range-datepicker/range-datepicker.model';
 import { EventStatus } from '../../event-list.models';

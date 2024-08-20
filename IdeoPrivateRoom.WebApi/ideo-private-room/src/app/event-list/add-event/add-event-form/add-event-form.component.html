@@ -1,31 +1,28 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
+  @if(employees()) {
   <div class="mb-3">
     <label for="employee" class="form-label">Employee</label>
-    <select
+    <ng-multiselect-dropdown
+      formControlName="employee"
       id="employee"
       name="employee"
-      class="form-select"
-      aria-label="employee"
-      formControlName="employee"
+      placeholder="Select employees"
+      [settings]="employeeDropdownSettings"
+      [data]="employees()"
     >
-      <option value="" disabled selected>Select employee</option>
-      @for (employee of employees; track employee.id) {
-      <option [value]="employee.id">{{ employee.name }}</option>
-      }
-    </select>
+    </ng-multiselect-dropdown>
     @if(invalidEmployee) {
-      <div class="invalid">
-        Select an employee.
-      </div>
+    <div class="invalid">Select an employee.</div>
     }
   </div>
+  }
   <div class="mb-3">
-    <label for="title" class="form-label">Comment (Optional)</label>
+    <label for="comment" class="form-label">Comment (Optional)</label>
     <input
       type="text"
       class="form-control"
-      id="title"
-      formControlName="title"
+      id="comment"
+      formControlName="comment"
     />
   </div>
   <div class="row mb-3" formGroupName="dates">
@@ -48,13 +45,11 @@
         </button>
       </div>
       @if(invalidStartDate) {
-        <div class="invalid">
-          Start date is invalid.
-        </div>
+      <div class="invalid">Start date is invalid.</div>
       } @else if (endDateBeforeStartDate) {
-        <div class="invalid">
-          End date should be greater or equal to start date.
-        </div>
+      <div class="invalid">
+        End date should be greater or equal to start date.
+      </div>
       }
     </div>
     <div class="col-6">
@@ -76,15 +71,19 @@
         </button>
       </div>
       @if(invalidEndDate) {
-        <div class="invalid">
-          End date is invalid.
-        </div>
+      <div class="invalid">End date is invalid.</div>
       }
     </div>
   </div>
 
   <div class="d-flex justify-content-end">
     <button type="submit" class="btn btn-danger btn-action">Submit</button>
-    <button type="button" class="btn btn-secondary ms-2 btn-action" (click)="onCancel()">Cancel</button>
+    <button
+      type="button"
+      class="btn btn-secondary ms-2 btn-action"
+      (click)="onCancel()"
+    >
+      Cancel
+    </button>
   </div>
 </form>
