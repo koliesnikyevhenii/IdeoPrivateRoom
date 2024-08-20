@@ -35,10 +35,6 @@ export interface EventApproval {
     user: User;
     approvalStatus: EventStatus;
 }
-  id: string,
-  userId: string,
-  status: EventStatus
-}
 
 export interface EventFilters {
   employee: string | string[],
