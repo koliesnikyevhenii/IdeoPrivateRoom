@@ -5,7 +5,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { endsBeforeStart, isADate, validDate } from './add-event-form.validators';
+import { endsBeforeStart, isADate, validDate } from '../../event-validators/add-event-form.validators';
 import {
   NgbActiveModal,
   NgbDateAdapter,

@@ -1,7 +1,17 @@
 <app-event-list-header />
 
+@defer () {
 <div class="container mt-5 d-flex justify-content-around flex-wrap">
-    @for(card of cards(); track card.id) {
-        <app-event-card [card]="card" />
-    }
+  @for(card of cards(); track card.id) {
+  <app-event-card [card]="card" />
+  } @empty {
+  <div class="row text-center">
+    <p>There are no added vacation requests yet.</p>
+  </div>
+  }
 </div>
+} @placeholder {
+  <div class="d-flex justify-content-center align-items-center">
+    <span class="loader align-self-center"></span>
+  </div>
+}

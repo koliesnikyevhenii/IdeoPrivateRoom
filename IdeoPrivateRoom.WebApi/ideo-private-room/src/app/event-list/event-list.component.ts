@@ -19,6 +19,7 @@ export class EventListComponent {
   private destroyRef = inject(DestroyRef)
 
   cards = signal<EventCardModel[]>([])
+  loading = signal<boolean>(true)
 
   constructor() {
     afterNextRender(() => {
@@ -37,7 +38,8 @@ export class EventListComponent {
             };
           }))
 
-          this.cards.set([...constructedArray])
+              this.cards.set([...constructedArray])
+              this.loading.set(true)
         }
       })
       // const sub = this.calendarService.fetchAllEvents().subscribe({

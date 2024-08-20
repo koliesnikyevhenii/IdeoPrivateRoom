@@ -1,4 +1,5 @@
 import { CalendarEvent } from "angular-calendar";
+import { RangeDatepickerModel } from "../shared/range-datepicker/range-datepicker.model";
 import { User } from "../user/user.models";
 
 export const colors: any = {
@@ -33,4 +34,14 @@ export interface EventApproval {
     id: string;
     user: User;
     approvalStatus: EventStatus;
+}
+  id: string,
+  userId: string,
+  status: EventStatus
+}
+
+export interface EventFilters {
+  employee: string | string[],
+  status: EventStatus | EventStatus[],
+  dates: RangeDatepickerModel,
 }
