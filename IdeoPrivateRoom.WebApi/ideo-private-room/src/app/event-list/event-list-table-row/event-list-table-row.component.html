@@ -1,0 +1,22 @@
+<tr ngbAccordion class="accordion-flush">
+  <div ngbAccordionItem>
+    <h2 ngbAccordionHeader>
+      <button
+        ngbAccordionButton
+      >
+        <td class="w-25">{{ card().userName }}</td>
+        <td class="w-25">{{ currentDate() | date : "M.d.yyyy" }} (Demo)</td>
+        <td class="w-25">
+          {{ card().fromDate | date : "M.d.yyyy" }} @if(card().toDate) { -
+          {{ card().toDate | date : "M.d.yyyy" }} }
+        </td>
+        <td class="w-25">{{ approvalStatus() }}</td>
+      </button>
+    </h2>
+    <div ngbAccordionCollapse>
+      <div ngbAccordionBody>
+        <ng-template>Content for the first item</ng-template>
+      </div>
+    </div>
+  </div>
+</tr>
