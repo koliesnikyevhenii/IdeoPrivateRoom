@@ -15,6 +15,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS,  withFetch,} from '@angular/common/http';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import {  
   MsalInterceptor,
   MSAL_INSTANCE,
@@ -27,6 +28,7 @@ import {
   MsalBroadcastService } from '@azure/msal-angular';
 import { PublicClientApplication, IPublicClientApplication, InteractionType, BrowserCacheLocation, LogLevel} from '@azure/msal-browser';
 import { environment } from '../environments/environment';
+
 
 
 export function loggerCallback(logLevel: LogLevel, message: string) {
