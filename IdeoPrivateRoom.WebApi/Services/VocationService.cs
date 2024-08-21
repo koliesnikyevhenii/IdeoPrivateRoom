@@ -8,13 +8,27 @@ using IdeoPrivateRoom.WebApi.Services.Interfaces;
 
 namespace IdeoPrivateRoom.WebApi.Services;
 
-public class VocationService(IVocationRepository _vocationRepository, IMapper _mapper) : IVocationService
+public class VocationService(
+    IVocationRepository _vocationRepository, 
+    IMapper _mapper,
+    ILogger<VocationService> _logger) : IVocationService
 {
-    public async Task<List<VocationResponse>> GetAll()
+    public async Task<List<VocationResponse>> GetAll(string? userIds, string? statuses, string? startDate, string? endDate)
     {
-        var vocations = await _vocationRepository.Get();
+        DateTimeOffset? start = DateTimeOffset.TryParse(startDate, out var parsedStart) ? parsedStart : null;
+        DateTimeOffset? end = DateTimeOffset.TryParse(endDate, out var parsedEnd) ? parsedEnd : null;
 
-        return vocations.Select(_mapper.Map<VocationResponse>).ToList();
+        var ids = userIds?.Split(',')
+            .Select(i => Guid.TryParse(i, out var id) ? id : Guid.Empty)
+            .Where(i => i != Guid.Empty)
+            .ToList();
+        
+        var vocations = await _vocationRepository
+            .Get(start, end, ids, statuses);
+
+        return vocations.OrderByDescending(v => v.CreatedDate)
+            .Select(_mapper.Map<VocationResponse>)
+            .ToList();
     }
     public async Task<List<VocationResponse>> GetByUserId(Guid id)
     {
