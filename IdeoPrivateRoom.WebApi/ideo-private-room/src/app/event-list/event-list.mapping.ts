@@ -7,7 +7,7 @@ export function mapEvent(event: ApiEvent): EventModel {
     userId: event.user.id,
     userName: event.user.name,
     userIcon: event.user.icon,
-    status: getEventStatusByValue(event.status),
+    status: getEventStatusByValue(event.status) ?? EventStatus.Pending,
     fromDate: new Date(event.start),
     toDate: event.end ? new Date(event.end) : undefined,
     userApprovalResponses: event.userApprovalResponses.map(mapApproval),

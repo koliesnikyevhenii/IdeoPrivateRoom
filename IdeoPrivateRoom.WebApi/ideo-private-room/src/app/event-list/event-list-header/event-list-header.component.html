@@ -1,13 +1,32 @@
 <div class="px-3 py-2 border-bottom mb-3">
   <div class="container d-flex flex-wrap justify-content-center">
     <div class="col-12 col-lg-auto mb-lg-0 me-lg-auto">
-      <button (click)="openFiltersMenu()" type="button" class="btn btn-dark btn-menu">
+      <button
+        (click)="onOpenFiltersMenu()"
+        type="button"
+        class="btn btn-dark btn-menu me-2"
+      >
         <img src="event-filter-ico.svg" width="24px" height="24px" />
       </button>
+      @if(activeFilters()) {
+      <button
+        (click)="onClearFilters()"
+        type="button"
+        class="btn btn-action btn-dark me-2"
+      >
+        Clear
+      </button>
+      }
     </div>
 
     <div class="text-end">
-      <button type="button" (click)="onAddEvent()" class="btn btn-action btn-dark me-2">Add Event</button>
+      <button
+        type="button"
+        (click)="onAddEvent()"
+        class="btn btn-action btn-dark me-2"
+      >
+        Add Event
+      </button>
     </div>
   </div>
 </div>

@@ -18,7 +18,7 @@ export interface EventModel {
   userId: string,
   userName: string,
   userIcon: string,
-  status: EventStatus | undefined;
+  status: EventStatus;
   userApprovalResponses: EventApproval[];
   fromDate: Date,
   toDate: Date | undefined
@@ -30,10 +30,4 @@ export interface EventApproval {
   userName: string,
   userIcon: string,
   approvalStatus: EventStatus | undefined;
-}
-
-export interface EventFilters {
-  employee: string | string[];
-  status: EventStatus | EventStatus[];
-  dates: RangeDatepickerModel;
 }

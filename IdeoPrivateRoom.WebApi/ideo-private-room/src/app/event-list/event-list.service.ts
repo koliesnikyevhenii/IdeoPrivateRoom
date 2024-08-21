@@ -77,17 +77,16 @@ export class EventListService {
     );
   }
 
-  private fetchEvents(errorMessage: string): Observable<EventModel[]> {
+  fetchEvents(errorMessage: string): Observable<EventModel[]> {
     return this.http.get<ApiEvent[]>(this.eventsUrl).pipe(
       map((events) => {
-        console.log(events)
-        return events.map(mapEvent)
+        return events.map(mapEvent);
       }),
       catchError((error) => {
-        console.log(error)
+        console.error(error);
         return throwError(() => {
-          return new Error(errorMessage)
-        })
+          return new Error(errorMessage);
+        });
       })
     );
   }

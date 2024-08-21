@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { AddEventComponent } from '../add-event/add-event.component';
 import { EventFiltersComponent } from '../event-filters/event-filters.component';
+import { EventFiltersService } from '../event-filters/event-filters.service';
 
 @Component({
   selector: 'app-event-list-header',
@@ -13,12 +14,19 @@ import { EventFiltersComponent } from '../event-filters/event-filters.component'
 export class EventListHeaderComponent {
   private modalService = inject(NgbModal);
   private offcanvasService = inject(NgbOffcanvas)
+  private eventFiltersService = inject(EventFiltersService)
+
+  activeFilters = this.eventFiltersService.readonlyEventFilters;
 
   onAddEvent() {
     this.modalService.open(AddEventComponent)
   }
 
-  openFiltersMenu() {
+  onOpenFiltersMenu() {
     this.offcanvasService.open(EventFiltersComponent, { backdrop: 'static' })
+  }
+
+  onClearFilters() {
+    this.eventFiltersService.clearFilters()
   }
 }

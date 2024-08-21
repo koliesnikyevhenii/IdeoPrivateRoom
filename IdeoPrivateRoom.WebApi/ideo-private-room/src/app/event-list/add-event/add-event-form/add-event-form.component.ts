@@ -26,9 +26,9 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
   styleUrl: './add-event-form.component.scss',
 })
 export class AddEventFormComponent implements OnInit {
-  modalService = inject(NgbActiveModal);
-  userService = inject(UserService)
-  eventListService = inject(EventListService)
+  private modalService = inject(NgbActiveModal);
+  private userService = inject(UserService)
+  private eventListService = inject(EventListService)
   private destroyRef = inject(DestroyRef);
 
   isFetching = signal<boolean>(false);

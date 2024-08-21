@@ -1,7 +1,7 @@
 <app-event-list-header />
 
 @defer () {
-<div class="container mt-5 d-flex justify-content-around flex-wrap">
+<div class="container mt-5 d-flex justify-content-start flex-wrap">
   @for(card of cards(); track card.id) {
   <app-event-card [card]="card" />
   } @empty {

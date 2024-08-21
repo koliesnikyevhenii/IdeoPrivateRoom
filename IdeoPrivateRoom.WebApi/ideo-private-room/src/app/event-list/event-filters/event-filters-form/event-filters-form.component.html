@@ -1,5 +1,5 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-  @if(employees) {
+  @if(employees()) {
   <div class="mb-3">
     <label for="employee" class="form-label">Employee</label>
     <ng-multiselect-dropdown
@@ -8,7 +8,7 @@
       name="employee"
       placeholder="Select employees"
       [settings]="employeeDropdownSettings"
-      [data]="employees"
+      [data]="employees()"
     >
     </ng-multiselect-dropdown>
   </div>
