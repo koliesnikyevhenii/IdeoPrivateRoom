@@ -113,7 +113,8 @@ export const appConfig: ApplicationConfig = {
       CalendarModule.forRoot({
         provide: DateAdapter,
         useFactory: adapterFactory,
-      })
+      }),
+      NgMultiSelectDropDownModule.forRoot()
     ),
 
     provideAnimations()

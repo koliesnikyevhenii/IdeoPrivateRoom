@@ -1,7 +1,4 @@
-﻿using AutoMapper;
-using IdeoPrivateRoom.WebApi.Models.Dtos;
-using IdeoPrivateRoom.WebApi.Models.Requests;
-using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
+﻿using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
 using IdeoPrivateRoom.WebApi.Services.Interfaces;
 
 namespace IdeoPrivateRoom.WebApi.Endpoints;
@@ -10,24 +7,24 @@ public static class Users
 {
     public static void RegisterUserEndpoints(this IEndpointRouteBuilder routes)
     {
-        var users = routes.MapGroup("/api/v1/users")
+        var users = routes.MapGroup("/api/users")
             .WithTags("Users");
 
-        users.MapGet("", async (IUserService userService) =>
+        users.MapGet("", (IUserService userService) =>
         {
-            return await userService.GetAll();
+            return userService.GetAll();
         })
         .WithOpenApi();
 
-        users.MapGet("/{id}", async (Guid id, IUserService userService) =>
+        users.MapGet("/{id}", (Guid id, IUserService userService) =>
         {
-            return await userService.GetById(id);
+            return userService.GetById(id);
         })
         .WithOpenApi();
 
-        users.MapGet("/all", async (IUserRepository userRepository) =>
+        users.MapGet("/all", (IUserRepository userRepository) =>
         {
-            return await userRepository.GetAll();
+            return userRepository.GetAll();
         });
 
         /*users.MapPost("", async (UserRequest request, IUserService userService, IMapper mapper) =>

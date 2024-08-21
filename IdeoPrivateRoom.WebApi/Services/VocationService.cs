@@ -1,43 +1,41 @@
-﻿using IdeoPrivateRoom.WebApi.Endpoints;
+﻿using AutoMapper;
+using IdeoPrivateRoom.WebApi.Data.Entities;
 using IdeoPrivateRoom.WebApi.Models.Dtos;
+using IdeoPrivateRoom.WebApi.Models.Enums;
+using IdeoPrivateRoom.WebApi.Models.Requests;
 using IdeoPrivateRoom.WebApi.Models.Responses;
 using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
 using IdeoPrivateRoom.WebApi.Services.Interfaces;
 
 namespace IdeoPrivateRoom.WebApi.Services;
 
-public class VocationService(IVocationRepository _vocationRepository) : IVocationService
+public class VocationService(IVocationRepository _vocationRepository, IMapper _mapper) : IVocationService
 {
     public async Task<List<VocationResponse>> GetAll()
     {
         var vocations = await _vocationRepository.Get();
 
-        return vocations.Select(v => new VocationResponse
-        {
-            Id = v.Id,
-            Title = v.Title,
-            StartDate = v.StartDate,
-            EndDate = v.EndDate,
-            VocationStatus = v.VocationStatus
-        }).ToList();
+        return vocations.Select(_mapper.Map<VocationResponse>).ToList();
     }
     public async Task<List<VocationResponse>> GetByUserId(Guid id)
     {
         var vocations = await _vocationRepository.Get(id);
 
-        return vocations.Select(v => new VocationResponse
-        {
-            Id = v.Id,
-            Title = v.Title,
-            StartDate = v.StartDate,
-            EndDate = v.EndDate,
-            VocationStatus = v.VocationStatus
-        }).ToList();
+        return vocations.Select(_mapper.Map<VocationResponse>).ToList();
     }
 
-    public async Task<Guid> Create(VocationRequestDto vocation)
+    public async Task<Guid> Create(CreateVocationRequest vocation)
     {
-        return await _vocationRepository.Create(vocation);
+        var createdVocation = new VocationRequestEntity
+        {
+            UserId = vocation.UserId,
+            StartDate = vocation.StartDate,
+            EndDate = vocation.EndDate,
+            CreatedDate = DateTime.UtcNow,
+            UpdatedDate = DateTime.UtcNow,
+            VocationStatus = ApprovalStatus.Approved
+        };
+        return await _vocationRepository.Create(createdVocation);
     }
 
     public async Task<Guid?> Update(Guid id, VocationRequestDto vocation)

@@ -5,7 +5,6 @@ using IdeoPrivateRoom.WebApi.Models.Dtos;
 using IdeoPrivateRoom.WebApi.Models.Enums;
 using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata.Ecma335;
 
 namespace IdeoPrivateRoom.WebApi.Repositories;
 
@@ -13,7 +12,7 @@ public class UserRepository(ApplicationDbContext _dbContext, IMapper _mapper) : 
 {
     public async Task<Guid> Create(UserDto user)
     {
-        var createdUser = await _dbContext.Users.AddAsync(_mapper.Map<User>(user));
+        var createdUser = await _dbContext.Users.AddAsync(_mapper.Map<UserEntity>(user));
         await _dbContext.SaveChangesAsync();
 
         return createdUser.Entity.Id;
@@ -139,39 +138,40 @@ public class UserRepository(ApplicationDbContext _dbContext, IMapper _mapper) : 
             })
             .ToListAsync();
     }
-    public class UserDtoTest
-    {
-        public Guid Id { get; set; }
-        public string Email { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string UserIcon { get; set; }
-        public bool IsEmailConfirmed { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime UpdatedDate { get; set; }
+}
 
-        public IEnumerable<RoleDtoTest> Roles { get; set; }
-        public IEnumerable<VocationRequestDtoTest> Vocations { get; set; }
-        public IEnumerable<LinkedUserDtoTest> LinkedUsers { get; set; }
-    }
+public class UserDtoTest
+{
+    public Guid Id { get; set; }
+    public string Email { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string UserIcon { get; set; }
+    public bool IsEmailConfirmed { get; set; }
+    public DateTime CreatedDate { get; set; }
+    public DateTime UpdatedDate { get; set; }
 
-    public class RoleDtoTest
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-    }
+    public IEnumerable<RoleDtoTest> Roles { get; set; }
+    public IEnumerable<VocationRequestDtoTest> Vocations { get; set; }
+    public IEnumerable<LinkedUserDtoTest> LinkedUsers { get; set; }
+}
 
-    public class VocationRequestDtoTest
-    {
-        public Guid Id { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public ApprovalStatus VocationStatus { get; set; }
-    }
+public class RoleDtoTest
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+}
 
-    public class LinkedUserDtoTest
-    {
-        public Guid LinkedUserId { get; set; }
-        public string LinkedUserName { get; set; }
-    }
+public class VocationRequestDtoTest
+{
+    public Guid Id { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
+    public ApprovalStatus VocationStatus { get; set; }
+}
+
+public class LinkedUserDtoTest
+{
+    public Guid LinkedUserId { get; set; }
+    public string LinkedUserName { get; set; }
 }

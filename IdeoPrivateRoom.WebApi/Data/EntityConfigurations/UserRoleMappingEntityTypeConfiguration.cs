@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace IdeoPrivateRoom.WebApi.Data.EntityConfigurations;
 
-public class UserRoleMappingEntityTypeConfiguration : IEntityTypeConfiguration<UserRoleMapping>
+public class UserRoleMappingEntityTypeConfiguration : IEntityTypeConfiguration<UserRoleMappingEntity>
 {
-    public void Configure(EntityTypeBuilder<UserRoleMapping> builder)
+    public void Configure(EntityTypeBuilder<UserRoleMappingEntity> builder)
     {
         builder.ToTable("UserRoleMapping");
 

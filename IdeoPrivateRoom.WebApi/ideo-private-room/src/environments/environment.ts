@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-    production: false,
+   
     msalConfig: {
       auth: {
         clientId: 'ENTER_CLIENT_ID',
@@ -14,7 +14,9 @@ export const environment = {
       scopes: ['ENTER_SCOPE'],
       uri: 'ENTER_URI',
     },
-  };
+  production: true,
+  apiUrl: 'https://localhost:5001/api'
+};
   
   /*
    * For easier debugging in development mode, you can import the following file

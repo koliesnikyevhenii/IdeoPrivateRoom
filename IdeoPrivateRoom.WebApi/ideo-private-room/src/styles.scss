@@ -13,3 +13,12 @@
 ::-webkit-scrollbar-thumb {
   background-color: #212529;
 }
+
+.btn {
+  &-action {
+      &:hover,:active {
+        background-color: #fdb518;
+        color: #343a40;
+      }
+  }
+}

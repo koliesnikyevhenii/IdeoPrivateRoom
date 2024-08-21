@@ -57,53 +57,53 @@ public class DBInitializer
         }
     }
 
-    private static List<Role> SeedRoles()
+    private static List<RoleEntity> SeedRoles()
     {
         return
         [
-            new Role
+            new RoleEntity
             {
                 Id = Guid.NewGuid(),
                 Name = "Developer",
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new Role
+            new RoleEntity
             {
                 Id = Guid.NewGuid(),
                 Name = "DevOps",
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new Role
+            new RoleEntity
             {
                 Id = Guid.NewGuid(),
                 Name = "QA",
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new Role
+            new RoleEntity
             {
                 Id = Guid.NewGuid(),
                 Name = "Product Manager",
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new Role
+            new RoleEntity
             {
                 Id = Guid.NewGuid(),
                 Name = "UI/UX Designer",
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new Role
+            new RoleEntity
             {
                 Id = Guid.NewGuid(),
                 Name = "HR Manager",
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new Role
+            new RoleEntity
             {
                 Id = Guid.NewGuid(),
                 Name = "Team Lead",
@@ -113,11 +113,11 @@ public class DBInitializer
         ];
     }
 
-    private static List<User> SeedUsers()
+    private static List<UserEntity> SeedUsers()
     {
         return
         [
-            new User
+            new UserEntity
             {
                 Id = Guid.NewGuid(),
                 Email = "john.doe@example.com",
@@ -129,7 +129,7 @@ public class DBInitializer
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new User
+            new UserEntity
             {
                 Id = Guid.NewGuid(),
                 Email = "jane.smith@example.com",
@@ -141,7 +141,7 @@ public class DBInitializer
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new User
+            new UserEntity
             {
                 Id = Guid.NewGuid(),
                 Email = "alice.jones@example.com",
@@ -153,7 +153,7 @@ public class DBInitializer
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new User
+            new UserEntity
             {
                 Id = Guid.NewGuid(),
                 Email = "bob.brown@example.com",
@@ -165,7 +165,7 @@ public class DBInitializer
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new User
+            new UserEntity
             {
                 Id = Guid.NewGuid(),
                 Email = "charlie.miller@example.com",
@@ -177,7 +177,7 @@ public class DBInitializer
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new User
+            new UserEntity
             {
                 Id = Guid.NewGuid(),
                 Email = "diana.wilson@example.com",
@@ -189,7 +189,7 @@ public class DBInitializer
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new User
+            new UserEntity
             {
                 Id = Guid.NewGuid(),
                 Email = "edward.davis@example.com",
@@ -201,7 +201,7 @@ public class DBInitializer
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new User
+            new UserEntity
             {
                 Id = Guid.NewGuid(),
                 Email = "fiona.moore@example.com",
@@ -216,11 +216,11 @@ public class DBInitializer
         ];
     }
 
-    private static List<UserRoleMapping> SeedUserRoleMapping(List<User> users, List<Role> roles)
+    private static List<UserRoleMappingEntity> SeedUserRoleMapping(List<UserEntity> users, List<RoleEntity> roles)
     {
         return
         [
-            new UserRoleMapping
+            new UserRoleMappingEntity
             {
                 UserId = users[0].Id,
                 User = users[0],
@@ -229,7 +229,7 @@ public class DBInitializer
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new UserRoleMapping
+            new UserRoleMappingEntity
             {
                 UserId = users[0].Id,
                 User = users[0],
@@ -238,7 +238,7 @@ public class DBInitializer
                 UpdatedDate = DateTime.UtcNow
             },
 
-            new UserRoleMapping
+            new UserRoleMappingEntity
             {
                 UserId = users[1].Id,
                 User = users[1],
@@ -248,7 +248,7 @@ public class DBInitializer
                 UpdatedDate = DateTime.UtcNow
             },
 
-            new UserRoleMapping
+            new UserRoleMappingEntity
             {
                 UserId = users[2].Id,
                 User = users[2],
@@ -258,7 +258,7 @@ public class DBInitializer
                 UpdatedDate = DateTime.UtcNow
             },
 
-            new UserRoleMapping
+            new UserRoleMappingEntity
             {
                 UserId = users[3].Id,
                 User = users[3],
@@ -267,7 +267,7 @@ public class DBInitializer
                 UpdatedDate = DateTime.UtcNow
             },
 
-            new UserRoleMapping
+            new UserRoleMappingEntity
             {
                 UserId = users[4].Id,
                 User = users[4],
@@ -277,7 +277,7 @@ public class DBInitializer
                 UpdatedDate = DateTime.UtcNow
             },
 
-            new UserRoleMapping
+            new UserRoleMappingEntity
             {
                 UserId = users[5].Id,
                 User = users[5],
@@ -286,7 +286,7 @@ public class DBInitializer
                 UpdatedDate = DateTime.UtcNow
             },
 
-            new UserRoleMapping
+            new UserRoleMappingEntity
             {
                 UserId = users[6].Id,
                 User = users[6],
@@ -295,7 +295,7 @@ public class DBInitializer
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new UserRoleMapping
+            new UserRoleMappingEntity
             {
                 UserId = users[6].Id,
                 User = users[6],
@@ -305,7 +305,7 @@ public class DBInitializer
                 UpdatedDate = DateTime.UtcNow
             },
 
-            new UserRoleMapping
+            new UserRoleMappingEntity
             {
                 UserId = users[7].Id,
                 User = users[7],
@@ -317,11 +317,11 @@ public class DBInitializer
         ];
     }
 
-    private static List<VocationRequest> SeedVocations(List<User> users)
+    private static List<VocationRequestEntity> SeedVocations(List<UserEntity> users)
     {
         return
         [
-            new VocationRequest
+            new VocationRequestEntity
             {
                 Id = Guid.NewGuid(),
                 UserId = users[0].Id,
@@ -333,7 +333,7 @@ public class DBInitializer
                 UpdatedDate = DateTime.UtcNow,
                 VocationStatus = ApprovalStatus.Pending
             },
-            new VocationRequest
+            new VocationRequestEntity
             {
                 Id = Guid.NewGuid(),
                 UserId = users[1].Id,
@@ -345,7 +345,7 @@ public class DBInitializer
                 UpdatedDate = DateTime.UtcNow,
                 VocationStatus = ApprovalStatus.Rejected
             },
-            new VocationRequest
+            new VocationRequestEntity
             {
                 Id = Guid.NewGuid(),
                 UserId = users[2].Id,
@@ -357,7 +357,7 @@ public class DBInitializer
                 UpdatedDate = DateTime.UtcNow,
                 VocationStatus = ApprovalStatus.Approved
             },
-            new VocationRequest
+            new VocationRequestEntity
             {
                 Id = Guid.NewGuid(),
                 UserId = users[3].Id,
@@ -372,39 +372,39 @@ public class DBInitializer
         ];
     }
 
-    private static List<LinkedUser> SeedLinkedUsers(List<User> users)
+    private static List<LinkedUserEntity> SeedLinkedUsers(List<UserEntity> users)
     {
         return
         [
-            new LinkedUser
+            new LinkedUserEntity
             {
                 UserId = users[0].Id,
                 LinkedUserId = users[6].Id,
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new LinkedUser
+            new LinkedUserEntity
             {
                 UserId = users[0].Id,
                 LinkedUserId = users[7].Id,
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new LinkedUser
+            new LinkedUserEntity
             {
                 UserId = users[2].Id,
                 LinkedUserId = users[3].Id,
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new LinkedUser
+            new LinkedUserEntity
             {
                 UserId = users[4].Id,
                 LinkedUserId = users[6].Id,
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new LinkedUser
+            new LinkedUserEntity
             {
                 UserId = users[4].Id,
                 LinkedUserId = users[7].Id,
@@ -413,11 +413,11 @@ public class DBInitializer
             }
         ];
     }
-    private static List<UserApprovalResponse> SeedUserApprovalResponses(List<User> users, List<VocationRequest> vocations)
+    private static List<UserApprovalResponseEntity> SeedUserApprovalResponses(List<UserEntity> users, List<VocationRequestEntity> vocations)
     {
         return
         [
-            new UserApprovalResponse
+            new UserApprovalResponseEntity
             {
                 VocationRequestId = vocations[0].Id,
                 UserId = users[6].Id,
@@ -425,7 +425,7 @@ public class DBInitializer
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new UserApprovalResponse
+            new UserApprovalResponseEntity
             {
                 VocationRequestId = vocations[0].Id,
                 UserId = users[7].Id,
@@ -433,7 +433,7 @@ public class DBInitializer
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new UserApprovalResponse
+            new UserApprovalResponseEntity
             {
                 VocationRequestId = vocations[2].Id,
                 UserId = users[6].Id,
@@ -441,7 +441,7 @@ public class DBInitializer
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
-            new UserApprovalResponse
+            new UserApprovalResponseEntity
             {
                 VocationRequestId = vocations[3].Id,
                 UserId = users[6].Id,

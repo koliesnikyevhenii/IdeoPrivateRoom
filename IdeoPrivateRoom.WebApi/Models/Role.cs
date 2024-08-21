@@ -1,4 +1,4 @@
-﻿namespace IdeoPrivateRoom.WebApi.Data.Entities;
+﻿namespace IdeoPrivateRoom.WebApi.Models;
 
 public class Role
 {
@@ -6,5 +6,4 @@ public class Role
     public string Name { get; set; } = string.Empty;
     public DateTime CreatedDate { get; set; }
     public DateTime UpdatedDate { get; set; }
-    public ICollection<UserRoleMapping> RoleMappings { get; set; } = [];
 }
