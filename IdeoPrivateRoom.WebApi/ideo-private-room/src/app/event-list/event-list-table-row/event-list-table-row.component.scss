@@ -16,19 +16,34 @@
 .status {
   &-confirmed {
     #color {
-      fill: green;
+      fill: #198754;
+    }
+
+    &.status-image {
+      outline: 2px solid #198754;
+      border: 1px solid #ced4da;
     }
   }
 
   &-pending {
     #color {
-      fill: yellow;
+      fill: #f7ca45;
+    }
+
+    &.status-image {
+      outline: 2px solid #ffc107;
+      border: 1px solid #ced4da;
     }
   }
 
   &-declined {
     #color {
-      fill: red;
+      fill: #dc3545;
+    }
+
+    &.status-image {
+      outline: 2px solid #dc3545;
+      border: 1px solid #ced4da;
     }
   }
 }
@@ -39,7 +54,24 @@
   border-radius: 50%;
 }
 
-.divider {
-  border-bottom: 1px solid #dee2e6;
-  margin: 10px 0;
+::ng-deep {
+  .tooltip-inner {
+    background-color: #ffffff;
+    border: 1px solid #0062a2;
+    opacity: 1;
+  }
+
+  .bs-tooltip-top .tooltip-arrow::before,
+  .bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow::before {
+    border-top-color: #0062a2 !important;
+  }
+
+  .bs-tooltip-top {
+    opacity: 1 !important;
+  }
+}
+
+.accordion-button:not(.collapsed) {
+  outline: none;
+  background-color: #fff
 }

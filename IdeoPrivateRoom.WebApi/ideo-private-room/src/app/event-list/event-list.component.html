@@ -1,23 +1,23 @@
-<app-event-list-header (switchView)="onSwitchView()" />
+<app-event-list-header />
 
-@defer () { @if(isTable() && cards().length > 0) {
-<table class="table table-hover container">
+@defer () { @if(viewMode() === 'Table' && cards().length > 0) {
+<table class="table container">
   <thead class="row">
-    <tr class="w-100 row">
-      <th scope="col" class="col w-25">Name</th>
-      <th scope="col" class="col w-25">Dates</th>
-      <th scope="col" class="col w-25">Approvals</th>
-      <th scope="col" class="col w-25">Status</th>
-      <th scope="col" class="col w-25">Actions</th>
+    <tr class="row ps-0 pe-4">
+      <th scope="col" class="col-2 ps-0 pe-0">Name</th>
+      <th scope="col" class="col-4 ps-0 pe-0">Dates</th>
+      <th scope="col" class="col-2 ps-0 pe-0">Approvals</th>
+      <th scope="col" class="col-2 ps-0 pe-0">Status</th>
+      <th scope="col" class="col-2 ps-0 pe-0">Actions</th>
     </tr>
   </thead>
-  <tbody class="row">
+  <tbody>
     @for(card of cards(); track card.id) {
     <app-event-list-table-row class="row" [card]="card" />
     }
   </tbody>
 </table>
-} @else if(!isTable() && cards().length > 0) {
+} @else if(viewMode() === 'Cards' && cards().length > 0) {
 <div class="container mt-5 d-flex justify-content-start flex-wrap">
   @for(card of cards(); track card.id) {
   <app-event-card [card]="card" />

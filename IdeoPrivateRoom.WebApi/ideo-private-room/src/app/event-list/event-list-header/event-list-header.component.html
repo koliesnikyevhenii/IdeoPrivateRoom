@@ -1,18 +1,18 @@
 <div class="px-3 py-2 border-bottom mb-3">
-  <div class="container d-flex flex-wrap justify-content-center">
+  <div class="container-flex d-flex flex-wrap">
     <div class="col-12 col-lg-auto mb-lg-0 me-lg-auto">
       <button
         (click)="onOpenFiltersMenu()"
         type="button"
-        class="btn btn-dark btn-menu me-2"
+        class="btn btn-outline-primary btn-menu me-2"
       >
-        <img src="event-filter-ico.svg" width="24px" height="24px" />
+        <i class="bi bi-filter"></i>
       </button>
       @if(activeFilters()) {
       <button
         (click)="onClearFilters()"
         type="button"
-        class="btn btn-action btn-dark me-2"
+        class="btn btn-outline-secondary me-2"
       >
         Clear
       </button>
@@ -23,17 +23,28 @@
       <button
         type="button"
         (click)="onAddEvent()"
-        class="btn btn-action btn-dark me-2"
+        class="btn btn-outline-primary me-2"
       >
         Add Event
       </button>
-      <button
-        type="button"
-        (click)="onSwitchView()"
-        class="btn btn-action btn-dark me-2"
-      >
-        Switch View
-      </button>
+      <div ngbDropdown class="d-inline-block me-2">
+        <button
+          type="button"
+          class="btn btn-outline-primary dropdown-toggle"
+          id="mode-dropdown"
+          ngbDropdownToggle
+        >
+          <i class="bi bi-three-dots-vertical"></i>
+        </button>
+        <div ngbDropdownMenu>
+          <button ngbDropdownItem class="btn py-2 btn-outline-primary" [class.active]="viewMode() === 'Table'" (click)="switchTableMode()">
+            <i class="bi bi-table"></i>
+          </button>
+          <button ngbDropdownItem class="btn py-2 btn-outline-primary" [class.active]="viewMode() === 'Cards'" (click)="switchCardsMode()">
+            <i class="bi bi-list-ul"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

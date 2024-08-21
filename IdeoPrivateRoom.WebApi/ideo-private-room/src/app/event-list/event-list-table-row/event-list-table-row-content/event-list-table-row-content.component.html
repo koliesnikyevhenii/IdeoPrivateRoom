@@ -1,0 +1,57 @@
+<div class="container-fluid col-6 ms-0">
+  <table class="table">
+    <thead>
+      <tr>
+        <th><strong>Created At:</strong></th>
+        <th><strong>Comment:</strong></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ curentDate() | date : "longDate" }} - Demo</td>
+        <td>Very detailed comment with details - Demo</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="row border-bottom pb-2 mb-2">
+    <div class="col-12">
+      <table class="table table-borderless mb-0">
+        <tbody>
+          @for(response of card().userApprovalResponses; track response.id) {
+          <tr>
+            <td>
+              <img
+                [src]="response.userIcon"
+                class="img-fluid"
+                alt="Icon"
+                width="32"
+                height="32"
+              />
+              <span class="ms-2">{{ response.userName }}</span>
+            </td>
+            <td>
+              <h5 class="mb-0">
+                <span
+                  class="badge mx-auto"
+                  [class]="
+                    eventListTableRowService.getApprovalStatus(card().status)
+                      .badgeClass
+                  "
+                  >{{ approvalStatus() }}</span
+                >
+              </h5>
+            </td>
+            <td class="text-end">
+              <button class="btn btn-outline-primary btn-sm me-2">
+                Approve
+              </button>
+              <button class="btn btn-outline-danger btn-sm">Decline</button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
