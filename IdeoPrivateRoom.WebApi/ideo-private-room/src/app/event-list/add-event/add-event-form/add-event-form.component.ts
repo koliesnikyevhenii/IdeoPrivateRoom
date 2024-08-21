@@ -1,11 +1,21 @@
-import { Component, inject } from '@angular/core';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { endsBeforeStart, isADate, validDate } from '../../event-validators/add-event-form.validators';
+import {
+  endsBeforeStart,
+  validDate,
+} from '../../event-validators/add-event-form.validators';
 import {
   NgbActiveModal,
   NgbDateAdapter,
@@ -15,26 +25,41 @@ import {
 import { DatePipe } from '@angular/common';
 import { UserService } from '../../../user/user.service';
 import { EventListService } from '../../event-list.service';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { EventFiltersService } from '../../event-filters/event-filters.service';
 
 @Component({
   selector: 'app-add-event-form',
   standalone: true,
-  imports: [ReactiveFormsModule, NgbDatepickerModule, DatePipe],
+  imports: [
+    ReactiveFormsModule,
+    NgbDatepickerModule,
+    DatePipe,
+    NgMultiSelectDropDownModule,
+  ],
   providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
   templateUrl: './add-event-form.component.html',
   styleUrl: './add-event-form.component.scss',
 })
-export class AddEventFormComponent {
-  modalService = inject(NgbActiveModal);
-  userService = inject(UserService)
-  eventListService = inject(EventListService)
+export class AddEventFormComponent implements OnInit {
+  private modalService = inject(NgbActiveModal);
+  private userService = inject(UserService);
+  private eventListService = inject(EventListService);
+  private eventFiltersService = inject(EventFiltersService);
+  private destroyRef = inject(DestroyRef);
 
-  employees = this.userService.allUsers();
+  isFetching = signal<boolean>(false);
+  error = signal<string>('');
+
+  employees = computed(() => this.userService.allUsers());
 
   form = new FormGroup({
-    employee: new FormControl<string>('', {
-      validators: [Validators.required],
-    }),
+    employee: new FormControl<{ id: string; name: string }[] | undefined>(
+      undefined,
+      {
+        validators: [Validators.required],
+      }
+    ),
     comment: new FormControl<string>(''),
     dates: new FormGroup(
       {
@@ -54,6 +79,18 @@ export class AddEventFormComponent {
     ),
   });
 
+  employeeDropdownSettings = {
+    singleSelection: true,
+    idField: 'id',
+    textField: 'name',
+    selectAllText: 'Select All',
+    unSelectAllText: 'UnSelect All',
+    itemsShowLimit: 3,
+    allowRemoteDataSearch: true,
+    allowSearchFilter: true,
+    defaultOpen: false,
+  };
+
   get invalidEmployee() {
     const employeeField = this.form.controls.employee;
     return employeeField.touched && employeeField.invalid;
@@ -61,19 +98,24 @@ export class AddEventFormComponent {
 
   get invalidStartDate() {
     const startDate = this.form.controls.dates.get('startDate');
-    return (startDate?.touched && startDate?.errors) || this.form.controls.dates.errors?.['startDateNotADate']
+    return (
+      (startDate?.touched && startDate?.errors) ||
+      this.form.controls.dates.errors?.['startDateNotADate']
+    );
   }
 
   get invalidEndDate() {
     const endDate = this.form.controls.dates.get('endDate');
-    return endDate?.touched && endDate?.errors || this.form.controls.dates.errors?.['endDateNotADate']
+    return (
+      (endDate?.touched && endDate?.errors) ||
+      this.form.controls.dates.errors?.['endDateNotADate']
+    );
   }
 
   get endDateBeforeStartDate() {
-    const dates = this.form.controls.dates
+    const dates = this.form.controls.dates;
     return (
-      (dates.get('endDate')?.touched ||
-      dates.get('startDate')?.touched) &&
+      (dates.get('endDate')?.touched || dates.get('startDate')?.touched) &&
       dates?.errors &&
       dates.errors['endsBeforeStart'] == true
     );
@@ -90,18 +132,47 @@ export class AddEventFormComponent {
       return;
     }
 
-    const userId = this.form.controls.employee.value;
+    const userData = this.form.controls.employee.value;
     const comment = this.form.controls.comment.value;
     const startDate = this.form.controls.dates.controls.startDate.value;
     const endDate = this.form.controls.dates.controls.endDate.value;
 
-    if(userId && comment && startDate && endDate) {
-      this.eventListService.addEvent(userId, startDate, endDate, comment)
+    if (userData?.[0] && startDate && endDate) {
+      const sub = this.eventListService
+        .createEvent(userData[0].id, startDate, endDate, comment)
+        .subscribe({
+          complete: () =>
+            this.eventFiltersService.loadFilteredEvents().subscribe(),
+          error: (error: Error) => {
+            this.error.set(error.message);
+          },
+        });
+
+      this.destroyRef.onDestroy(() => {
+        sub.unsubscribe();
+      });
+
       this.modalService.close();
     }
   }
 
   onCancel() {
     this.modalService.close();
+  }
+
+  ngOnInit() {
+    this.isFetching.set(true);
+    const sub = this.userService.loadUsers().subscribe({
+      complete: () => {
+        this.isFetching.set(false);
+      },
+      error: (error: Error) => {
+        this.error.set(error.message);
+      },
+    });
+
+    this.destroyRef.onDestroy(() => {
+      sub.unsubscribe();
+    });
   }
 }

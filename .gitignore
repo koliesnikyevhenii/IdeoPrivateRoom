@@ -388,6 +388,10 @@ FodyWeavers.xsd
 # Local History for Visual Studio Code
 .history/
 
+# Containers data
+.containers/
+.containers/*
+
 # Windows Installer files from build outputs
 *.cab
 *.msi

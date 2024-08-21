@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   inject,
   OnInit,
@@ -9,6 +10,7 @@ import {
 import { EventCardComponent } from './event-card/event-card.component';
 import { EventListHeaderComponent } from './event-list-header/event-list-header.component';
 import { EventListService } from './event-list.service';
+import { EventFiltersService } from './event-filters/event-filters.service';
 @Component({
   selector: 'app-event-list',
   standalone: true,
@@ -18,16 +20,16 @@ import { EventListService } from './event-list.service';
   styleUrl: './event-list.component.scss',
 })
 export class EventListComponent implements OnInit {
-  private eventListService = inject(EventListService);
+  private eventFiltersService = inject(EventFiltersService);
   private destroyRef = inject(DestroyRef);
 
-  cards = this.eventListService.loadedEvents;
+  cards = computed(() => this.eventFiltersService.loadedEvents());
   isFetching = signal<boolean>(false);
   error = signal<string>('');
 
   ngOnInit() {
     this.isFetching.set(true);
-    const sub = this.eventListService.loadEvents().subscribe({
+    const sub = this.eventFiltersService.loadFilteredEvents().subscribe({
       complete: () => {
         this.isFetching.set(false);
       },

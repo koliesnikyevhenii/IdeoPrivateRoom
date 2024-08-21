@@ -11,8 +11,8 @@
   />
   <div class="card-status">{{ cardStatus()?.name }}</div>
   <div class="vacation-details">
-    {{ card().start | date : "M.d.yyyy" }}
-    @if(card().end) { - {{ card().end | date : "M.d.yyyy" }}
+    {{ card().fromDate | date : "M.d.yyyy" }}
+    @if(card().toDate) { - {{ card().toDate | date : "M.d.yyyy" }}
     }
   </div>
 

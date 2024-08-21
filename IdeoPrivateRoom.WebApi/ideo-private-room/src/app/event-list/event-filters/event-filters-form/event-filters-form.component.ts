@@ -1,31 +1,50 @@
-import { Component, inject } from '@angular/core';
 import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../user/user.service';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { NgbActiveOffcanvas, NgbCalendar, NgbDate, NgbDateParserFormatter, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
-import { RangeDatepickerComponent } from "../../../shared/range-datepicker/range-datepicker.component";
+import {
+  NgbActiveOffcanvas,
+  NgbDatepickerModule,
+} from '@ng-bootstrap/ng-bootstrap';
+import { RangeDatepickerComponent } from '../../../shared/range-datepicker/range-datepicker.component';
 import { RangeDatepickerModel } from '../../../shared/range-datepicker/range-datepicker.model';
 import { EventStatus } from '../../event-list.models';
+import { EventFiltersService } from '../event-filters.service';
 
 @Component({
   selector: 'app-event-filters-form',
   standalone: true,
-  imports: [ReactiveFormsModule, NgMultiSelectDropDownModule, NgbDatepickerModule, RangeDatepickerComponent],
+  imports: [
+    ReactiveFormsModule,
+    NgMultiSelectDropDownModule,
+    NgbDatepickerModule,
+    RangeDatepickerComponent,
+  ],
   templateUrl: './event-filters-form.component.html',
   styleUrl: './event-filters-form.component.scss',
 })
-export class EventFiltersFormComponent {
+export class EventFiltersFormComponent implements OnInit {
   private userService = inject(UserService);
   private offCanvasService = inject(NgbActiveOffcanvas);
+  private eventFiltersService = inject(EventFiltersService);
+  private destroyRef = inject(DestroyRef);
+
+  isFetching = signal<boolean>(false);
+  error = signal<string>('');
 
   employeeDropdownSettings = {
     singleSelection: false,
     selectAllText: 'Select All',
     unSelectAllText: 'UnSelect All',
+    idField: 'id',
+    textField: 'name',
     itemsShowLimit: 3,
     allowRemoteDataSearch: true,
     allowSearchFilter: true,
@@ -42,24 +61,59 @@ export class EventFiltersFormComponent {
     defaultOpen: false,
   };
 
-  employees = this.userService.allUsers().map((m) => m.name);
+  employees = computed(() => this.userService.allUsers());
   // Outputs a list of status keys without values
-  statuses = Object.keys(EventStatus).filter(key => isNaN(Number(key)))
+  statuses = Object.keys(EventStatus).filter((key) => isNaN(Number(key)));
+  activeFilters = this.eventFiltersService.readonlyEventFilters;
 
   form = new FormGroup({
-    employee: new FormControl<string[]>([]),
-    status: new FormControl<EventStatus[]>([]),
-    dates: new FormControl<RangeDatepickerModel>({
-      fromDate: null,
-      toDate: null
-    })
+    employee: new FormControl<{ id: string; name: string }[] | undefined>(
+      this.activeFilters()?.employee ?? []
+    ),
+    status: new FormControl<string[]>(this.activeFilters()?.status ?? []),
+    dates: new FormControl<RangeDatepickerModel>(
+      this.activeFilters()?.dates ?? {
+        fromDate: null,
+        toDate: null,
+      }
+    ),
   });
 
   onSubmit() {
-    console.log(this.form);
+    if (!this.form.valid) {
+      return;
+    }
+
+    const employee = this.form.controls.employee.value;
+    const status = this.form.controls.status.value;
+    const dates = this.form.controls.dates.value;
+
+    this.eventFiltersService.setEventFilters({
+      employee: employee,
+      status: status,
+      dates: dates,
+    });
+
+    this.offCanvasService.close();
   }
 
   onClose() {
     this.offCanvasService.close();
+  }
+
+  ngOnInit() {
+    this.isFetching.set(true);
+    const sub = this.userService.loadUsers().subscribe({
+      complete: () => {
+        this.isFetching.set(false);
+      },
+      error: (error: Error) => {
+        this.error.set(error.message);
+      },
+    });
+
+    this.destroyRef.onDestroy(() => {
+      sub.unsubscribe();
+    });
   }
 }

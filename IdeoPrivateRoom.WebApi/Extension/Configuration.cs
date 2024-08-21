@@ -42,9 +42,11 @@ public static class Configuration
             var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             DBInitializer.Seed(context);
         }
+        else
+        {
+            app.UseCors(builder => builder.WithOrigins("http://localhost:8080", "http://localhost:4200"));
+        }
 
         app.UseHttpsRedirection();
-
-        app.UseCors(builder => builder.WithOrigins("http://localhost:8080", "http://localhost:4200"));
     }
 }
