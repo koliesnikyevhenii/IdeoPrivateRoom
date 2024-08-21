@@ -9,10 +9,10 @@ namespace IdeoPrivateRoom.WebApi.Repositories;
 
 public class VocationRepository(ApplicationDbContext _dbContext, IMapper _mapper) : IVocationRepository
 {
-    public async Task<Guid> Create(VocationRequestDto vocationRequest)
+    public async Task<Guid> Create(VocationRequestEntity vocationRequest)
     {
         var createdVocation = await _dbContext.VocationRequests
-            .AddAsync(_mapper.Map<VocationRequest>(vocationRequest));
+            .AddAsync(vocationRequest);
 
         await _dbContext.SaveChangesAsync();
 
@@ -23,6 +23,9 @@ public class VocationRepository(ApplicationDbContext _dbContext, IMapper _mapper
     {
         return await _dbContext.VocationRequests
             .AsNoTracking()
+            .Include(v => v.User)
+            .Include(v => v.UserApprovalResponses)
+                .ThenInclude(u => u.User)
             .Select(v => _mapper.Map<VocationRequestDto>(v))
             .ToListAsync();
     }

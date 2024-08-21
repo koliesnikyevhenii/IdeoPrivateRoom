@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace IdeoPrivateRoom.WebApi.Data.EntityConfigurations;
 
-public class UserApprovalResponseEntityTypeConfiguration : IEntityTypeConfiguration<UserApprovalResponse>
+public class UserApprovalResponseEntityTypeConfiguration : IEntityTypeConfiguration<UserApprovalResponseEntity>
 {
-    public void Configure(EntityTypeBuilder<UserApprovalResponse> builder)
+    public void Configure(EntityTypeBuilder<UserApprovalResponseEntity> builder)
     {
         builder.ToTable("UserApprovalResponse");
 

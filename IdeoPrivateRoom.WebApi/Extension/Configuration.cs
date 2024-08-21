@@ -37,10 +37,13 @@ public static class Configuration
             app.UseSwaggerUI();
             app.ApplyMigrations();
             DBInitializer.Seed(app);
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+        }
+        else
+        {
+            app.UseCors(builder => builder.WithOrigins("http://localhost:8080", "http://localhost:4200"));
         }
 
         app.UseHttpsRedirection();
-
-        app.UseCors(builder => builder.WithOrigins("http://localhost:8080"));
     }
 }

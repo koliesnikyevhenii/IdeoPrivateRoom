@@ -1,52 +1,45 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { EventCardComponent } from './event-card/event-card.component';
-import { EventListHeaderComponent } from "./event-list-header/event-list-header.component";
-import { EventCardModel } from './event-card/event-card.models';
-import { CalendarService } from '../calendar/calendar.service';
-import { UserService } from '../user/user.service';
-
+import { EventListHeaderComponent } from './event-list-header/event-list-header.component';
+import { EventListService } from './event-list.service';
+import { EventFiltersService } from './event-filters/event-filters.service';
 @Component({
   selector: 'app-event-list',
   standalone: true,
   imports: [EventCardComponent, EventListHeaderComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './event-list.component.html',
-  styleUrl: './event-list.component.scss'
+  styleUrl: './event-list.component.scss',
 })
-export class EventListComponent {
-  private calendarService = inject(CalendarService)
-  private userService = inject(UserService)
-  private destroyRef = inject(DestroyRef)
+export class EventListComponent implements OnInit {
+  private eventFiltersService = inject(EventFiltersService);
+  private destroyRef = inject(DestroyRef);
 
-  cards = signal<EventCardModel[]>([])
-  loading = signal<boolean>(true)
+  cards = computed(() => this.eventFiltersService.loadedEvents());
+  isFetching = signal<boolean>(false);
+  error = signal<string>('');
 
-  constructor() {
-    afterNextRender(() => {
-      const sub = this.calendarService.allEvents.subscribe({
-        next: (events) => {
-          const users = this.userService.allUsers()
-          const constructedArray = events.map<EventCardModel>((event => {
-            const user = users.find(f => f.id === event.userId)
-            return {
-              id: event.id,
-              name: user?.name,
-              title: event.title,
-              icon: user?.icon,
-              startDate: event.start,
-              endDate: event.end,
-              status: event.status
-            }
-          }))
-      
-          this.cards.set([...constructedArray])
-          this.loading.set(false)
-        }
-      })
-  
-      this.destroyRef.onDestroy(() => {
-        sub.unsubscribe()
-      })
-    })
+  ngOnInit() {
+    this.isFetching.set(true);
+    const sub = this.eventFiltersService.loadFilteredEvents().subscribe({
+      complete: () => {
+        this.isFetching.set(false);
+      },
+      error: (error: Error) => {
+        this.error.set(error.message);
+      },
+    });
+
+    this.destroyRef.onDestroy(() => {
+      sub.unsubscribe();
+    });
   }
 }

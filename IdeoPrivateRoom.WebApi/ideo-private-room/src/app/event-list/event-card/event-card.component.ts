@@ -1,10 +1,17 @@
-import { Component, computed, DestroyRef, inject, input, OnInit, signal, TemplateRef } from '@angular/core';
-import { EventCardModel } from './event-card.models';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  input,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { EventStatus } from '../../calendar/calendar.models';
-import { CalendarService } from '../../calendar/calendar.service';
+import { EventModel, EventStatus } from '../event-list.models';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../../shared/confirm-modal/confirm-modal.component';
+import { EventListService } from '../event-list.service';
+import { EventFiltersService } from '../event-filters/event-filters.service';
 
 @Component({
   selector: 'app-event-card',
@@ -15,50 +22,58 @@ import { ConfirmModalComponent } from '../../shared/confirm-modal/confirm-modal.
 })
 export class EventCardComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
-  private calendarService = inject(CalendarService);
-  private modalService = inject(NgbModal)
+  private eventListService = inject(EventListService);
+  private eventFiltersService = inject(EventFiltersService);
+  private modalService = inject(NgbModal);
 
-  card = input.required<EventCardModel>();
-  cardStatus = signal<{class: string, name: string} | undefined>(undefined);
+  card = input.required<EventModel>();
+  cardStatus = signal<{ class: string; name: string } | undefined>(undefined);
 
   ngOnInit(): void {
     switch (this.card().status) {
       case EventStatus.Pending:
         this.cardStatus.set({
           class: 'pending-bg',
-          name: EventStatus[EventStatus.Pending]
-        })
+          name: EventStatus[EventStatus.Pending],
+        });
         break;
       case EventStatus.Declined:
         this.cardStatus.set({
           class: 'rejected-bg',
-          name: EventStatus[EventStatus.Declined]
-        })
+          name: EventStatus[EventStatus.Declined],
+        });
         break;
       default:
         this.cardStatus.set({
           class: 'approved-bg',
-          name: EventStatus[EventStatus.Confirmed]
-        })
+          name: EventStatus[EventStatus.Confirmed],
+        });
         break;
     }
   }
 
   removeCard() {
     const modal = this.modalService.open(ConfirmModalComponent);
-    modal.componentInstance.confirmationTitle = "Confirm Deletion"
-    modal.componentInstance.confirmationText = "Are you sure you want to delete this vacation request?"
+    modal.componentInstance.confirmationTitle = 'Confirm Deletion';
+    modal.componentInstance.confirmationText =
+      'Are you sure you want to delete this vacation request?';
 
-    const sub = (modal.componentInstance).confirmationStatus.subscribe({
+    const sub = modal.componentInstance.confirmationStatus.subscribe({
       next: (result: any) => {
-        if(result === true) {
-          this.calendarService.deleteEvent(this.card().id);
+        if (result === true) {
+          this.eventListService.deleteEvent(this.card().id).subscribe({
+            complete: () =>
+              this.eventFiltersService.loadFilteredEvents().subscribe(),
+            error: (error: Error) => {
+              console.log(error.message);
+            },
+          });
         }
-      }
-    })
+      },
+    });
 
     this.destroyRef.onDestroy(() => {
-      sub.unsubscribe()
-    })
+      sub.unsubscribe();
+    });
   }
 }

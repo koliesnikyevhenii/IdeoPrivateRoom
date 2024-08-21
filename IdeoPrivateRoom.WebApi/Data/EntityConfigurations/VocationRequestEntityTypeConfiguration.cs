@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace IdeoPrivateRoom.WebApi.Data.EntityConfigurations;
 
-public class VocationRequestEntityTypeConfiguration : IEntityTypeConfiguration<VocationRequest>
+public class VocationRequestEntityTypeConfiguration : IEntityTypeConfiguration<VocationRequestEntity>
 {
-    public void Configure(EntityTypeBuilder<VocationRequest> builder)
+    public void Configure(EntityTypeBuilder<VocationRequestEntity> builder)
     {
         builder.ToTable("VocationRequest");
 
