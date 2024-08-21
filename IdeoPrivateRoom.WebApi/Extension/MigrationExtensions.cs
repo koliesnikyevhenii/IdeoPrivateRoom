@@ -1,4 +1,4 @@
-﻿using IdeoPrivateRoom.WebApi.Data;
+﻿using IdeoPrivateRoom.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace IdeoPrivateRoom.WebApi.Extension;

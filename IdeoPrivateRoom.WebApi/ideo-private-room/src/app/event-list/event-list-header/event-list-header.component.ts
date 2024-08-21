@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import { NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { AddEventComponent } from '../add-event/add-event.component';
 import { EventFiltersComponent } from '../event-filters/event-filters.component';
@@ -17,6 +17,8 @@ export class EventListHeaderComponent {
   private eventFiltersService = inject(EventFiltersService)
 
   activeFilters = this.eventFiltersService.readonlyEventFilters;
+  
+  switchView = output();
 
   onAddEvent() {
     this.modalService.open(AddEventComponent)
@@ -28,5 +30,9 @@ export class EventListHeaderComponent {
 
   onClearFilters() {
     this.eventFiltersService.clearFilters()
+  }
+
+  onSwitchView() {
+    this.switchView.emit()
   }
 }

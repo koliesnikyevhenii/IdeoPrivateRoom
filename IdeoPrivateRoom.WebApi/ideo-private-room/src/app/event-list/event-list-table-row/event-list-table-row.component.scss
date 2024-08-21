@@ -1,0 +1,45 @@
+.status-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid;
+}
+
+.user-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status {
+  &-confirmed {
+    #color {
+      fill: green;
+    }
+  }
+
+  &-pending {
+    #color {
+      fill: yellow;
+    }
+  }
+
+  &-declined {
+    #color {
+      fill: red;
+    }
+  }
+}
+
+.status-image {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.divider {
+  border-bottom: 1px solid #dee2e6;
+  margin: 10px 0;
+}

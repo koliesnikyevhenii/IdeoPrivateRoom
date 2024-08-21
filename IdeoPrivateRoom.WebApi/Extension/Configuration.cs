@@ -1,10 +1,12 @@
-﻿using IdeoPrivateRoom.WebApi.Data;
-using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
-using IdeoPrivateRoom.WebApi.Repositories;
+﻿/*using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
+using IdeoPrivateRoom.WebApi.Repositories;*/
 using Microsoft.EntityFrameworkCore;
 using IdeoPrivateRoom.WebApi.Services.Interfaces;
 using IdeoPrivateRoom.WebApi.Services;
 using IdeoPrivateRoom.WebApi.Mapping;
+using IdeoPrivateRoom.DAL.Data;
+using IdeoPrivateRoom.DAL.Repositories.Interfaces;
+using IdeoPrivateRoom.DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
@@ -49,8 +51,9 @@ public static class Configuration
             app.UseSwagger();
             app.UseSwaggerUI();
             app.ApplyMigrations();
-            DBInitializer.Seed(app);
-            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            using var serviceScope = app.Services.CreateScope();
+            var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            DBInitializer.Seed(context);
         }
         else
         {
