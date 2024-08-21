@@ -1,6 +1,4 @@
-﻿using IdeoPrivateRoom.WebApi.Data.Entities;
-
-namespace IdeoPrivateRoom.WebApi.Models;
+﻿namespace IdeoPrivateRoom.WebApi.Models;
 
 public class UserRoleMapping
 {

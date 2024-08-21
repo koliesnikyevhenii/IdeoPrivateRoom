@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using IdeoPrivateRoom.WebApi.Data;
-using IdeoPrivateRoom.WebApi.Data.Entities;
+using IdeoPrivateRoom.DAL.Data;
+using IdeoPrivateRoom.DAL.Data.Entities;
 using IdeoPrivateRoom.WebApi.Models.Dtos;
 using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -48,7 +48,7 @@ public class VocationRepository(ApplicationDbContext _dbContext, IMapper _mapper
                 .SetProperty(p => p.EndDate, p => vocation.EndDate)
                 .SetProperty(p => p.UpdatedDate, p => vocation.UpdatedDate)
                 .SetProperty(p => p.CreatedDate, p => vocation.CreatedDate)
-                .SetProperty(p => p.VocationStatus, p => vocation.VocationStatus));
+                .SetProperty(p => p.VocationStatus, p => ((int)vocation.VocationStatus).ToString()));
 
         return id;
     }

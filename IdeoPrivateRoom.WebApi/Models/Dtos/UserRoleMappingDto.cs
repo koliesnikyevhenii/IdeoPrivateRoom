@@ -1,4 +1,4 @@
-﻿using IdeoPrivateRoom.WebApi.Data.Entities;
+﻿using IdeoPrivateRoom.DAL.Data.Entities;
 
 namespace IdeoPrivateRoom.WebApi.Models.Dtos;
 

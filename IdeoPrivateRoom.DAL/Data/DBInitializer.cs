@@ -1,15 +1,11 @@
-﻿using IdeoPrivateRoom.WebApi.Data.Entities;
-using IdeoPrivateRoom.WebApi.Models.Enums;
+﻿using IdeoPrivateRoom.DAL.Data.Entities;
 
-namespace IdeoPrivateRoom.WebApi.Data;
+namespace IdeoPrivateRoom.DAL.Data;
 
 public class DBInitializer
 {
-    public static async void Seed(IApplicationBuilder applicationBuilder)
+    public static void Seed(ApplicationDbContext? context)
     {
-        using var serviceScope = applicationBuilder.ApplicationServices.CreateScope();
-        var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-
         var users = SeedUsers();
         var roles = SeedRoles();
         var roleMapping = SeedUserRoleMapping(users, roles);
@@ -22,38 +18,38 @@ public class DBInitializer
 
         if (!context.Users.Any())
         {
-            await context.Users.AddRangeAsync(users);
-            await context.SaveChangesAsync();
+            context.Users.AddRange(users);
+            context.SaveChanges();
         }
 
         if (!context.Roles.Any())
         {
-            await context.Roles.AddRangeAsync(roles);
-            await context.SaveChangesAsync();
+            context.Roles.AddRange(roles);
+            context.SaveChanges();
         }
 
         if (!context.UserRoleMappings.Any())
         {
-            await context.UserRoleMappings.AddRangeAsync(roleMapping);
-            await context.SaveChangesAsync();
+            context.UserRoleMappings.AddRange(roleMapping);
+            context.SaveChanges();
         }
 
         if (!context.VocationRequests.Any())
         {
-            await context.VocationRequests.AddRangeAsync(vocations);
-            await context.SaveChangesAsync();
+            context.VocationRequests.AddRange(vocations);
+            context.SaveChanges();
         }
 
         if (!context.LinkedUsers.Any())
         {
-            await context.LinkedUsers.AddRangeAsync(linkedUsers);
-            await context.SaveChangesAsync();
+            context.LinkedUsers.AddRange(linkedUsers);
+            context.SaveChanges();
         }
 
         if (!context.UserApprovalResponses.Any())
         {
-            await context.UserApprovalResponses.AddRangeAsync(userApprovalResponses);
-            await context.SaveChangesAsync();
+            context.UserApprovalResponses.AddRange(userApprovalResponses);
+            context.SaveChanges();
         }
     }
 
@@ -328,10 +324,9 @@ public class DBInitializer
                 User = users[0],
                 StartDate = new DateTime(2024, 9, 1, 0, 0, 0, DateTimeKind.Utc),
                 EndDate = new DateTime(2024, 9, 14, 0, 0, 0, DateTimeKind.Utc),
-                Title = "John Doe - Vocation",
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow,
-                VocationStatus = ApprovalStatus.Pending
+                VocationStatus = "1"
             },
             new VocationRequestEntity
             {
@@ -340,10 +335,9 @@ public class DBInitializer
                 User = users[1],
                 StartDate = new DateTime(2024, 10, 15, 0, 0, 0, DateTimeKind.Utc),
                 EndDate = new DateTime(2024, 10, 22, 0, 0, 0, DateTimeKind.Utc),
-                Title = "Jane Smith - Vocation",
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow,
-                VocationStatus = ApprovalStatus.Rejected
+                VocationStatus = "2"
             },
             new VocationRequestEntity
             {
@@ -352,10 +346,9 @@ public class DBInitializer
                 User = users[2],
                 StartDate = new DateTime(2024, 11, 5, 0, 0, 0, DateTimeKind.Utc),
                 EndDate = new DateTime(2024, 11, 6, 0, 0, 0, DateTimeKind.Utc),
-                Title = "Alice Jones - Day Off",
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow,
-                VocationStatus = ApprovalStatus.Approved
+                VocationStatus = "2"
             },
             new VocationRequestEntity
             {
@@ -364,10 +357,9 @@ public class DBInitializer
                 User = users[3],
                 StartDate = new DateTime(2024, 11, 10, 0, 0, 0, DateTimeKind.Utc),
                 EndDate = new DateTime(2024, 11, 19, 0, 0, 0, DateTimeKind.Utc),
-                Title = "Bob Brown - Vocation",
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow,
-                VocationStatus = ApprovalStatus.Approved
+                VocationStatus = "1"
             }
         ];
     }
@@ -421,7 +413,7 @@ public class DBInitializer
             {
                 VocationRequestId = vocations[0].Id,
                 UserId = users[6].Id,
-                ApprovalStatus = ApprovalStatus.Approved,
+                ApprovalStatus = "1",
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
@@ -429,7 +421,7 @@ public class DBInitializer
             {
                 VocationRequestId = vocations[0].Id,
                 UserId = users[7].Id,
-                ApprovalStatus = ApprovalStatus.Rejected,
+                ApprovalStatus = "2",
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
@@ -437,7 +429,7 @@ public class DBInitializer
             {
                 VocationRequestId = vocations[2].Id,
                 UserId = users[6].Id,
-                ApprovalStatus = ApprovalStatus.Approved,
+                ApprovalStatus = "1",
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },
@@ -445,7 +437,7 @@ public class DBInitializer
             {
                 VocationRequestId = vocations[3].Id,
                 UserId = users[6].Id,
-                ApprovalStatus = ApprovalStatus.Approved,
+                ApprovalStatus = "1",
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             }

@@ -1,4 +1,4 @@
-﻿namespace IdeoPrivateRoom.WebApi.Data.Entities;
+﻿namespace IdeoPrivateRoom.DAL.Data.Entities;
 
 public class RoleEntity
 {

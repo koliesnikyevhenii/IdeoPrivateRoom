@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using IdeoPrivateRoom.WebApi.Data;
-using IdeoPrivateRoom.WebApi.Data.Entities;
+using IdeoPrivateRoom.DAL.Data;
+using IdeoPrivateRoom.DAL.Data.Entities;
 using IdeoPrivateRoom.WebApi.Models.Dtos;
 using IdeoPrivateRoom.WebApi.Models.Enums;
 using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
@@ -128,7 +128,7 @@ public class UserRepository(ApplicationDbContext _dbContext, IMapper _mapper) : 
                     Id = v.Id,
                     StartDate = v.StartDate,
                     EndDate = v.EndDate,
-                    VocationStatus = v.VocationStatus
+                    VocationStatus = (ApprovalStatus)int.Parse(v.VocationStatus)
                 }),
                 LinkedUsers = u.LinkedUsers.Select(lu => new LinkedUserDtoTest
                 {

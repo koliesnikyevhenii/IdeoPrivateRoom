@@ -1,10 +1,10 @@
-﻿using IdeoPrivateRoom.WebApi.Data;
-using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
+﻿using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
 using IdeoPrivateRoom.WebApi.Repositories;
 using Microsoft.EntityFrameworkCore;
 using IdeoPrivateRoom.WebApi.Services.Interfaces;
 using IdeoPrivateRoom.WebApi.Services;
 using IdeoPrivateRoom.WebApi.Mapping;
+using IdeoPrivateRoom.DAL.Data;
 
 namespace IdeoPrivateRoom.WebApi.Extension;
 
@@ -36,7 +36,9 @@ public static class Configuration
             app.UseSwagger();
             app.UseSwaggerUI();
             app.ApplyMigrations();
-            DBInitializer.Seed(app);
+            using var serviceScope = app.Services.CreateScope();
+            var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            DBInitializer.Seed(context);
         }
 
         app.UseHttpsRedirection();

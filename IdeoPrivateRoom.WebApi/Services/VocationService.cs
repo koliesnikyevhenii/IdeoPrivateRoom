@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using IdeoPrivateRoom.WebApi.Data.Entities;
+using IdeoPrivateRoom.DAL.Data.Entities;
 using IdeoPrivateRoom.WebApi.Models.Dtos;
 using IdeoPrivateRoom.WebApi.Models.Enums;
 using IdeoPrivateRoom.WebApi.Models.Requests;
@@ -33,7 +33,7 @@ public class VocationService(IVocationRepository _vocationRepository, IMapper _m
             EndDate = vocation.EndDate,
             CreatedDate = DateTime.UtcNow,
             UpdatedDate = DateTime.UtcNow,
-            VocationStatus = ApprovalStatus.Approved
+            VocationStatus = ((int)ApprovalStatus.Approved).ToString()
         };
         return await _vocationRepository.Create(createdVocation);
     }

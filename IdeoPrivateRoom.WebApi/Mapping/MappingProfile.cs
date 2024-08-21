@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using IdeoPrivateRoom.WebApi.Data.Entities;
+using IdeoPrivateRoom.DAL.Data.Entities;
 using IdeoPrivateRoom.WebApi.Models.Dtos;
 using IdeoPrivateRoom.WebApi.Models.Requests;
 using IdeoPrivateRoom.WebApi.Models.Responses;
