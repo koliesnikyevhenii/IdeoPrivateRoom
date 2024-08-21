@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using IdeoPrivateRoom.DAL.Data.Entities;
-using IdeoPrivateRoom.WebApi.Models.Dtos;
+using IdeoPrivateRoom.DAL.Repositories.Interfaces;
 using IdeoPrivateRoom.WebApi.Models.Enums;
 using IdeoPrivateRoom.WebApi.Models.Requests;
 using IdeoPrivateRoom.WebApi.Models.Responses;
-using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
 using IdeoPrivateRoom.WebApi.Services.Interfaces;
 
 namespace IdeoPrivateRoom.WebApi.Services;
@@ -38,9 +37,9 @@ public class VocationService(IVocationRepository _vocationRepository, IMapper _m
         return await _vocationRepository.Create(createdVocation);
     }
 
-    public async Task<Guid?> Update(Guid id, VocationRequestDto vocation)
+    public async Task<Guid?> Update(Guid id, VocationRequestEntity vocation)
     {
-        return await _vocationRepository.Update(id, vocation);
+        return await _vocationRepository.Update(id, _mapper.Map<VocationRequestEntity>(vocation));
     }
 
     public async Task<Guid?> Delete(Guid id)

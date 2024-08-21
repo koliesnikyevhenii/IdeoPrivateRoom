@@ -1,10 +1,12 @@
-﻿using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
-using IdeoPrivateRoom.WebApi.Repositories;
+﻿/*using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
+using IdeoPrivateRoom.WebApi.Repositories;*/
 using Microsoft.EntityFrameworkCore;
 using IdeoPrivateRoom.WebApi.Services.Interfaces;
 using IdeoPrivateRoom.WebApi.Services;
 using IdeoPrivateRoom.WebApi.Mapping;
 using IdeoPrivateRoom.DAL.Data;
+using IdeoPrivateRoom.DAL.Repositories.Interfaces;
+using IdeoPrivateRoom.DAL.Repositories;
 
 namespace IdeoPrivateRoom.WebApi.Extension;
 
