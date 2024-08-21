@@ -1,4 +1,5 @@
-﻿using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
+﻿//using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
+using IdeoPrivateRoom.DAL.Repositories.Interfaces;
 using IdeoPrivateRoom.WebApi.Services.Interfaces;
 
 namespace IdeoPrivateRoom.WebApi.Endpoints;
@@ -22,10 +23,10 @@ public static class Users
         })
         .WithOpenApi();
 
-        users.MapGet("/all", (IUserRepository userRepository) =>
+        /*users.MapGet("/all", (IUserRepository userRepository) =>
         {
             return userRepository.GetAll();
-        });
+        });*/
 
         /*users.MapPost("", async (UserRequest request, IUserService userService, IMapper mapper) =>
         {

@@ -1,8 +1,8 @@
-﻿using IdeoPrivateRoom.WebApi.Data.Entities;
-using IdeoPrivateRoom.WebApi.Data.EntityConfigurations;
+﻿using IdeoPrivateRoom.DAL.Data.Entities;
+using IdeoPrivateRoom.DAL.Data.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdeoPrivateRoom.WebApi.Data;
+namespace IdeoPrivateRoom.DAL.Data;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {

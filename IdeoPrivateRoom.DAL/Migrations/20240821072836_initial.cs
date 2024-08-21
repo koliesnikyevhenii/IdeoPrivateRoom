@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace IdeoPrivateRoom.WebApi.Migrations
+namespace IdeoPrivateRoom.DAL.Migrations
 {
     /// <inheritdoc />
     public partial class initial : Migration
@@ -106,7 +106,7 @@ namespace IdeoPrivateRoom.WebApi.Migrations
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Title = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Comment = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     VocationStatus = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false)

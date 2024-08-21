@@ -1,8 +1,8 @@
-﻿using IdeoPrivateRoom.WebApi.Data.Entities;
+﻿using IdeoPrivateRoom.DAL.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace IdeoPrivateRoom.WebApi.Data.EntityConfigurations;
+namespace IdeoPrivateRoom.DAL.Data.EntityConfigurations;
 
 public class VocationRequestEntityTypeConfiguration : IEntityTypeConfiguration<VocationRequestEntity>
 {
@@ -21,8 +21,7 @@ public class VocationRequestEntityTypeConfiguration : IEntityTypeConfiguration<V
         builder.Property(v => v.EndDate)
             .IsRequired();
 
-        builder.Property(v => v.Title)
-            .IsRequired()
+        builder.Property(v => v.Comment)
             .HasMaxLength(50);
 
         builder.Property(v => v.CreatedDate)
@@ -32,7 +31,6 @@ public class VocationRequestEntityTypeConfiguration : IEntityTypeConfiguration<V
             .IsRequired();
 
         builder.Property(v => v.VocationStatus)
-            .HasConversion<string>()
             .HasMaxLength(15);
 
         builder.HasOne(v => v.User)

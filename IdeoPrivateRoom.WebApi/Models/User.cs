@@ -1,6 +1,4 @@
-﻿using IdeoPrivateRoom.WebApi.Models.Dtos;
-
-namespace IdeoPrivateRoom.WebApi.Models;
+﻿namespace IdeoPrivateRoom.WebApi.Models;
 
 public class User
 {

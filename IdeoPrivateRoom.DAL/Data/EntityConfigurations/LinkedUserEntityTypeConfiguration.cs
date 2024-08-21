@@ -1,8 +1,8 @@
-﻿using IdeoPrivateRoom.WebApi.Data.Entities;
+﻿using IdeoPrivateRoom.DAL.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace IdeoPrivateRoom.WebApi.Data.EntityConfigurations;
+namespace IdeoPrivateRoom.DAL.Data.EntityConfigurations;
 
 public class LinkedUserEntityTypeConfiguration : IEntityTypeConfiguration<LinkedUserEntity>
 {

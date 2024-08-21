@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using IdeoPrivateRoom.WebApi.Data.Entities;
-using IdeoPrivateRoom.WebApi.Models.Dtos;
+using IdeoPrivateRoom.DAL.Data.Entities;
 using IdeoPrivateRoom.WebApi.Models.Requests;
 using IdeoPrivateRoom.WebApi.Models.Responses;
 
@@ -10,40 +9,33 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<UserEntity, UserDto>();
-        CreateMap<UserEntity, VocationUserDto>();
-        CreateMap<UserDto, UserEntity>();
-        CreateMap<UserRequest, UserDto>();
-        CreateMap<UserDto, UserResponse>()
+        CreateMap<UserEntity, UserRequest>()
+            .ReverseMap();
+
+        CreateMap<UserEntity, UserResponse>()
             .ForMember(u => u.Name, conf => conf.MapFrom(scr => $"{scr.FirstName} {scr.LastName}"))
-            .ForMember(u => u.Icon, conf => conf.MapFrom(scr => scr.UserIcon));
+            .ForMember(u => u.Icon, conf => conf.MapFrom(scr => scr.UserIcon))
+            .ForMember(u => u.Roles, conf => conf.MapFrom(scr => scr.RoleMappings));
 
-        CreateMap<RoleDto, RoleResponse>();
-        CreateMap<UserRoleMappingEntity, UserRoleMappingDto>();
+        CreateMap<UserEntity, VocationUserResponse>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
+            .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.UserIcon));
 
-        CreateMap<VocationRequestEntity, VocationRequestDto>();
-  
-        CreateMap<VocationRequestDto, VocationRequestEntity>();
-        CreateMap<VocationUserDto, VocationUserResponse>();
-        CreateMap<VocationRequestDto, VocationResponse>();
-        CreateMap<VocationUserApprovalDto, VocationUserApprovalResponse>();
-        CreateMap<VocationRequestDto, VocationResponse>()
+        CreateMap<RoleEntity, RoleResponse>()
+            .ReverseMap();
+
+        CreateMap<UserRoleMappingEntity, RoleResponse>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Role.Id))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Role.Name));
+
+        CreateMap<VocationRequestEntity, VocationResponse>()
             .ForMember(r => r.Start, conf => conf.MapFrom(scr => scr.StartDate))
             .ForMember(r => r.End, conf => conf.MapFrom(scr => scr.EndDate))
             .ForMember(r => r.Status, conf => conf.MapFrom(scr => scr.VocationStatus));
 
-
-        CreateMap<VocationRequestEntity, VocationRequestDto>()
+        CreateMap<UserApprovalResponseEntity, VocationUserApprovalResponse>()
             .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
-            .ForMember(dest => dest.UserApprovalResponses, opt => opt.MapFrom(src => src.UserApprovalResponses));
-
-        CreateMap<UserEntity, VocationUserDto>()
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
-            .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.UserIcon));
-
-        CreateMap<UserApprovalResponseEntity, VocationUserApprovalDto>()
-            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
-            .ForMember(dest => dest.ApprovalStatus, opt => opt.MapFrom(src => src.ApprovalStatus));
+            .ForMember(dest => dest.ApprovalStatus, opt => opt.MapFrom(src => int.Parse(src.ApprovalStatus).ToString()));
 
     }
 }

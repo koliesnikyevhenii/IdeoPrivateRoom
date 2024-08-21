@@ -1,4 +1,4 @@
-﻿namespace IdeoPrivateRoom.WebApi.Data.Entities;
+﻿namespace IdeoPrivateRoom.DAL.Data.Entities;
 
 public class UserEntity
 {
@@ -11,6 +11,7 @@ public class UserEntity
     public DateTime CreatedDate { get; set; }
     public string PasswordHash { get; set; } = string.Empty;
     public bool IsEmailConfirmed { get; set; }
+
     public ICollection<UserRoleMappingEntity> RoleMappings { get; set; } = [];
     public ICollection<VocationRequestEntity> VocationRequests { get; set; } = [];
     public ICollection<LinkedUserEntity> LinkedUsers { get; set; } = [];

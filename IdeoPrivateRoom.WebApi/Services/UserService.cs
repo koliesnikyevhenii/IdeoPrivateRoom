@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
-using IdeoPrivateRoom.WebApi.Models.Dtos;
+using IdeoPrivateRoom.DAL.Data.Entities;
+using IdeoPrivateRoom.DAL.Repositories.Interfaces;
+using IdeoPrivateRoom.WebApi.Models.Requests;
 using IdeoPrivateRoom.WebApi.Models.Responses;
-using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
 using IdeoPrivateRoom.WebApi.Services.Interfaces;
 
 namespace IdeoPrivateRoom.WebApi.Services;
@@ -20,14 +21,14 @@ public class UserService(IUserRepository _userRepository, IMapper _mapper) : IUs
     }
 
 
-    public async Task<Guid> Create(UserDto user)
+    public async Task<Guid> Create(UserRequest user)
     {
-        return await _userRepository.Create(user);
+        return await _userRepository.Create(_mapper.Map<UserEntity>(user));
     }
 
-    public async Task<Guid?> Update(Guid id, UserDto user)
+    public async Task<Guid?> Update(Guid id, UserRequest user)
     {
-        return await _userRepository.Update(id, user);
+        return await _userRepository.Update(id, _mapper.Map<UserEntity>(user));
     }
 
     public async Task<Guid?> Delete(Guid id)

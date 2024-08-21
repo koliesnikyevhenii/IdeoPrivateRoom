@@ -1,8 +1,8 @@
-﻿using IdeoPrivateRoom.WebApi.Data.Entities;
+﻿using IdeoPrivateRoom.DAL.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace IdeoPrivateRoom.WebApi.Data.EntityConfigurations;
+namespace IdeoPrivateRoom.DAL.Data.EntityConfigurations;
 
 public class UserApprovalResponseEntityTypeConfiguration : IEntityTypeConfiguration<UserApprovalResponseEntity>
 {
@@ -13,7 +13,6 @@ public class UserApprovalResponseEntityTypeConfiguration : IEntityTypeConfigurat
         builder.HasKey(u => u.Id);
 
         builder.Property(u => u.ApprovalStatus)
-            .HasConversion<string>()
             .HasMaxLength(15);
 
         builder.Property(u => u.CreatedDate)

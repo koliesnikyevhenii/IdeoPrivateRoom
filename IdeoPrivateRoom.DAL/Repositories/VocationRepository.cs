@@ -1,13 +1,11 @@
-﻿using AutoMapper;
-using IdeoPrivateRoom.WebApi.Data;
-using IdeoPrivateRoom.WebApi.Data.Entities;
-using IdeoPrivateRoom.WebApi.Models.Dtos;
-using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
+﻿using IdeoPrivateRoom.DAL.Data.Entities;
+using IdeoPrivateRoom.DAL.Data;
+using IdeoPrivateRoom.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace IdeoPrivateRoom.WebApi.Repositories;
+namespace IdeoPrivateRoom.DAL.Repositories;
 
-public class VocationRepository(ApplicationDbContext _dbContext, IMapper _mapper) : IVocationRepository
+public class VocationRepository(ApplicationDbContext _dbContext) : IVocationRepository
 {
     public async Task<Guid> Create(VocationRequestEntity vocationRequest)
     {
@@ -19,27 +17,28 @@ public class VocationRepository(ApplicationDbContext _dbContext, IMapper _mapper
         return createdVocation.Entity.Id;
     }
 
-    public async Task<List<VocationRequestDto>> Get()
+    public async Task<List<VocationRequestEntity>> Get()
     {
         return await _dbContext.VocationRequests
             .AsNoTracking()
             .Include(v => v.User)
             .Include(v => v.UserApprovalResponses)
                 .ThenInclude(u => u.User)
-            .Select(v => _mapper.Map<VocationRequestDto>(v))
             .ToListAsync();
     }
 
-    public async Task<List<VocationRequestDto>> Get(Guid userId)
+    public async Task<List<VocationRequestEntity>> Get(Guid userId)
     {
         return await _dbContext.VocationRequests
             .AsNoTracking()
             .Where(v => v.UserId == userId)
-            .Select(v => _mapper.Map<VocationRequestDto>(v))
+            .Include(v => v.User)
+            .Include(v => v.UserApprovalResponses)
+                .ThenInclude(u => u.User)
             .ToListAsync();
     }
 
-    public async Task<Guid?> Update(Guid id, VocationRequestDto vocation)
+    public async Task<Guid?> Update(Guid id, VocationRequestEntity vocation)
     {
         await _dbContext.VocationRequests
             .Where(v => v.Id == id)
