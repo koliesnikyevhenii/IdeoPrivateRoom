@@ -8,7 +8,6 @@ builder.RegisterServices();
 var app = builder.Build();
 
 app.RegisterMiddlewares();
-
 app.RegisterUserEndpoints();
 app.RegisterVocationEndpoints();
 

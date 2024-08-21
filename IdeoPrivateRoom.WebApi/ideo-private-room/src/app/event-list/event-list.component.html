@@ -1,17 +1,34 @@
-<app-event-list-header />
+<app-event-list-header (switchView)="onSwitchView()" />
 
-@defer () {
+@defer () { @if(isTable() && cards().length > 0) {
+<table class="table table-hover container">
+  <thead class="row">
+    <tr class="w-100 row">
+      <th scope="col" class="col w-25">Name</th>
+      <th scope="col" class="col w-25">Dates</th>
+      <th scope="col" class="col w-25">Approvals</th>
+      <th scope="col" class="col w-25">Status</th>
+      <th scope="col" class="col w-25">Actions</th>
+    </tr>
+  </thead>
+  <tbody class="row">
+    @for(card of cards(); track card.id) {
+    <app-event-list-table-row class="row" [card]="card" />
+    }
+  </tbody>
+</table>
+} @else if(!isTable() && cards().length > 0) {
 <div class="container mt-5 d-flex justify-content-start flex-wrap">
   @for(card of cards(); track card.id) {
   <app-event-card [card]="card" />
-  } @empty {
-  <div class="row text-center">
-    <p>There are no added vacation requests yet.</p>
-  </div>
   }
 </div>
-} @placeholder {
-  <div class="d-flex justify-content-center align-items-center">
-    <span class="loader align-self-center"></span>
-  </div>
+} @else {
+<div class="row text-center">
+  <p>There are no added vacation requests yet.</p>
+</div>
+} } @placeholder {
+<div class="d-flex justify-content-center align-items-center">
+  <span class="loader align-self-center"></span>
+</div>
 }

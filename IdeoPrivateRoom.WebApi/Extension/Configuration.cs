@@ -5,6 +5,9 @@ using IdeoPrivateRoom.WebApi.Mapping;
 using IdeoPrivateRoom.DAL.Data;
 using IdeoPrivateRoom.DAL.Repositories.Interfaces;
 using IdeoPrivateRoom.DAL.Repositories;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
 using IdeoPrivateRoom.WebApi.Models.Options;
 
 namespace IdeoPrivateRoom.WebApi.Extension;
@@ -13,6 +16,16 @@ public static class Configuration
 {
     public static void RegisterServices(this WebApplicationBuilder builder)
     {
+        builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+          .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+          //.EnableTokenAcquisitionToCallDownstreamApi(new string[] { "https://graph.microsoft.com/.default" })
+          //.AddMicrosoftGraph(builder.Configuration.GetSection("GraphApi"))
+          //.AddInMemoryTokenCaches();
+
+        builder.Services.AddControllersWithViews()
+                .AddMicrosoftIdentityUI();
+
+
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
@@ -51,8 +64,12 @@ public static class Configuration
             DBInitializer.Seed(context);
         }
 
-        app.UseCors();
 
         app.UseHttpsRedirection();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.UseCors();
     }
 }
