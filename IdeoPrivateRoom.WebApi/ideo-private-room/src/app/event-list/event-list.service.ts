@@ -23,7 +23,6 @@ export class EventListService {
     ).pipe(tap((events) => this.events.set(events)));
   }
 
-  // TODO: deal with api foreign key exception
   createEvent(
     userId: string,
     startDate: Date,
@@ -35,6 +34,7 @@ export class EventListService {
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
     };
+
     return this.http.post(this.eventsUrl, eventPayload).pipe(
       tap(() => {
         this.refreshEvents('Failed to fetch events after adding one.');
@@ -46,7 +46,6 @@ export class EventListService {
     );
   }
 
-  // TODO: deal with cors restriction for testing
   deleteEvent(eventId: string) {
     const prevEvents = this.events();
 
