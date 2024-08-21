@@ -1,9 +1,7 @@
 <tr ngbAccordion class="accordion-flush">
   <div ngbAccordionItem>
     <h2 ngbAccordionHeader>
-      <button
-        ngbAccordionButton
-      >
+      <button ngbAccordionButton>
         <td class="w-25">{{ card().userName }}</td>
         <td class="w-25">{{ currentDate() | date : "M.d.yyyy" }} (Demo)</td>
         <td class="w-25">
@@ -15,7 +13,39 @@
     </h2>
     <div ngbAccordionCollapse>
       <div ngbAccordionBody>
-        <ng-template>Content for the first item</ng-template>
+        <ng-template>
+          <div class="container">
+            <div class="row align-items-center">
+              <div class="col-auto">
+                <img [src]="card().userIcon" alt="Icon" class="user-icon" />
+              </div>
+              <div class="col">
+                <strong>{{ card().userName }}</strong>
+              </div>
+            </div>
+            <div class="divider"></div>
+
+            <div class="row">
+              <div class="col">
+                <strong class="me-2">Approvals:</strong>
+                @for(approval of card().userApprovalResponses; track
+                approval.id) {
+                <img
+                  [src]="approval.userIcon"
+                  [alt]="approval.userName"
+                  class="status-image me-2"
+                  [class]="getApprovalStatus(card().status).class"
+                />
+                }
+              </div>
+            </div>
+            <div class="divider"></div>
+
+            <div class="row">
+              <div class="col"><strong>Global Status: </strong>{{ approvalStatus() }}</div>
+            </div>
+          </div>
+        </ng-template>
       </div>
     </div>
   </div>
