@@ -5,6 +5,7 @@ using IdeoPrivateRoom.WebApi.Models.Enums;
 using IdeoPrivateRoom.WebApi.Models.Requests;
 using IdeoPrivateRoom.WebApi.Models.Responses;
 using IdeoPrivateRoom.WebApi.Services.Interfaces;
+using LightResults;
 
 namespace IdeoPrivateRoom.WebApi.Services;
 
@@ -13,7 +14,7 @@ public class VocationService(
     IMapper _mapper,
     ILogger<VocationService> _logger) : IVocationService
 {
-    public async Task<List<VocationResponse>> GetAll(string? userIds, string? statuses, string? startDate, string? endDate)
+    public async Task<Result<List<VocationResponse>>> GetAll(string? userIds, string? statuses, string? startDate, string? endDate)
     {
         DateTimeOffset? start = DateTimeOffset.TryParse(startDate, out var parsedStart) ? parsedStart : null;
         DateTimeOffset? end = DateTimeOffset.TryParse(endDate, out var parsedEnd) ? parsedEnd : null;
@@ -26,18 +27,28 @@ public class VocationService(
         var vocations = await _vocationRepository
             .Get(start, end, ids, statuses);
 
-        return vocations.OrderByDescending(v => v.CreatedDate)
+        if (vocations?.Any() != true)
+        {
+            return Result.Fail<List<VocationResponse>>("No vocations found matching the given criteria.");
+        }
+
+        var result = vocations.OrderByDescending(v => v.CreatedDate)
             .Select(_mapper.Map<VocationResponse>)
             .ToList();
+
+        return Result.Ok(result);
+
     }
-    public async Task<List<VocationResponse>> GetByUserId(Guid id)
+    public async Task<Result<List<VocationResponse>>> GetByUserId(Guid id)
     {
         var vocations = await _vocationRepository.Get(id);
 
-        return vocations.Select(_mapper.Map<VocationResponse>).ToList();
+        var result = vocations.Select(_mapper.Map<VocationResponse>).ToList();
+
+        return Result.Ok(result);
     }
 
-    public async Task<Guid> Create(CreateVocationRequest vocation)
+    public async Task<Result<Guid>> Create(CreateVocationRequest vocation)
     {
         var createdVocation = new VocationRequestEntity
         {
@@ -48,16 +59,23 @@ public class VocationService(
             UpdatedDate = DateTime.UtcNow,
             VocationStatus = ((int)ApprovalStatus.Approved).ToString()
         };
-        return await _vocationRepository.Create(createdVocation);
+        
+        var result = await _vocationRepository.Create(createdVocation);
+
+        return Result.Ok(result);
     }
 
-    public async Task<Guid?> Update(Guid id, VocationRequestEntity vocation)
+    public async Task<Result<Guid?>> Update(Guid id, VocationRequestEntity vocation)
     {
-        return await _vocationRepository.Update(id, _mapper.Map<VocationRequestEntity>(vocation));
+        var result = await _vocationRepository.Update(id, _mapper.Map<VocationRequestEntity>(vocation));
+
+        return Result.Ok(result);
     }
 
-    public async Task<Guid?> Delete(Guid id)
+    public async Task<Result<Guid?>> Delete(Guid id)
     {
-        return await _vocationRepository.Delete(id);
+        var result = await _vocationRepository.Delete(id);
+
+        return Result.Ok(result);
     }
 }

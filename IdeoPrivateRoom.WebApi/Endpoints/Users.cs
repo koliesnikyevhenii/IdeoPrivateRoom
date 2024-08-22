@@ -9,15 +9,22 @@ public static class Users
         var users = routes.MapGroup("/api/users")
             .WithTags("Users");
 
-        users.MapGet("", (IUserService userService) =>
+        users.MapGet("", async (IUserService userService) =>
         {
-            return userService.GetAll();
+            var result = await userService.GetAll();
+            return result.IsSuccess
+                ? Results.Ok(result)
+                : Results.BadRequest(result.Error.Message);
         })
         .WithOpenApi();
 
-        users.MapGet("/{id}", (Guid id, IUserService userService) =>
+        users.MapGet("/{id}", async (Guid id, IUserService userService) =>
         {
-            return userService.GetById(id);
+            var result = await userService.GetById(id);
+
+            return result.IsSuccess
+                ? Results.Ok(result)
+                : Results.BadRequest(result.Error.Message);
         })
         .WithOpenApi();
 
