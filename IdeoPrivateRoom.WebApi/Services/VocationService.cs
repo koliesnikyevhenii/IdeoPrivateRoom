@@ -14,18 +14,18 @@ public class VocationService(
     IMapper _mapper,
     ILogger<VocationService> _logger) : IVocationService
 {
-    public async Task<Result<List<VocationResponse>>> GetAll(string? userIds, string? statuses, string? startDate, string? endDate)
+    public async Task<Result<List<VocationResponse>>> GetAll(VocationQueryFilters filters)
     {
-        DateTimeOffset? start = DateTimeOffset.TryParse(startDate, out var parsedStart) ? parsedStart : null;
-        DateTimeOffset? end = DateTimeOffset.TryParse(endDate, out var parsedEnd) ? parsedEnd : null;
+        DateTimeOffset? start = DateTimeOffset.TryParse(filters.StartDate, out var parsedStart) ? parsedStart : null;
+        DateTimeOffset? end = DateTimeOffset.TryParse(filters.EndDate, out var parsedEnd) ? parsedEnd : null;
 
-        var ids = userIds?.Split(',')
+        var ids = filters.UserIds?.Split(',')
             .Select(i => Guid.TryParse(i, out var id) ? id : Guid.Empty)
             .Where(i => i != Guid.Empty)
             .ToList();
         
         var vocations = await _vocationRepository
-            .Get(start, end, ids, statuses);
+            .Get(start, end, ids, filters.Statuses);
 
         if (vocations?.Any() != true)
         {

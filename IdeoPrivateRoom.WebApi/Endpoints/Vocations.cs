@@ -16,7 +16,7 @@ public static class Vocations
             [AsParameters] VocationQueryFilters filters,
             IVocationService vocationService) =>
         {
-            var result = await vocationService.GetAll(filters.UserIds, filters.Statuses, filters.StartDate, filters.EndDate);
+            var result = await vocationService.GetAll(filters);
             return result.IsSuccess
                 ? Results.Ok(result)
                 : Results.BadRequest(result.Error.Message);
