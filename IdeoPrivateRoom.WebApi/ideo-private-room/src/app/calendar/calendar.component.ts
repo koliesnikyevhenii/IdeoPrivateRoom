@@ -17,11 +17,12 @@ import { Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { collapseAnimation } from 'angular-calendar';
 import { EventListService } from '../event-list/event-list.service';
+import { CalendarMonthCellComponent } from './calendar-month-cell/calendar-month-cell.component';
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CalendarHeaderComponent, CalendarModule, CommonModule],
+  imports: [CalendarHeaderComponent, CalendarModule, CommonModule, CalendarMonthCellComponent],
   templateUrl: './calendar.component.html',
   animations: [collapseAnimation],
   styleUrl: './calendar.component.scss',

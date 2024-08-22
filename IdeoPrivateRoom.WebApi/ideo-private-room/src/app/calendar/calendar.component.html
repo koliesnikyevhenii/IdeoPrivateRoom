@@ -2,7 +2,21 @@
   <app-calendar-header [(view)]="view" [(viewDate)]="viewDate" />
 </header>
 
+@defer () {
 <main>
+  <ng-template
+    #customCellTemplate
+    let-day="day"
+    let-locale="locale"
+    let-month="month"
+  >
+    <div class="cal-cell-top">
+      <span class="cal-day-number">{{
+        day.date | calendarDate : "monthViewDayNumber" : locale
+      }}</span>
+    </div>
+    <app-calendar-month-cell [viewDay]="day" [events]="events()" />
+  </ng-template>
   <div [ngSwitch]="view">
     <mwl-calendar-month-view
       *ngSwitchCase="'month'"
@@ -11,6 +25,8 @@
       [activeDayIsOpen]="false"
       [refresh]="refresh"
       (eventTimesChanged)="eventTimesChanged($event)"
+      [cellTemplate]="customCellTemplate"
+      class="align-items-end month-cell"
     >
     </mwl-calendar-month-view>
     <mwl-calendar-week-view
@@ -31,3 +47,8 @@
     </mwl-calendar-day-view>
   </div>
 </main>
+} @placeholder {
+<div class="d-flex justify-content-center align-items-center">
+  <span class="loader align-self-center"></span>
+</div>
+}

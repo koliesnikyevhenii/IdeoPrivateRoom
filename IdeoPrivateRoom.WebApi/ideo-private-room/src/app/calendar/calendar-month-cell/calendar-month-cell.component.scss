@@ -1,0 +1,26 @@
+.line {
+  width: 100%;
+  height: 20px;
+  background-color: #d3e0d5; /* Light-green-gray color */
+  margin-bottom: 2px; /* Close spacing between lines */
+}
+
+.rounded-left {
+  width: 66.66%; /* Start at 1/3 of the container */
+  margin-left: 33.33%;
+  border-top-left-radius: 10px; /* Adjust radius as needed */
+  border-bottom-left-radius: 10px;
+}
+
+.rounded-right {
+  width: 66.66%; /* End at 2/3 of the container */
+  margin-right: 33.33%;
+  border-top-right-radius: 10px; /* Adjust radius as needed */
+  border-bottom-right-radius: 10px;
+}
+
+.rounded-both {
+  width: 33.33%; /* Line centered between 1/3 and 2/3 */
+  margin-left: 33.33%;
+  border-radius: 10px; /* Rounding on both sides */
+}

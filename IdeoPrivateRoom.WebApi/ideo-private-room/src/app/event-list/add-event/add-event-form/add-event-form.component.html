@@ -41,7 +41,6 @@
           (click)="startDate.toggle()"
           type="button"
         >
-          <img src="date-select-ico.svg" width="24px" height="24px" />
         </button>
       </div>
       @if(invalidStartDate) {
@@ -67,7 +66,6 @@
           (click)="endDate.toggle()"
           type="button"
         >
-          <img src="date-select-ico.svg" width="24px" height="24px" />
         </button>
       </div>
       @if(invalidEndDate) {
@@ -77,10 +75,10 @@
   </div>
 
   <div class="d-flex justify-content-end">
-    <button type="submit" class="btn btn-danger btn-action">Submit</button>
+    <button type="submit" class="btn btn-primary">Submit</button>
     <button
       type="button"
-      class="btn btn-secondary ms-2 btn-action"
+      class="btn btn-outline-secondary ms-2"
       (click)="onCancel()"
     >
       Cancel
