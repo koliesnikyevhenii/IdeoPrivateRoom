@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using IdeoPrivateRoom.DAL.Data.Entities;
 using IdeoPrivateRoom.DAL.Repositories.Interfaces;
+using IdeoPrivateRoom.WebApi.Models;
 using IdeoPrivateRoom.WebApi.Models.Enums;
 using IdeoPrivateRoom.WebApi.Models.Requests;
 using IdeoPrivateRoom.WebApi.Models.Responses;
@@ -8,13 +9,27 @@ using IdeoPrivateRoom.WebApi.Services.Interfaces;
 
 namespace IdeoPrivateRoom.WebApi.Services;
 
-public class VocationService(IVocationRepository _vocationRepository, IMapper _mapper) : IVocationService
+public class VocationService(
+    IVocationRepository _vocationRepository, 
+    IMapper _mapper,
+    ILogger<VocationService> _logger) : IVocationService
 {
-    public async Task<List<VocationResponse>> GetAll()
+    public async Task<List<VocationResponse>> GetAll(VocationQueryFilters filters)
     {
-        var vocations = await _vocationRepository.Get();
+        DateTimeOffset? start = DateTimeOffset.TryParse(filters.StartDate, out var parsedStart) ? parsedStart : null;
+        DateTimeOffset? end = DateTimeOffset.TryParse(filters.EndDate, out var parsedEnd) ? parsedEnd : null;
 
-        return vocations.Select(_mapper.Map<VocationResponse>).ToList();
+        var ids = filters.UserIds?.Split(',')
+            .Select(i => Guid.TryParse(i, out var id) ? id : Guid.Empty)
+            .Where(i => i != Guid.Empty)
+            .ToList();
+        
+        var vocations = await _vocationRepository
+            .Get(start, end, ids, filters.Statuses);
+
+        return vocations.OrderByDescending(v => v.CreatedDate)
+            .Select(_mapper.Map<VocationResponse>)
+            .ToList();
     }
     public async Task<List<VocationResponse>> GetByUserId(Guid id)
     {
