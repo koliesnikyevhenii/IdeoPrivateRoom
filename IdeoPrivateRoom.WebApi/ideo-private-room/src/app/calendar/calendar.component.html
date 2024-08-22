@@ -1,9 +1,9 @@
-<header>
+<header class="container-fluid">
   <app-calendar-header [(view)]="view" [(viewDate)]="viewDate" />
 </header>
 
 @defer () {
-<main>
+<main class="container-fluid">
   <ng-template
     #customCellTemplate
     let-day="day"

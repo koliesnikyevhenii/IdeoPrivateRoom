@@ -2,5 +2,9 @@ import { CalendarEvent } from "angular-calendar";
 
 export interface SlotModel {
     order: number,
-    event: CalendarEvent | null
+    event: CalendarUserEvent | null
+}
+
+export interface CalendarUserEvent extends CalendarEvent {
+    userName: string
 }

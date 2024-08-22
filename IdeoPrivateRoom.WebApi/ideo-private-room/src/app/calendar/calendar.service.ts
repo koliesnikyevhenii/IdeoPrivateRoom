@@ -1,6 +1,5 @@
 import { computed, Injectable, signal } from '@angular/core';
-import { CalendarEvent } from 'angular-calendar';
-import { SlotModel } from './calendar.models';
+import { CalendarUserEvent, SlotModel } from './calendar.models';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +8,7 @@ export class CalendarService {
   slots: SlotModel[] = [];
   readonlySlots = computed(() => this.slots);
 
-  addEventToSlot(event: CalendarEvent) {
+  addEventToSlot(event: CalendarUserEvent) {
     // Find the index of the first null in the array
     const firstNullIndex = this.slots.findIndex((slot) => slot.event == null);
 

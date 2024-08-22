@@ -18,6 +18,7 @@ import { CommonModule } from '@angular/common';
 import { collapseAnimation } from 'angular-calendar';
 import { EventListService } from '../event-list/event-list.service';
 import { CalendarMonthCellComponent } from './calendar-month-cell/calendar-month-cell.component';
+import { CalendarUserEvent } from './calendar.models';
 
 @Component({
   selector: 'app-calendar',
@@ -32,12 +33,13 @@ export class CalendarComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   events = computed(() => {
-    return this.eventListService.loadedEvents().map((event) => <CalendarEvent> {
+    return this.eventListService.loadedEvents().map((event) => <CalendarUserEvent> {
       id: event.id,
       title: event.userName,
       start: event.fromDate,
       end: event.toDate,
-      color: this.eventListService.mapColorToEventStatus(event.status)
+      color: this.eventListService.mapColorToEventStatus(event.status),
+      userName: event.userName
     });
   });
 

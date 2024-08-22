@@ -1,5 +1,5 @@
-<div class="container-flex">
-  @for(displayEvent of displayEvents(); track displayEvent.order) {
-  <div class="line" [class]="displayEvent.styleClass" [style]="{'top.px': displayEvent.order * 30}"></div>
+<div class="line-container">
+  @for(displayEvent of displayEvents; track displayEvent.order) {
+  <div class="line" [class]="displayEvent.styleClass" [style]="{'bottom': displayEvent.order * 22 + 'px'}"></div>
   }
 </div>
