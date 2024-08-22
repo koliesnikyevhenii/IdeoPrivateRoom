@@ -3,6 +3,8 @@
   height: 20px;
   background-color: #d3e0d5; /* Light-green-gray color */
   margin-bottom: 2px; /* Close spacing between lines */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Small box shadow */
+  position: absolute;
 }
 
 .rounded-left {

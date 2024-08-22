@@ -3,6 +3,7 @@ import { MonthViewDay } from 'calendar-utils';
 import { CalendarEvent } from 'angular-calendar';
 import { isAfter, isSameDay, isBefore } from 'date-fns';
 import { CalendarService } from '../calendar.service';
+import { SlotModel } from '../calendar.models';
 
 @Component({
   selector: 'app-calendar-month-cell',
@@ -17,7 +18,7 @@ export class CalendarMonthCellComponent implements OnInit {
   viewDay = input.required<MonthViewDay>();
   events = input.required<CalendarEvent[]>();
 
-  currentSlotsStatus = signal<Array<CalendarEvent | null>>([]);
+  currentSlotsStatus = signal<SlotModel[]>([]);
 
   ngOnInit() {
     this.events().forEach((event) => {
@@ -30,25 +31,24 @@ export class CalendarMonthCellComponent implements OnInit {
       }
     })
 
-    console.log(this.viewDay().date, this.calendarService.readonlySlots().map(m => m.event))
-
-    this.currentSlotsStatus.set(JSON.parse(
-      JSON.stringify(this.calendarService.readonlySlots())
-    ) as Array<CalendarEvent | null>);
+    this.currentSlotsStatus.set(this.calendarService.slots.filter(slot => slot.event != null))
   }
+  
+  displayEvents = computed(() => {
+    return this.currentSlotsStatus()
+    .map(slot => {
+      let styleClass = '';
 
-  // displayEvents = computed(() => {
-  //   return this.events().map((event) => {
-  //     let styleClass = '';
-  //     if (isSameDay(this.viewDay().date, event.start)) {
-  //       styleClass = 'rounded-left';
-  //     } else if (!event.end) {
-  //       styleClass = 'rounded-both';
-  //     } else if (isSameDay(this.viewDay().date, event.end)) {
-  //       styleClass = 'rounded-right';
-  //     }
+      if (slot.event && isSameDay(this.viewDay().date, slot.event.start)) {
+        styleClass = 'rounded-left';
+      } else if (!slot.event?.end) {
+        styleClass = 'rounded-both';
+      } else if (slot.event && isSameDay(this.viewDay().date, slot.event.end)) {
+        styleClass = 'rounded-right';
+      }
 
-  //     return { event, styleClass };
-  //   });
-  // });
+      return { styleClass, order: slot.order };
+    })
+    .sort((a, b) => a.order - b.order);  // Sort by order to maintain vertical positioning;
+  });
 }
