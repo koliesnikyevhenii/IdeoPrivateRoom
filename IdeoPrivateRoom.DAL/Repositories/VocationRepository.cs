@@ -17,7 +17,7 @@ public class VocationRepository(ApplicationDbContext _dbContext) : IVocationRepo
         return createdVocation.Entity.Id;
     }
 
-    public async Task<List<VocationRequestEntity>> Get(DateTimeOffset? startDate, DateTimeOffset? endDate, List<Guid>? userIds, string? statuses)
+    public async Task<List<VocationRequestEntity>> Get(int page, int pageSize, DateTimeOffset? startDate, DateTimeOffset? endDate, List<Guid>? userIds, string? statuses)
     {
         var vocations = _dbContext.VocationRequests
             .AsNoTracking()
@@ -45,7 +45,12 @@ public class VocationRepository(ApplicationDbContext _dbContext) : IVocationRepo
                 || v.EndDate >= startDate && v.EndDate<= endDate);
         }
 
-        return await vocations.ToListAsync();
+        var skipNumber = (page - 1) * pageSize;
+
+        return await vocations
+            .Skip(skipNumber)
+            .Take(pageSize)
+            .ToListAsync();
     }
 
     public async Task<List<VocationRequestEntity>> Get(Guid userId)

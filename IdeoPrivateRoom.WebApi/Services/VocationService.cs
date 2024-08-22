@@ -25,7 +25,7 @@ public class VocationService(
             .ToList();
         
         var vocations = await _vocationRepository
-            .Get(start, end, ids, filters.Statuses);
+            .Get(filters.Page, filters.PageSize, start, end, ids, filters.Statuses);
 
         return vocations.OrderByDescending(v => v.CreatedDate)
             .Select(_mapper.Map<VocationResponse>)
