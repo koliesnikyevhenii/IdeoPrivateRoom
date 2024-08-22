@@ -16,7 +16,7 @@ public static class Vocations
             [AsParameters] VocationQueryFilters filters,
             IVocationService vocationService) =>
         {
-            return vocationService.GetAll(filters.UserIds, filters.Statuses, filters.StartDate, filters.EndDate);
+            return vocationService.GetAll(filters);
         })
         .WithOpenApi();
 

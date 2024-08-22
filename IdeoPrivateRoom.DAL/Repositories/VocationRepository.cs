@@ -32,8 +32,8 @@ public class VocationRepository(ApplicationDbContext _dbContext) : IVocationRepo
         }
         if (!string.IsNullOrWhiteSpace(statuses))
         {
-            var stas = statuses.Split(',');
-            vocations = vocations.Where(v => stas.Contains(v.VocationStatus));
+            var splitedStatuses = statuses.Split(',');
+            vocations = vocations.Where(v => splitedStatuses.Contains(v.VocationStatus));
         }
         if (startDate != null)
         {
