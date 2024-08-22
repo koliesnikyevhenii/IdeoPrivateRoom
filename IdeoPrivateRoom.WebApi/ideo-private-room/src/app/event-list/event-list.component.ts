@@ -11,6 +11,8 @@ import { EventCardComponent } from './event-card/event-card.component';
 import { EventListHeaderComponent } from './event-list-header/event-list-header.component';
 import { EventFiltersService } from './event-filters/event-filters.service';
 import { EventListTableRowComponent } from './event-list-table-row/event-list-table-row.component';
+import { EventListService } from './event-list.service';
+import { ViewMode } from './event-list.models';
 @Component({
   selector: 'app-event-list',
   standalone: true,
@@ -21,17 +23,13 @@ import { EventListTableRowComponent } from './event-list-table-row/event-list-ta
 })
 export class EventListComponent implements OnInit {
   private eventFiltersService = inject(EventFiltersService);
+  private eventListService = inject(EventListService)
   private destroyRef = inject(DestroyRef);
 
   cards = computed(() => this.eventFiltersService.loadedEvents());
+  viewMode = computed(() => ViewMode[this.eventListService.readonlyViewMode()])
   isFetching = signal<boolean>(false);
   error = signal<string>('');
-
-  isTable = signal<boolean>(false);
-
-  onSwitchView() {
-    this.isTable.update((value) => !value)
-  }
 
   ngOnInit() {
     this.isFetching.set(true);
