@@ -1,6 +1,4 @@
-﻿/*using IdeoPrivateRoom.WebApi.Repositories.Interfaces;
-using IdeoPrivateRoom.WebApi.Repositories;*/
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using IdeoPrivateRoom.WebApi.Services.Interfaces;
 using IdeoPrivateRoom.WebApi.Services;
 using IdeoPrivateRoom.WebApi.Mapping;
@@ -10,6 +8,7 @@ using IdeoPrivateRoom.DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+using IdeoPrivateRoom.WebApi.Models.Options;
 
 namespace IdeoPrivateRoom.WebApi.Extension;
 
@@ -30,7 +29,16 @@ public static class Configuration
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        builder.Services.AddCors();
+        var corsOptions = builder.Configuration.GetSection(CorsOptions.Section).Get<CorsOptions>();
+        var allowedOrigins = corsOptions?.AllowedOrigins?.Split(',') ?? [];
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(builder =>
+            {
+                builder.WithOrigins(allowedOrigins);
+            });
+        });
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("IdeoPrivateRoomDB")));
@@ -55,15 +63,13 @@ public static class Configuration
             var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             DBInitializer.Seed(context);
         }
-        else
-        {
-            app.UseCors(builder => builder.WithOrigins("http://localhost:8080", "http://localhost:4200"));
-        }
+
 
         app.UseHttpsRedirection();
 
         app.UseAuthentication();
         app.UseAuthorization();
-        app.UseCors(builder => builder.WithOrigins("http://localhost:8080"));
+
+        app.UseCors();
     }
 }

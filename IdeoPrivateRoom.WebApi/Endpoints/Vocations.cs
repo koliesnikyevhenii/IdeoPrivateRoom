@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using IdeoPrivateRoom.WebApi.Models;
 using IdeoPrivateRoom.WebApi.Models.Requests;
 using IdeoPrivateRoom.WebApi.Services.Interfaces;
 
@@ -11,9 +12,11 @@ public static class Vocations
         var vocations = routes.MapGroup("/api/vocations")
             .WithTags("Vocations");
 
-        vocations.MapGet("", (IVocationService vocationService) =>
+        vocations.MapGet("", (
+            [AsParameters] VocationQueryFilters filters,
+            IVocationService vocationService) =>
         {
-            return vocationService.GetAll();
+            return vocationService.GetAll(filters);
         })
         .WithOpenApi();
 
