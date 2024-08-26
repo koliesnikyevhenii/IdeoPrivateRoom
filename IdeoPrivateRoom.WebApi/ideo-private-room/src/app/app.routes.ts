@@ -8,15 +8,15 @@ export const routes: Routes = [
     ...eventListRoutes,
     {
         path: '',
-        redirectTo: 'calendar',
+        component: LoginComponent,
         pathMatch: 'full',
-      //  canActivate: [MsalGuard]
+      
     },
     {
         path: 'calendar',
         component: CalendarComponent,
-        title: 'Calendar'
-         //  canActivate: [MsalGuard]
+        title: 'Calendar',
+        canActivate: [MsalGuard]
     },
     {
         path: 'login',

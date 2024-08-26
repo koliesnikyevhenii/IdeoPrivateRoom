@@ -1,25 +1,45 @@
 <header>
   <div class="px-3 py-2 text-bg-dark border-bottom">
     <div class="container">
-      <div
-        class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
-      >
+      <div class="d-flex flex-wrap align-items-center justify-content-between">
         <ul
           class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small"
         >
           <li>
             <a [routerLink]="['/', 'event-list']" class="nav-link text-white">
-              <img src="events-list-ico.svg" class="bi d-block mx-auto mb-1" width="24" height="24">
+              <img
+                src="events-list-ico.svg"
+                class="bi d-block mx-auto mb-1"
+                width="24"
+                height="24"
+                alt=""
+              />
               Events List
             </a>
           </li>
           <li>
             <a [routerLink]="['/', 'calendar']" class="nav-link text-white">
-              <img src="calendar-ico.svg" class="bi d-block mx-auto mb-1" width="24" height="24" />
+              <img
+                src="calendar-ico.svg"
+                class="bi d-block mx-auto mb-1"
+                width="24"
+                height="24"
+                alt=""
+              />
               Calendar
             </a>
           </li>
         </ul>
+
+        <div class="text-end" *ngIf="isAuthorized">
+          <button
+            type="button"
+            (click)="logout()"
+            class="btn btn-outline-light me-2"
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   </div>
