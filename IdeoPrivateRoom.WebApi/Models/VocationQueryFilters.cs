@@ -6,6 +6,6 @@ public class VocationQueryFilters
     public string? EndDate { get; set; }
     public string? UserIds { get; set; }
     public string? Statuses { get; set; }
-    public int Page { get; set; } = 1;
-    public int PageSize { get; set; } = 7;
+    public int? Page { get; set; }
+    public int? PageSize { get; set; }
 }

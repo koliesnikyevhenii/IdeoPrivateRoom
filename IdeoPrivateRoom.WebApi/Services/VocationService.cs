@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using IdeoPrivateRoom.DAL.Data.Entities;
+using IdeoPrivateRoom.DAL.Models;
 using IdeoPrivateRoom.DAL.Repositories.Interfaces;
 using IdeoPrivateRoom.WebApi.Models;
 using IdeoPrivateRoom.WebApi.Models.Enums;
@@ -14,7 +15,7 @@ public class VocationService(
     IMapper _mapper,
     ILogger<VocationService> _logger) : IVocationService
 {
-    public async Task<List<VocationResponse>> GetAll(VocationQueryFilters filters)
+    public async Task<PagedList<VocationResponse>> GetAll(VocationQueryFilters filters)
     {
         DateTimeOffset? start = DateTimeOffset.TryParse(filters.StartDate, out var parsedStart) ? parsedStart : null;
         DateTimeOffset? end = DateTimeOffset.TryParse(filters.EndDate, out var parsedEnd) ? parsedEnd : null;
@@ -22,14 +23,17 @@ public class VocationService(
         var ids = filters.UserIds?.Split(',')
             .Select(i => Guid.TryParse(i, out var id) ? id : Guid.Empty)
             .Where(i => i != Guid.Empty)
-            .ToList();
+            .ToArray();
+
+        var statuses = filters.Statuses?.Split(",");
+
+        var page = filters.Page ?? 1;
+        var pageSize = filters.PageSize ?? 3;
         
         var vocations = await _vocationRepository
-            .Get(filters.Page, filters.PageSize, start, end, ids, filters.Statuses);
+            .Get(page, pageSize, start, end, ids, statuses);
 
-        return vocations.OrderByDescending(v => v.CreatedDate)
-            .Select(_mapper.Map<VocationResponse>)
-            .ToList();
+        return _mapper.Map<PagedList<VocationResponse>>(vocations);
     }
     public async Task<List<VocationResponse>> GetByUserId(Guid id)
     {

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using IdeoPrivateRoom.DAL.Data.Entities;
+using IdeoPrivateRoom.DAL.Models;
+using IdeoPrivateRoom.WebApi.Mapping.Converters;
 using IdeoPrivateRoom.WebApi.Models.Requests;
 using IdeoPrivateRoom.WebApi.Models.Responses;
 
@@ -36,6 +38,9 @@ public class MappingProfile : Profile
         CreateMap<UserApprovalResponseEntity, VocationUserApprovalResponse>()
             .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
             .ForMember(dest => dest.ApprovalStatus, opt => opt.MapFrom(src => int.Parse(src.ApprovalStatus).ToString()));
+
+        CreateMap(typeof(PagedList<VocationRequestEntity>), typeof(PagedList<VocationResponse>))
+            .ConvertUsing(typeof(VocationsPagedListConverter<VocationRequestEntity, VocationResponse>));
 
     }
 }

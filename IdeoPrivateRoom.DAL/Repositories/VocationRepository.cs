@@ -2,6 +2,7 @@
 using IdeoPrivateRoom.DAL.Data;
 using IdeoPrivateRoom.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using IdeoPrivateRoom.DAL.Models;
 
 namespace IdeoPrivateRoom.DAL.Repositories;
 
@@ -17,7 +18,7 @@ public class VocationRepository(ApplicationDbContext _dbContext) : IVocationRepo
         return createdVocation.Entity.Id;
     }
 
-    public async Task<List<VocationRequestEntity>> Get(int page, int pageSize, DateTimeOffset? startDate, DateTimeOffset? endDate, List<Guid>? userIds, string? statuses)
+    public async Task<PagedList<VocationRequestEntity>> Get(int page, int pageSize, DateTimeOffset? startDate, DateTimeOffset? endDate, Guid[]? userIds, string[]? statuses)
     {
         var vocations = _dbContext.VocationRequests
             .AsNoTracking()
@@ -26,14 +27,13 @@ public class VocationRepository(ApplicationDbContext _dbContext) : IVocationRepo
                 .ThenInclude(u => u.User)
             .AsQueryable();
 
-        if (userIds?.Any() == true)
+        if (userIds != null && userIds.Length != 0)
         {
             vocations = vocations.Where(v => userIds.Contains(v.UserId));
         }
-        if (!string.IsNullOrWhiteSpace(statuses))
+        if (statuses != null && statuses.Length != 0)
         {
-            var splitedStatuses = statuses.Split(',');
-            vocations = vocations.Where(v => splitedStatuses.Contains(v.VocationStatus));
+            vocations = vocations.Where(v => statuses.Contains(v.VocationStatus));
         }
         if (startDate != null)
         {
@@ -45,12 +45,15 @@ public class VocationRepository(ApplicationDbContext _dbContext) : IVocationRepo
                 || v.EndDate >= startDate && v.EndDate<= endDate);
         }
 
-        var skipNumber = (page - 1) * pageSize;
+        var totalRecords = await vocations.CountAsync();
 
-        return await vocations
-            .Skip(skipNumber)
+        var data =  await vocations
+            .Skip((page - 1) * pageSize)
             .Take(pageSize)
+            .OrderByDescending(v => v.CreatedDate)
             .ToListAsync();
+
+        return new PagedList<VocationRequestEntity>(data, page, pageSize, totalRecords);
     }
 
     public async Task<List<VocationRequestEntity>> Get(Guid userId)
