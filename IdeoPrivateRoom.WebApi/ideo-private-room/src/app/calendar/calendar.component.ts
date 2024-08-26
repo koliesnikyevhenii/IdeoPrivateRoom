@@ -1,14 +1,15 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   DestroyRef,
   inject,
   OnInit,
   signal,
+  ViewEncapsulation,
 } from '@angular/core';
 import { CalendarHeaderComponent } from './calendar-header/calendar-header.component';
 import {
-  CalendarEvent,
   CalendarEventTimesChangedEvent,
   CalendarModule,
   CalendarView,
@@ -27,6 +28,8 @@ import { CalendarUserEvent } from './calendar.models';
   templateUrl: './calendar.component.html',
   animations: [collapseAnimation],
   styleUrl: './calendar.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None
 })
 export class CalendarComponent implements OnInit {
   private eventListService = inject(EventListService);
@@ -39,11 +42,14 @@ export class CalendarComponent implements OnInit {
       start: event.fromDate,
       end: event.toDate,
       color: this.eventListService.mapColorToEventStatus(event.status),
-      userName: event.userName
+      userName: event.userName,
+      allDay: true
     });
   });
 
   view: CalendarView = CalendarView.Month;
+
+  CalendarView = CalendarView;
 
   viewDate = new Date();
 

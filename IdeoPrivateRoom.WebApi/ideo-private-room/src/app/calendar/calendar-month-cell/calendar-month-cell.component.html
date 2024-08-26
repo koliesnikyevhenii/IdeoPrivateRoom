@@ -1,5 +1,9 @@
 <div class="line-container">
   @for(displayEvent of displayEvents; track displayEvent.order) {
-  <div class="line" [class]="displayEvent.styleClass" [style]="{'bottom': displayEvent.order * 22 + 'px'}"></div>
+  <div class="line container-fluid" [class]="displayEvent.styleClass" [style]="{'bottom': displayEvent.order * 22 + 'px'}">
+    @if(displayEvent.userName) {
+      <p class="position-relative bottom-15">{{ displayEvent.userName }}</p>
+    }
+  </div>
   }
 </div>

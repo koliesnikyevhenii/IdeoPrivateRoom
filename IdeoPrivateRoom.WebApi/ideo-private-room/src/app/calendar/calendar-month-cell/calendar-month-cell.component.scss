@@ -12,22 +12,6 @@
   margin-bottom: 2px; /* Close spacing between lines */
 }
 
-.rounded-left {
-  width: 85%; /* Start at 15% of the container */
-  margin-left: 15%;
-  border-top-left-radius: 10px; /* Adjust radius as needed */
-  border-bottom-left-radius: 10px;
-}
-
-.rounded-right {
-  width: 85%; /* End at 15% of the container */
-  margin-right: 15%;
-  border-top-right-radius: 10px; /* Adjust radius as needed */
-  border-bottom-right-radius: 10px;
-}
-
-.rounded-both {
-  width: 70%; /* Line centered between 15% and 85% */
-  margin-left: 15%;
-  border-radius: 10px; /* Rounding on both sides */
+.bottom-15 {
+  bottom: 15%;
 }

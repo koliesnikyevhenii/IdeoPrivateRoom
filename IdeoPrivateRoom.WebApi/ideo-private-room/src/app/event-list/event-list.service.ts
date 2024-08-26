@@ -75,12 +75,12 @@ export class EventListService {
   } {
     const statusColors: Record<number, { primary: string; secondary: string }> =
       {
-        [EventStatus.Approved]: { primary: '#28a745', secondary: '#28a745' },
-        [EventStatus.Declined]: { primary: '#dc3545', secondary: '#dc3545' },
+        [EventStatus.Approved]: { primary: '#198754', secondary: '#5fb78e' },
+        [EventStatus.Declined]: { primary: '#ad2121', secondary: '#FAE3E3' },
       };
 
     return (
-      statusColors[status ?? -1] || { primary: '#ffc107', secondary: '#ffc107' }
+      statusColors[status ?? -1] || { primary: '#e3bc08', secondary: '#FDF1BA' }
     );
   }
 

@@ -7,8 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { MonthViewDay } from 'calendar-utils';
-import { CalendarEvent } from 'angular-calendar';
-import { isAfter, isSameDay, isBefore, addDays } from 'date-fns';
+import { isSameDay, addDays } from 'date-fns';
 import { CalendarService } from '../calendar.service';
 import { CalendarUserEvent, SlotModel } from '../calendar.models';
 
@@ -45,10 +44,10 @@ export class CalendarMonthCellComponent implements OnInit {
     this.displayEvents = this.currentSlotsStatus()
     .map((slot) => {
       let styleClass = '';
-
+      let userName = '';
       // this condition will not happen, but should exist to pass null check
       if (!slot.event) {
-        return { styleClass, order: slot.order };
+        return { styleClass, order: slot.order, userName: userName };
       }
 
       if (
@@ -56,21 +55,23 @@ export class CalendarMonthCellComponent implements OnInit {
         isSameDay(this.viewDay().date, slot.event.start) &&
         isSameDay(this.viewDay().date, slot.event.end)
       ) {
-        styleClass = 'rounded-both';
+        styleClass = 'rounded-2';
+        userName = slot.event.userName;
       } else if (isSameDay(this.viewDay().date, slot.event.start)) {
-        styleClass = 'rounded-left';
+        styleClass = 'rounded-start-2';
+        userName = slot.event.userName;
       } else if (
         slot.event?.end &&
         isSameDay(this.viewDay().date, slot.event.end)
       ) {
-        styleClass = 'rounded-right';
+        styleClass = 'rounded-end-2';
       }
 
-      return { styleClass, order: slot.order };
+      return { styleClass, order: slot.order, userName: userName };
     })
     .sort((a, b) => a.order - b.order)
     .reverse(); // Sort by order to maintain vertical positioning;
   }
 
-  displayEvents: { styleClass: string, order: number }[] = []
+  displayEvents: { styleClass: string, order: number, userName: string | undefined }[] = []
 }
