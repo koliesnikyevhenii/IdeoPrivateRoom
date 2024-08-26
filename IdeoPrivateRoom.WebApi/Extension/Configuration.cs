@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using IdeoPrivateRoom.WebApi.Models.Options;
+using IdeoPrivateRoom.WebApi.Configurations;
 
 namespace IdeoPrivateRoom.WebApi.Extension;
 
@@ -28,6 +29,8 @@ public static class Configuration
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        builder.Services.Configure<VocationsListSettings>(builder.Configuration.GetSection(nameof(VocationsListSettings)));
 
         var corsOptions = builder.Configuration.GetSection(CorsOptions.Section).Get<CorsOptions>();
         var allowedOrigins = corsOptions?.AllowedOrigins?.Split(',') ?? [];

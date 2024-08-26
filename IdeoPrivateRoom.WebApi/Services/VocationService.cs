@@ -6,17 +6,23 @@ using IdeoPrivateRoom.WebApi.Models;
 using IdeoPrivateRoom.WebApi.Models.Enums;
 using IdeoPrivateRoom.WebApi.Models.Requests;
 using IdeoPrivateRoom.WebApi.Models.Responses;
+using IdeoPrivateRoom.WebApi.Configurations;
 using IdeoPrivateRoom.WebApi.Services.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace IdeoPrivateRoom.WebApi.Services;
 
 public class VocationService(
     IVocationRepository _vocationRepository, 
     IMapper _mapper,
+    IOptions<VocationsListSettings> settings,
     ILogger<VocationService> _logger) : IVocationService
 {
     public async Task<PagedList<VocationResponse>> GetAll(VocationQueryFilters filters)
     {
+        var page = filters.Page ?? 1;
+        var pageSize = filters.PageSize ?? settings.Value.PageSize;
+
         DateTimeOffset? start = DateTimeOffset.TryParse(filters.StartDate, out var parsedStart) ? parsedStart : null;
         DateTimeOffset? end = DateTimeOffset.TryParse(filters.EndDate, out var parsedEnd) ? parsedEnd : null;
 
@@ -27,9 +33,6 @@ public class VocationService(
 
         var statuses = filters.Statuses?.Split(",");
 
-        var page = filters.Page ?? 1;
-        var pageSize = filters.PageSize ?? 3;
-        
         var vocations = await _vocationRepository
             .Get(page, pageSize, start, end, ids, statuses);
 
