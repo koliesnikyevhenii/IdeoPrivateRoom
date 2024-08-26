@@ -1,7 +1,7 @@
 <div class="line-container position-relative">
   @if(firstDisplayEvent) {
   <div
-    class="line container-fluid border-end-0 border-start-0 position-absolute bottom-0"
+    class="line container-fluid border border-end-0 border-start-0 position-absolute w-100 bottom-0"
     [class]="definePaletteFromStatus(firstDisplayEvent)"
   >
     @if(isFirstEventStartDay()) {
@@ -12,7 +12,7 @@
   </div>
   } @if(moreEvents.length > 0) {
   <div
-    class="line position-absolute container-fluid text-center more-line border-end-0 border-start-0"
+    class="line bg-secondary-subtle position-absolute w-100 container-fluid text-center border-0"
     [ngbTooltip]="moreLineContent"
     placement="top"
     triggers="click"
@@ -24,7 +24,7 @@
   <ng-template #moreLineContent>
     @for(event of moreEvents; track event.id) {
     <div
-      class="internal-line container-fluid border-end-0 border-start-0"
+      class="border internal-line container-fluid border-end-0 border-start-0 w-100 mb-1"
       [class]="definePaletteFromStatus(event)"
     >
       @if(event.userName) {

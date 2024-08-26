@@ -47,21 +47,6 @@ export class CalendarMonthCellComponent implements OnInit {
     return statusThemes[event.status ?? -1] || ['border-warning', 'bg-warning-subtle']
   }
 
-  // mapColorToEventStatus(status?: number): {
-  //   primary: string;
-  //   secondary: string;
-  // } {
-  //   const statusColors: Record<number, { primary: string; secondary: string }> =
-  //     {
-  //       [EventStatus.Approved]: { primary: '#198754', secondary: '#5fb78e8f' },
-  //       [EventStatus.Declined]: { primary: '#ad2121', secondary: '#FAE3E3' },
-  //     };
-
-  //   return (
-  //     statusColors[status ?? -1] || { primary: '#e3bc08', secondary: '#FDF1BA' }
-  //   );
-  // }
-
   ngOnInit() {
     for (const event of this.events()) {
       if (isSameDay(event.start, this.viewDay().date)) {

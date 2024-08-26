@@ -7,22 +7,11 @@
   height: 100%;
 
   .line {
-    position: absolute;
-    width: 100%;
     height: 22px;
-    margin-bottom: 1px;
-    border: 1px solid;
-  }
-
-  .more-line {
-    border: 0;
-    background-color: mix($gray-500, $white);
   }
 
   .internal-line {
     height: 22px;
-    margin-bottom: 1px;
-    border: 1px solid;
   }
 
   .tooltip-inner {
