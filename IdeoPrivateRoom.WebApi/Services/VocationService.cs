@@ -1,43 +1,49 @@
 ﻿using AutoMapper;
 using IdeoPrivateRoom.DAL.Data.Entities;
+using IdeoPrivateRoom.DAL.Models;
 using IdeoPrivateRoom.DAL.Repositories.Interfaces;
+using IdeoPrivateRoom.WebApi.Models;
 using IdeoPrivateRoom.WebApi.Models.Enums;
 using IdeoPrivateRoom.WebApi.Models.Requests;
 using IdeoPrivateRoom.WebApi.Models.Responses;
+using IdeoPrivateRoom.WebApi.Configurations;
 using IdeoPrivateRoom.WebApi.Services.Interfaces;
 using LightResults;
+using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 
 namespace IdeoPrivateRoom.WebApi.Services;
 
 public class VocationService(
     IVocationRepository _vocationRepository, 
     IMapper _mapper,
+    IOptions<VocationsListSettings> settings,
     ILogger<VocationService> _logger) : IVocationService
 {
-    public async Task<Result<List<VocationResponse>>> GetAll(VocationQueryFilters filters)
+    public async Task<Result<PagedList<VocationResponse>>> GetAll(VocationQueryFilters filters)
     {
+        var page = filters.Page ?? 1;
+        var pageSize = filters.PageSize ?? settings.Value.PageSize;
+
         DateTimeOffset? start = DateTimeOffset.TryParse(filters.StartDate, out var parsedStart) ? parsedStart : null;
         DateTimeOffset? end = DateTimeOffset.TryParse(filters.EndDate, out var parsedEnd) ? parsedEnd : null;
 
         var ids = filters.UserIds?.Split(',')
             .Select(i => Guid.TryParse(i, out var id) ? id : Guid.Empty)
             .Where(i => i != Guid.Empty)
-            .ToList();
-        
+            .ToArray();
+
+        var statuses = filters.Statuses?.Split(",");
+
         var vocations = await _vocationRepository
-            .Get(start, end, ids, filters.Statuses);
+            .Get(page, pageSize, start, end, ids, statuses);
 
         if (vocations?.Any() != true)
         {
-            return Result.Fail<List<VocationResponse>>("No vocations found matching the given criteria.");
+            return Result.Fail<List<VocationResponse>>("No vocations was found.");
         }
 
-        var result = vocations.OrderByDescending(v => v.CreatedDate)
-            .Select(_mapper.Map<VocationResponse>)
-            .ToList();
-
-        return Result.Ok(result);
-
+            return Result.Ok(_mapper.Map<PagedList<VocationResponse>>(vocations));
     }
     public async Task<Result<List<VocationResponse>>> GetByUserId(Guid id)
     {

@@ -46,7 +46,7 @@ export class EventCardComponent implements OnInit {
       default:
         this.cardStatus.set({
           class: 'approved-bg',
-          name: EventStatus[EventStatus.Confirmed],
+          name: EventStatus[EventStatus.Approved],
         });
         break;
     }
