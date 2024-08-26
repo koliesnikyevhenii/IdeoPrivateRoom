@@ -69,21 +69,6 @@ export class EventListService {
     );
   }
 
-  mapColorToEventStatus(status?: number): {
-    primary: string;
-    secondary: string;
-  } {
-    const statusColors: Record<number, { primary: string; secondary: string }> =
-      {
-        [EventStatus.Approved]: { primary: '#198754', secondary: '#5fb78e' },
-        [EventStatus.Declined]: { primary: '#ad2121', secondary: '#FAE3E3' },
-      };
-
-    return (
-      statusColors[status ?? -1] || { primary: '#e3bc08', secondary: '#FDF1BA' }
-    );
-  }
-
   fetchEvents(errorMessage: string): Observable<EventModel[]> {
     return this.http.get<ApiEvent[]>(this.eventsUrl).pipe(
       map((events) => {

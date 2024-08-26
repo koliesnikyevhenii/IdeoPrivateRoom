@@ -5,37 +5,37 @@
 .line-container {
   width: 100%;
   height: 100%;
-  position: relative;
 
   .line {
     position: absolute;
     width: 100%;
-    height: 25px;
+    height: 22px;
     margin-bottom: 1px;
     border: 1px solid;
   }
 
   .more-line {
-    width: 90%;
-    margin-right: 10%;
+    border: 0;
+    background-color: mix($gray-500, $white);
   }
 
   .internal-line {
-    width: 150px;
-    height: 25px;
+    height: 22px;
     margin-bottom: 1px;
     border: 1px solid;
   }
 
   .tooltip-inner {
+    min-width: 100%;
+    height: 100%;
     background-color: mix($gray-100, $white);
     border: 1px solid #0062a2;
     opacity: 1;
   }
 
   .bs-tooltip-top .tooltip-arrow::before,
-  .bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow::before {
-    border-top-color: #0062a2 !important;
+  .bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow::before, .tooltip-arrow {
+    display: none;
   }
 
   .bs-tooltip-top {

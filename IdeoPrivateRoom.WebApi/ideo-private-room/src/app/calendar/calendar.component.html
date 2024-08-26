@@ -15,7 +15,9 @@
         day.date | calendarDate : "monthViewDayNumber" : locale
       }}</span>
     </div>
-    <app-calendar-month-cell [viewDay]="day" />
+    @defer() {
+      <app-calendar-month-cell [viewDay]="day" />
+    }
   </ng-template>
   <div [ngSwitch]="view">
     <mwl-calendar-month-view

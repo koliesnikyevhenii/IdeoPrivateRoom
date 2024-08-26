@@ -41,8 +41,8 @@ export class CalendarComponent implements OnInit {
       title: event.userName,
       start: event.fromDate,
       end: event.toDate,
-      color: this.eventListService.mapColorToEventStatus(event.status),
       userName: event.userName,
+      status: event.status,
       allDay: true
     });
   });

@@ -1,38 +1,31 @@
-<div class="line-container">
-  @if(firstDisplayEvent()) {
+<div class="line-container position-relative">
+  @if(firstDisplayEvent) {
   <div
-    class="line container-fluid"
-    [style]="{
-      bottom: '0px',
-      'background-color': firstDisplayEvent().color?.secondary,
-      'border-color': firstDisplayEvent().color?.primary
-    }"
-    [class]="roundStatus()"
+    class="line container-fluid border-end-0 border-start-0 position-absolute bottom-0"
+    [class]="definePaletteFromStatus(firstDisplayEvent)"
   >
-    @if(isEventStartDay()) {
-    <p class="position-relative bottom-15">
-      <b>{{ firstDisplayEvent().userName }}</b>
+    @if(isFirstEventStartDay()) {
+    <p class="position-relative">
+      <b>{{ firstDisplayEvent!.userName }}</b>
     </p>
     }
   </div>
-  } @if(moreEvents().length > 0) {
+  } @if(moreEvents.length > 0) {
   <div
-    class="line container-fluid rounded-2 text-center more-line"
+    class="line position-absolute container-fluid text-center more-line border-end-0 border-start-0"
     [ngbTooltip]="moreLineContent"
+    placement="top"
     triggers="click"
-    tooltipClass="test"
-    [style]="{ bottom: '26px' }"
+    tooltipClass="container-fluid"
+    [style]="{ bottom: firstDisplayEvent ? '23px' : '0' }"
   >
-    +{{ events().length }}
+    +{{ moreEvents.length }}
   </div>
   <ng-template #moreLineContent>
-    @for(event of events(); track event.id) {
+    @for(event of moreEvents; track event.id) {
     <div
-      class="internal-line container-fluid"
-      [style]="{
-        'background-color': event.color?.secondary,
-        'border-color': event.color?.primary
-      }"
+      class="internal-line container-fluid border-end-0 border-start-0"
+      [class]="definePaletteFromStatus(event)"
     >
       @if(event.userName) {
       <p class="position-relative text-start text-dark">
