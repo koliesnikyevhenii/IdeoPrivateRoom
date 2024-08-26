@@ -18,7 +18,7 @@ public static class Vocations
         {
             var result = await vocationService.GetAll(filters);
             return result.IsSuccess
-                ? Results.Ok(result)
+                ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);
         })
         .WithOpenApi();
@@ -27,7 +27,7 @@ public static class Vocations
         {
             var result = await vocationService.GetByUserId(id);
             return result.IsSuccess
-                ? Results.Ok(result)
+                ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);
         })
         .WithOpenApi();
@@ -36,7 +36,7 @@ public static class Vocations
         {
             var result = await vocationService.Create(request);
             return result.IsSuccess
-                ? Results.Ok(result)
+                ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);
         })
         .WithOpenApi();
@@ -45,7 +45,7 @@ public static class Vocations
         {
             var result = await vocationService.Delete(id);
             return result.IsSuccess
-                ? Results.Ok(result)
+                ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);
         })
         .WithOpenApi();

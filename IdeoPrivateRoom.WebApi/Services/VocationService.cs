@@ -10,7 +10,6 @@ using IdeoPrivateRoom.WebApi.Configurations;
 using IdeoPrivateRoom.WebApi.Services.Interfaces;
 using LightResults;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
 
 namespace IdeoPrivateRoom.WebApi.Services;
 
@@ -38,12 +37,12 @@ public class VocationService(
         var vocations = await _vocationRepository
             .Get(page, pageSize, start, end, ids, statuses);
 
-        if (vocations?.Any() != true)
+        if (vocations.TotalRecords == 0)
         {
-            return Result.Fail<List<VocationResponse>>("No vocations was found.");
+            return Result.Fail<PagedList<VocationResponse>>("No vocations was found.");
         }
 
-            return Result.Ok(_mapper.Map<PagedList<VocationResponse>>(vocations));
+        return Result.Ok(_mapper.Map<PagedList<VocationResponse>>(vocations));
     }
     public async Task<Result<List<VocationResponse>>> GetByUserId(Guid id)
     {

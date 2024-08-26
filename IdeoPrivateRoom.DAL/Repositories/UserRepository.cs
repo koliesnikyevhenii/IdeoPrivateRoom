@@ -6,14 +6,6 @@ using Microsoft.EntityFrameworkCore;
 namespace IdeoPrivateRoom.DAL.Repositories;
 public class UserRepository(ApplicationDbContext _dbContext) : IUserRepository
 {
-    public async Task<Guid> Create(UserEntity user)
-    {
-        var createdUser = await _dbContext.Users.AddAsync(user);
-        await _dbContext.SaveChangesAsync();
-
-        return createdUser.Entity.Id;
-    }
-
     public async Task<List<UserEntity>> Get()
     {
         return await _dbContext.Users
@@ -31,6 +23,14 @@ public class UserRepository(ApplicationDbContext _dbContext) : IUserRepository
             .Include(u => u.RoleMappings)
                 .ThenInclude(rm => rm.Role)
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<Guid> Create(UserEntity user)
+    {
+        var createdUser = await _dbContext.Users.AddAsync(user);
+        await _dbContext.SaveChangesAsync();
+
+        return createdUser.Entity.Id;
     }
 
     public async Task<Guid?> Update(Guid id, UserEntity user)

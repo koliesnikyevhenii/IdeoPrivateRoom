@@ -13,7 +13,7 @@ public static class Users
         {
             var result = await userService.GetAll();
             return result.IsSuccess
-                ? Results.Ok(result)
+                ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);
         })
         .WithOpenApi();
@@ -23,7 +23,7 @@ public static class Users
             var result = await userService.GetById(id);
 
             return result.IsSuccess
-                ? Results.Ok(result)
+                ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);
         })
         .WithOpenApi();
