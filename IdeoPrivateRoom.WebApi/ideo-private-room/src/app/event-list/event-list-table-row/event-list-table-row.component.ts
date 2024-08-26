@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, inject, input, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
 import { EventModel, EventStatus } from '../event-list.models';
 import { DatePipe } from '@angular/common';
 import { NgbAccordionModule, NgbModal, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
@@ -14,6 +14,7 @@ import { EventListTableRowService } from './event-list-table-row.service';
   imports: [DatePipe, NgbAccordionModule, EventListTableRowContentComponent, NgbTooltipModule],
   templateUrl: './event-list-table-row.component.html',
   styleUrl: './event-list-table-row.component.scss',
+  encapsulation: ViewEncapsulation.None
 })
 export class EventListTableRowComponent {
   private destroyRef = inject(DestroyRef);

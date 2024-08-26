@@ -1,9 +1,46 @@
 <div class="line-container">
-  @for(displayEvent of displayEvents; track displayEvent.order) {
-  <div class="line container-fluid" [class]="displayEvent.styleClass" [style]="{'bottom': displayEvent.order * 22 + 'px'}">
-    @if(displayEvent.userName) {
-      <p class="position-relative bottom-15">{{ displayEvent.userName }}</p>
+  @if(firstDisplayEvent()) {
+  <div
+    class="line container-fluid"
+    [style]="{
+      bottom: '0px',
+      'background-color': firstDisplayEvent().color?.secondary,
+      'border-color': firstDisplayEvent().color?.primary
+    }"
+    [class]="roundStatus()"
+  >
+    @if(isEventStartDay()) {
+    <p class="position-relative bottom-15">
+      <b>{{ firstDisplayEvent().userName }}</b>
+    </p>
     }
   </div>
+  } @if(moreEvents().length > 0) {
+  <div
+    class="line container-fluid rounded-2 text-center more-line"
+    [ngbTooltip]="moreLineContent"
+    triggers="click"
+    tooltipClass="test"
+    [style]="{ bottom: '26px' }"
+  >
+    +{{ events().length }}
+  </div>
+  <ng-template #moreLineContent>
+    @for(event of events(); track event.id) {
+    <div
+      class="internal-line container-fluid"
+      [style]="{
+        'background-color': event.color?.secondary,
+        'border-color': event.color?.primary
+      }"
+    >
+      @if(event.userName) {
+      <p class="position-relative text-start text-dark">
+        <b>{{ event.userName }}</b>
+      </p>
+      }
+    </div>
+    }
+  </ng-template>
   }
 </div>
