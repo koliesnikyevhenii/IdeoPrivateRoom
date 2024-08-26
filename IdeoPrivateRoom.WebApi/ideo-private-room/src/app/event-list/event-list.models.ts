@@ -9,7 +9,7 @@ export interface User {
 
 export enum EventStatus {
   Pending = 0,
-  Confirmed = 1,
+  Approved = 1,
   Declined = 2,
 }
 
@@ -30,4 +30,9 @@ export interface EventApproval {
   userName: string,
   userIcon: string,
   approvalStatus: EventStatus | undefined;
+}
+
+export enum ViewMode {
+  Table = 0,
+  Cards = 1
 }

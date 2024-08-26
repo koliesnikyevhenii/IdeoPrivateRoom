@@ -15,6 +15,7 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS,  withFetch,} from '@angular/common/http';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import {  
   MsalInterceptor,
   MSAL_INSTANCE,
@@ -29,6 +30,7 @@ import { PublicClientApplication, IPublicClientApplication, InteractionType, Bro
 import { environment } from '../environments/environment';
 
 
+
 export function loggerCallback(logLevel: LogLevel, message: string) {
   console.log(message);
 }
@@ -38,11 +40,12 @@ export function MSALInstanceFactory(): IPublicClientApplication {
     auth: {
       clientId: environment.msalConfig.auth.clientId,
       authority: environment.msalConfig.auth.authority,
-      redirectUri: '/',
+      redirectUri: 'http://localhost:8080/calendar',
       postLogoutRedirectUri: '/',
     },
     cache: {
       cacheLocation: BrowserCacheLocation.LocalStorage,
+      storeAuthStateInCookie: true
     },
     system: {
       allowNativeBroker: false, // Disables WAM Broker

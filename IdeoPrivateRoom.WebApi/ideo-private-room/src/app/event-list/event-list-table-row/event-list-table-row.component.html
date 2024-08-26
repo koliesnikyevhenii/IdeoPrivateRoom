@@ -1,10 +1,10 @@
-<tr ngbAccordion class="accordion-flush row" colspan="4">
-  <div ngbAccordionItem>
-    <h2 ngbAccordionHeader>
-      <button ngbAccordionButton>
+<tr ngbAccordion class="accordion-flush row ps-0 pe-0" colspan="5">
+  <div ngbAccordionItem class="ps-0 pe-0">
+    <h2 ngbAccordionHeader class="ps-0 pe-0">
+      <button ngbAccordionButton class="ps-0 pe-4 border-0">
         <td class="col-2">
           <div>
-            <img [src]="card().userIcon" alt="Icon" class="user-icon me-1" />
+            <img [src]="card().userIcon" alt="Icon" class="user-icon me-3" />
             <strong>{{ card().userName }}</strong>
           </div>
         </td>
@@ -13,43 +13,42 @@
           {{ card().toDate | date : "longDate" }} }
         </td>
         <td class="col-2">
-          @for(approval of card().userApprovalResponses; track approval.id) {
+          @if(card().userApprovalResponses.length > 3) {
+          <button
+            type="button"
+            [ngbTooltip]="tipContent"
+            triggers="hover"
+            class="btn btn-outline-primary rounded-circle p-0"
+            style="width: 32px; height: 32px;"
+          >
+            +{{card().userApprovalResponses.length}}
+          </button>
+          <ng-template #tipContent>
+            @for(approval of card().userApprovalResponses; track approval.id) {
+            <img
+              [src]="approval.userIcon"
+              [alt]="approval.userName"
+              class="status-image me-2"
+              [class]="eventListTableRowService.getApprovalStatus(card().status).class"
+            />
+            }
+          </ng-template>
+          } @else { @for(approval of card().userApprovalResponses; track
+          approval.id) {
           <img
             [src]="approval.userIcon"
             [alt]="approval.userName"
             class="status-image me-2"
-            [class]="getApprovalStatus(card().status).class"
+            [class]="eventListTableRowService.getApprovalStatus(card().status).class"
           />
-          }
-        </td>
-        <td class="col-2" [class]="getApprovalStatus(card().status).class">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="32px"
-            height="32px"
-            viewBox="0 0 72 72"
-            id="emoji"
-          >
-            <g id="color">
-              <circle cx="36" cy="36" r="28" />
-            </g>
-            <g id="line">
-              <circle
-                cx="36"
-                cy="36"
-                r="28"
-                fill="none"
-                stroke="#000000"
-                stroke-linejoin="round"
-                stroke-width="2"
-              />
-            </g>
-          </svg>
-          {{ approvalStatus() }}
+          } }
         </td>
         <td class="col-2">
-          <button class="btn btn-danger" (click)="onDelete($event)">
-            Delete
+          <h5 class="mb-0"><span class="badge mx-auto" [class]="eventListTableRowService.getApprovalStatus(card().status).badgeClass">{{ approvalStatus() }}</span></h5>
+        </td>
+        <td class="col-2">
+          <button class="btn btn-outline-danger" (click)="onDelete($event)">
+            <i class="bi bi-trash"></i>
           </button>
         </td>
       </button>
@@ -57,39 +56,7 @@
     <div ngbAccordionCollapse>
       <div ngbAccordionBody>
         <ng-template>
-          <div class="container">
-            <div class="row align-items-center">
-              <div class="col-auto">
-                <img [src]="card().userIcon" alt="Icon" class="user-icon" />
-              </div>
-              <div class="col">
-                <strong>{{ card().userName }}</strong>
-              </div>
-            </div>
-            <div class="divider"></div>
-
-            <div class="row">
-              <div class="col">
-                <strong class="me-2">Approvals:</strong>
-                @for(approval of card().userApprovalResponses; track
-                approval.id) {
-                <img
-                  [src]="approval.userIcon"
-                  [alt]="approval.userName"
-                  class="status-image me-2"
-                  [class]="getApprovalStatus(card().status).class"
-                />
-                }
-              </div>
-            </div>
-            <div class="divider"></div>
-
-            <div class="row">
-              <div class="col">
-                <strong>Global Status: </strong>{{ approvalStatus() }}
-              </div>
-            </div>
-          </div>
+          <app-event-list-table-row-content [card]="card()" />
         </ng-template>
       </div>
     </div>

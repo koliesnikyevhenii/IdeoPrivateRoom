@@ -3,7 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { ApiEvent } from '../api-models/event.model';
-import { EventModel, EventStatus } from './event-list.models';
+import { EventModel, EventStatus, ViewMode } from './event-list.models';
 import { mapEvent } from './event-list.mapping';
 
 @Injectable({
@@ -16,6 +16,14 @@ export class EventListService {
   private events = signal<EventModel[]>([]);
 
   loadedEvents = this.events.asReadonly();
+
+  private currentViewMode = signal<ViewMode>(ViewMode.Table);
+
+  readonlyViewMode = this.currentViewMode.asReadonly();
+
+  changeViewMode(mode: ViewMode) {
+    this.currentViewMode.set(mode)
+  }
 
   loadEvents() {
     return this.fetchEvents(
@@ -67,7 +75,7 @@ export class EventListService {
   } {
     const statusColors: Record<number, { primary: string; secondary: string }> =
       {
-        [EventStatus.Confirmed]: { primary: '#28a745', secondary: '#28a745' },
+        [EventStatus.Approved]: { primary: '#28a745', secondary: '#28a745' },
         [EventStatus.Declined]: { primary: '#dc3545', secondary: '#dc3545' },
       };
 
