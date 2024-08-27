@@ -23,15 +23,6 @@ public static class Vocations
         })
         .WithOpenApi();
 
-        vocations.MapGet("/{id}", async(Guid id, IVocationService vocationService) =>
-        {
-            var result = await vocationService.GetByUserId(id);
-            return result.IsSuccess
-                ? Results.Ok(result.Value)
-                : Results.BadRequest(result.Error.Message);
-        })
-        .WithOpenApi();
-
         vocations.MapPost("", async (CreateVocationRequest request, IVocationService vocationService, IMapper mapper) =>
         {
             var result = await vocationService.Create(request);

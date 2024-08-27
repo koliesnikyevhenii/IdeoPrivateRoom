@@ -23,8 +23,9 @@ public class VocationRepository(ApplicationDbContext _dbContext) : IVocationRepo
         var vocations = _dbContext.VocationRequests
             .AsNoTracking()
             .Include(v => v.User)
-            .Include(v => v.UserApprovalResponses)
-                .ThenInclude(u => u.User)
+                .ThenInclude(u => u.LinkedUsers)
+                    .ThenInclude(lu => lu.AssociatedUser)
+                        .ThenInclude(au => au.UserApprovalResponses)
             .AsQueryable();
 
         if (userIds != null && userIds.Length != 0)
@@ -54,17 +55,6 @@ public class VocationRepository(ApplicationDbContext _dbContext) : IVocationRepo
             .ToListAsync();
 
         return new PagedList<VocationRequestEntity>(data, page, pageSize, totalRecords);
-    }
-
-    public async Task<List<VocationRequestEntity>> Get(Guid userId)
-    {
-        return await _dbContext.VocationRequests
-            .AsNoTracking()
-            .Where(v => v.UserId == userId)
-            .Include(v => v.User)
-            .Include(v => v.UserApprovalResponses)
-                .ThenInclude(u => u.User)
-            .ToListAsync();
     }
 
     public async Task<Guid?> Update(Guid id, VocationRequestEntity vocation)

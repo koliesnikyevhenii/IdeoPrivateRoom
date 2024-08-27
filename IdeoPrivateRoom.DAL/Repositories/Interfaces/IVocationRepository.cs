@@ -5,7 +5,6 @@ namespace IdeoPrivateRoom.DAL.Repositories.Interfaces;
 public interface IVocationRepository
 {
     Task<PagedList<VocationRequestEntity>> Get(int page, int pageSize, DateTimeOffset? startDate, DateTimeOffset? endDate, Guid[]? userIds, string[]? statuses);
-    Task<List<VocationRequestEntity>> Get(Guid userId);
     Task<Guid> Create(VocationRequestEntity vocationRequest);
     Task<Guid?> Delete(Guid id);
     Task<Guid?> Update(Guid id, VocationRequestEntity vocation);

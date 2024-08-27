@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using IdeoPrivateRoom.DAL.Data.Entities;
 using IdeoPrivateRoom.DAL.Models;
+using IdeoPrivateRoom.WebApi.Extension;
 using IdeoPrivateRoom.WebApi.Mapping.Converters;
+using IdeoPrivateRoom.WebApi.Models.Enums;
 using IdeoPrivateRoom.WebApi.Models.Requests;
 using IdeoPrivateRoom.WebApi.Models.Responses;
 
@@ -33,7 +35,16 @@ public class MappingProfile : Profile
         CreateMap<VocationRequestEntity, VocationResponse>()
             .ForMember(r => r.Start, conf => conf.MapFrom(scr => scr.StartDate))
             .ForMember(r => r.End, conf => conf.MapFrom(scr => scr.EndDate))
-            .ForMember(r => r.Status, conf => conf.MapFrom(scr => scr.VocationStatus));
+            .ForMember(r => r.Status, conf => conf.MapFrom(scr => scr.VocationStatus))
+            .ForMember(r => r.Reviewers, conf => conf.MapFrom(scr => scr.User.LinkedUsers.Select(lu => new VocationReviewerResponse
+            {
+                Id = lu.AssociatedUser.Id,
+                Name = lu.AssociatedUser.FirstName + " " + lu.AssociatedUser.LastName,
+                Icon = lu.AssociatedUser.UserIcon,
+                ApprovalStatus = lu.AssociatedUser.UserApprovalResponses.FirstOrDefault(ar => ar.VocationRequestId == scr.Id) != null 
+                    ? lu.AssociatedUser.UserApprovalResponses.FirstOrDefault(ar => ar.VocationRequestId == scr.Id)!.ApprovalStatus.ToEnum(ApprovalStatus.Pending)
+                    : ApprovalStatus.Pending
+            }).ToList()));
 
         CreateMap<UserApprovalResponseEntity, VocationUserApprovalResponse>()
             .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))

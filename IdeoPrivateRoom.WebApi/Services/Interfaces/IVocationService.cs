@@ -9,7 +9,6 @@ namespace IdeoPrivateRoom.WebApi.Services.Interfaces;
 public interface IVocationService
 {
     Task<Result<PagedList<VocationResponse>>> GetAll(VocationQueryFilters filters);
-    Task<Result<List<VocationResponse>>> GetByUserId(Guid id);
     Task<Result<Guid>> Create(CreateVocationRequest vocation);
     Task<Result<Guid?>> Delete(Guid id);
     Task<Result<Guid?>> Update(Guid id, VocationRequestEntity vocation);
