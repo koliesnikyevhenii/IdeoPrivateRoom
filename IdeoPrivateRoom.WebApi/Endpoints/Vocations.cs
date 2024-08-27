@@ -12,29 +12,41 @@ public static class Vocations
         var vocations = routes.MapGroup("/api/vocations")
             .WithTags("Vocations");
 
-        vocations.MapGet("", (
+        vocations.MapGet("", async (
             [AsParameters] VocationQueryFilters filters,
             IVocationService vocationService) =>
         {
-            return vocationService.GetAll(filters);
+            var result = await vocationService.GetAll(filters);
+            return result.IsSuccess
+                ? Results.Ok(result.Value)
+                : Results.BadRequest(result.Error.Message);
         })
         .WithOpenApi();
 
-        vocations.MapGet("/{id}", (Guid id, IVocationService vocationService) =>
+        vocations.MapGet("/{id}", async(Guid id, IVocationService vocationService) =>
         {
-            return vocationService.GetByUserId(id);
+            var result = await vocationService.GetByUserId(id);
+            return result.IsSuccess
+                ? Results.Ok(result.Value)
+                : Results.BadRequest(result.Error.Message);
         })
         .WithOpenApi();
 
         vocations.MapPost("", async (CreateVocationRequest request, IVocationService vocationService, IMapper mapper) =>
         {
-            return await vocationService.Create(request);
+            var result = await vocationService.Create(request);
+            return result.IsSuccess
+                ? Results.Ok(result.Value)
+                : Results.BadRequest(result.Error.Message);
         })
         .WithOpenApi();
 
         vocations.MapDelete("/{id}", async (Guid id, IVocationService vocationService) =>
         {
-            return await vocationService.Delete(id);
+            var result = await vocationService.Delete(id);
+            return result.IsSuccess
+                ? Results.Ok(result.Value)
+                : Results.BadRequest(result.Error.Message);
         })
         .WithOpenApi();
     }
