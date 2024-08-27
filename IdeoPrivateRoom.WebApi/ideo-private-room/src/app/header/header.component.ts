@@ -13,11 +13,13 @@ import { CommonModule } from '@angular/common';
 })
 export class HeaderComponent {
   isAuthorized = false;
-
+  ngOnInit(): void {
+    this.isAuthorized = this.authService.instance.getAllAccounts().length > 0;
+  }
   constructor(
     private authService: MsalService,
   )   {  
-    this.isAuthorized = this.authService.instance.getAllAccounts().length > 0;
+   
   }
 
   logout() {

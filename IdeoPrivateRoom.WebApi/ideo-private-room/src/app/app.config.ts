@@ -41,7 +41,9 @@ export function MSALInstanceFactory(): IPublicClientApplication {
       clientId: environment.msalConfig.auth.clientId,
       authority: environment.msalConfig.auth.authority,
       redirectUri: '/calendar',
-      postLogoutRedirectUri: '/',
+      postLogoutRedirectUri: '/login',
+      navigateToLoginRequestUrl: true
+
     },
     cache: {
       cacheLocation: BrowserCacheLocation.LocalStorage,
@@ -77,7 +79,7 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     authRequest: {
       scopes: [...environment.apiConfig.scopes],
     },
-    loginFailedRoute: '/login-failed',
+    loginFailedRoute: '/login'
   };
 }
 

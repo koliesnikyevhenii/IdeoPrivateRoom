@@ -8,9 +8,8 @@ export const routes: Routes = [
     ...eventListRoutes,
     {
         path: '',
-        component: LoginComponent,
-        pathMatch: 'full',
-      
+        redirectTo: 'calendar', 
+        pathMatch: 'full',  
     },
     {
         path: 'calendar',
