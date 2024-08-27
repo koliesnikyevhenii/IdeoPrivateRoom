@@ -57,7 +57,7 @@ public class VocationService(
     {
         var createdVocation = new VocationRequestEntity
         {
-            UserId = vocation.UserId,
+            UserId = Guid.Parse(vocation.UserId),
             StartDate = vocation.StartDate,
             EndDate = vocation.EndDate,
             CreatedDate = DateTime.UtcNow,

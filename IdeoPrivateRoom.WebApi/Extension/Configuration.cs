@@ -10,6 +10,7 @@ using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using IdeoPrivateRoom.WebApi.Models.Options;
 using IdeoPrivateRoom.WebApi.Configurations;
+using FluentValidation;
 
 namespace IdeoPrivateRoom.WebApi.Extension;
 
@@ -17,8 +18,8 @@ public static class Configuration
 {
     public static void RegisterServices(this WebApplicationBuilder builder)
     {
-        builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-          .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+        //builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+          //.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
           //.EnableTokenAcquisitionToCallDownstreamApi(new string[] { "https://graph.microsoft.com/.default" })
           //.AddMicrosoftGraph(builder.Configuration.GetSection("GraphApi"))
           //.AddInMemoryTokenCaches();
@@ -45,6 +46,8 @@ public static class Configuration
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("IdeoPrivateRoomDB")));
+
+        builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
         builder.Services.AddAutoMapper(typeof(MappingProfile));
 

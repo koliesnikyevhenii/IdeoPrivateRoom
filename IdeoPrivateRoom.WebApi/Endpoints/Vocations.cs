@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using IdeoPrivateRoom.DAL.Models;
+using IdeoPrivateRoom.WebApi.Extension;
 using IdeoPrivateRoom.WebApi.Models;
 using IdeoPrivateRoom.WebApi.Models.Requests;
+using IdeoPrivateRoom.WebApi.Models.Responses;
 using IdeoPrivateRoom.WebApi.Services.Interfaces;
 
 namespace IdeoPrivateRoom.WebApi.Endpoints;
@@ -21,6 +24,7 @@ public static class Vocations
                 ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);
         })
+        .Produces<PagedList<VocationResponse>>()
         .WithOpenApi();
 
         vocations.MapGet("/{id}", async(Guid id, IVocationService vocationService) =>
@@ -39,6 +43,8 @@ public static class Vocations
                 ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);
         })
+        .Produces<Guid>()
+        .WithRequestValidation<CreateVocationRequest>()
         .WithOpenApi();
 
         vocations.MapDelete("/{id}", async (Guid id, IVocationService vocationService) =>
