@@ -1,0 +1,42 @@
+﻿@using IdeoPrivateRoom.Email.Models.Templates
+@model VacationRequestTemplateModel
+@{
+    var formattedPeriod = $"{Model.VacationDateStart.ToString("dd.MM.yyyy")} - {Model.VacationDateEnd.ToString("dd.MM.yyyy")}";
+}
+
+@* TODO: content & styles *@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h2>Vacation approval request</h2>
+
+    <div style="font-size: 12pt; margin-top: 20px;">
+        <p>
+            Vacation request by @(string.IsNullOrEmpty(Model.RequestorEmail) ? Model.RequestorName : $"{Model.RequestorEmail} ({Model.RequestorEmail})").
+        </p>
+        <p>
+            Vacation period: @formattedPeriod.
+        </p>
+        @if (!string.IsNullOrEmpty(Model.Notes))
+        {
+            <p class="vacation-notes">
+                Notes: @Model.Notes
+            </p>
+        }
+    </div>
+    <div style="font-weight: bold; margin-top: 10px;">
+        <span>
+            <a href="#">Approve</a> <a href="#">Reject</a>
+        </span>
+    </div>
+
+    <footer>
+        <h4 style="margin-top:40px; font-size:14pt;">Ideo</h4>
+    </footer>
+</body>
+</html>

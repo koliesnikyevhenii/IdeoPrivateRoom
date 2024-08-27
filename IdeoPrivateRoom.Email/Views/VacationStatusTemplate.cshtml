@@ -1,0 +1,47 @@
+﻿@using IdeoPrivateRoom.Email.Models.Templates
+@model VacationStatusTemplateModel
+@{
+    var formattedPeriod = $"{Model.VacationDateStart.ToString("dd.MM.yyyy")} - {Model.VacationDateEnd.ToString("dd.MM.yyyy")}";
+}
+
+@* TODO: content & styles *@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h2>Vacation approval status</h2>
+
+    <div style="font-size:12pt;">
+        <p>
+            @(Model.RecipientName), your vacation request for a period of @formattedPeriod is @(Model.IsApproved ? "approved" : "declined").
+        </p>
+        @if (Model.IsApproved)
+        {
+            <p>
+                Have a good time!
+            </p>
+        }
+        else if (!string.IsNullOrEmpty(Model.ContactEmail))
+        {
+            <p>
+                For details contact @Model.ContactEmail
+            </p>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.Notes))
+        {
+            <p>
+                Notes: @Model.Notes
+            </p>
+        }
+    </div>
+
+    <footer>
+        <span style="margin-top:40px; font-size:14pt;">Ideo</span>
+    </footer>
+</body>
+</html>
