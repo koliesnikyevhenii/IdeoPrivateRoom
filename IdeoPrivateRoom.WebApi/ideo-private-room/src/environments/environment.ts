@@ -13,6 +13,8 @@ export const environment = {
     apiConfig: {
       scopes: ['user.read', 'openid', 'profile'],
       uri: 'https://graph.microsoft.com/v1.0/me',
+      backscopes: ['api://7fbf6fd3-834a-4c22-8b46-4e804d30d2f8/access_as_user'],
+      backuri: 'https://localhost:5001/api/*'
     },
   production: false,
   apiUrl: 'https://localhost:5001/api'
