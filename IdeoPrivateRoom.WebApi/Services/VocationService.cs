@@ -44,14 +44,6 @@ public class VocationService(
 
         return Result.Ok(_mapper.Map<PagedList<VocationResponse>>(vocations));
     }
-    public async Task<Result<List<VocationResponse>>> GetByUserId(Guid id)
-    {
-        var vocations = await _vocationRepository.Get(id);
-
-        var result = vocations.Select(_mapper.Map<VocationResponse>).ToList();
-
-        return Result.Ok(result);
-    }
 
     public async Task<Result<Guid>> Create(CreateVocationRequest vocation)
     {
@@ -62,7 +54,7 @@ public class VocationService(
             EndDate = vocation.EndDate,
             CreatedDate = DateTime.UtcNow,
             UpdatedDate = DateTime.UtcNow,
-            VocationStatus = ((int)ApprovalStatus.Approved).ToString()
+            VocationStatus = ((int)ApprovalStatus.Pending).ToString()
         };
         
         var result = await _vocationRepository.Create(createdVocation);

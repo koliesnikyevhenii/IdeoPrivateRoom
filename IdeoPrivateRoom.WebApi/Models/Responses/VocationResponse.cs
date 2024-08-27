@@ -11,5 +11,5 @@ public class VocationResponse
     public DateTime CreatedDate { get; set; }
     public ApprovalStatus Status { get; set; }
     public VocationUserResponse User { get; set; }
-    public IEnumerable<VocationUserApprovalResponse> UserApprovalResponses { get; set; }
+    public List<VocationReviewerResponse> Reviewers { get; set; } = [];
 }
