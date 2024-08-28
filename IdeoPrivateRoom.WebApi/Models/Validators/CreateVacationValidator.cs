@@ -3,9 +3,9 @@ using IdeoPrivateRoom.WebApi.Models.Requests;
 
 namespace IdeoPrivateRoom.WebApi.Models.Validators;
 
-public class CreateVocationValidator : AbstractValidator<CreateVocationRequest>
+public class CreateVacationValidator : AbstractValidator<CreateVacationRequest>
 {
-    public CreateVocationValidator()
+    public CreateVacationValidator()
     {
         RuleFor(x => x.UserId).Must(x => Guid.TryParse(x, out var _)).WithMessage("Please specify a valid User Id.");
         RuleFor(x => x.StartDate).NotEmpty();

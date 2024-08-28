@@ -43,17 +43,17 @@ public class VacationService(
 
         if (vacations.TotalRecords == 0)
         {
-            return Result.Fail<PagedList<VacationResponse>>("No vocations was found. Please check your filter criteria.");
+            return Result.Fail<PagedList<VacationResponse>>("No vacations was found. Please check your filter criteria.");
         }
 
         return Result.Ok(_mapper.Map<PagedList<VacationResponse>>(vacations));
     }
 
-    public async Task<Result<Guid>> Create(CreateVocationRequest vocation)
+    public async Task<Result<Guid>> Create(CreateVacationRequest vacation)
     {
         var createdVacation = new VacationRequestEntity
         {
-            UserId = Guid.Parse(vocation.UserId),
+            UserId = Guid.Parse(vacation.UserId),
             StartDate = vacation.StartDate,
             EndDate = vacation.EndDate,
             CreatedDate = DateTime.UtcNow,
@@ -66,7 +66,7 @@ public class VacationService(
         return Result.Ok(result);
     }
 
-    public async Task<Result<Guid?>> Update(Guid id, UpdateVocationRequest vacation)
+    public async Task<Result<Guid?>> Update(Guid id, UpdateVacationRequest vacation)
     {
         var result = await _vacationRepository.Update(id, _mapper.Map<VacationRequestEntity>(vacation));
 

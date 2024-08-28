@@ -57,14 +57,14 @@ public class VacationRepository(ApplicationDbContext _dbContext) : IVacationRepo
         return new PagedList<VacationRequestEntity>(data, page, pageSize, totalRecords);
     }
 
-    public async Task<Guid?> Update(Guid id, VocationRequestEntity vocation)
+    public async Task<Guid?> Update(Guid id, VacationRequestEntity vacation)
     {
         await _dbContext.VacationRequests
             .Where(v => v.Id == id)
             .ExecuteUpdateAsync(v => v
                 .SetProperty(p => p.StartDate, p => vacation.StartDate)
                 .SetProperty(p => p.EndDate, p => vacation.EndDate)
-                .SetProperty(p => p.Comment, p => vocation.Comment)
+                .SetProperty(p => p.Comment, p => vacation.Comment)
                 .SetProperty(p => p.UpdatedDate, p => vacation.UpdatedDate)
                 .SetProperty(p => p.VacationStatus, p => vacation.VacationStatus));
 

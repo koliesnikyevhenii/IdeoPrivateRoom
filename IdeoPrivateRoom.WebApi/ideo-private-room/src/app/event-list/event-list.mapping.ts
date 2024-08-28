@@ -1,5 +1,5 @@
-import { ApiEvent, ApiEventUserAproval } from '../api-models/event.model';
-import { EventApproval, EventModel, EventStatus } from './event-list.models';
+import { ApiEvent, ApiEventReviewer } from '../api-models/event.model';
+import { EventApproval, EventModel, EventReviewer, EventStatus } from './event-list.models';
 
 export function mapEvent(event: ApiEvent): EventModel {
   return {
@@ -10,17 +10,16 @@ export function mapEvent(event: ApiEvent): EventModel {
     status: getEventStatusByValue(event.status) ?? EventStatus.Pending,
     fromDate: new Date(event.start),
     toDate: event.end ? new Date(event.end) : undefined,
-    userApprovalResponses: event.userApprovalResponses.map(mapApproval),
+    reviewers: event.reviewers.map(mapReviewer)
   };
 }
 
-function mapApproval(approval: ApiEventUserAproval): EventApproval {
+function mapReviewer(reviewer: ApiEventReviewer): EventReviewer {
   return {
-    id: approval.id,
-    userId: approval.user.id,
-    userName: approval.user.name,
-    userIcon: approval.user.icon,
-    approvalStatus: getEventStatusByValue(approval.approvalStatus),
+    id: reviewer.id,
+    name: reviewer.name,
+    icon: reviewer.icon,
+    approvalStatus: reviewer.approvalStatus
   };
 }
 

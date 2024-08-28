@@ -1,6 +1,6 @@
 ﻿namespace IdeoPrivateRoom.WebApi.Models.Requests;
 
-public class UpdateVocationRequest
+public class UpdateVacationRequest
 {
     public DateTime? Start { get; set; }
     public DateTime? End { get; set; }

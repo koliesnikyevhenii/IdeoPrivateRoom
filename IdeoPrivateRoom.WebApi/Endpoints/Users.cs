@@ -1,4 +1,5 @@
-﻿using IdeoPrivateRoom.WebApi.Services.Interfaces;
+﻿using IdeoPrivateRoom.WebApi.Models.Responses;
+using IdeoPrivateRoom.WebApi.Services.Interfaces;
 
 namespace IdeoPrivateRoom.WebApi.Endpoints;
 
@@ -16,6 +17,7 @@ public static class Users
                 ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);
         })
+        .Produces<List<UserResponse>>()
         .WithOpenApi();
 
         users.MapGet("/{id}", async (Guid id, IUserService userService) =>
@@ -26,6 +28,7 @@ public static class Users
                 ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);
         })
+        .Produces<UserResponse>()
         .WithOpenApi();
 
         /*users.MapGet("/all", (IUserRepository userRepository) =>

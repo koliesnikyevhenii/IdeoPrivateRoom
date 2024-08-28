@@ -41,6 +41,8 @@ public static class Configuration
             options.AddDefaultPolicy(builder =>
             {
                 builder.WithOrigins(allowedOrigins);
+                builder.AllowAnyMethod();
+                builder.AllowAnyHeader();
             });
         });
 

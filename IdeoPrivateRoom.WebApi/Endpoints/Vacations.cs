@@ -24,10 +24,10 @@ public static class Vacations
                 ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);
         })
-        .Produces<PagedList<VocationResponse>>()
+        .Produces<PagedList<VacationResponse>>()
         .WithOpenApi();
 
-        vacations.MapPost("", async (CreateVacationRequest request, IVocationService vacationService, IMapper mapper) =>
+        vacations.MapPost("", async (CreateVacationRequest request, IVacationService vacationService, IMapper mapper) =>
         {
             var result = await vacationService.Create(request);
             return result.IsSuccess

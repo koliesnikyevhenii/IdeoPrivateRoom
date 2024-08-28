@@ -10,5 +10,5 @@ public interface IVacationService
     Task<Result<PagedList<VacationResponse>>> GetAll(VacationQueryFilters filters);
     Task<Result<Guid>> Create(CreateVacationRequest vacation);
     Task<Result<Guid?>> Delete(Guid id);
-    Task<Result<Guid?>> Update(Guid id, UpdateVocationRequest vacation);
+    Task<Result<Guid?>> Update(Guid id, UpdateVacationRequest vacation);
 }

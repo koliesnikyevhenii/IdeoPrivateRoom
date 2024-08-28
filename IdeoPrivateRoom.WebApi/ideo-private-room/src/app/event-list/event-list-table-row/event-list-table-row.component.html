@@ -13,7 +13,7 @@
           {{ card().toDate | date : "longDate" }} }
         </td>
         <td class="col-2">
-          @if(card().userApprovalResponses.length > 3) {
+          @if(card().reviewers.length > 3) {
           <button
             type="button"
             [ngbTooltip]="tipContent"
@@ -21,23 +21,23 @@
             class="btn btn-outline-primary rounded-circle p-0"
             style="width: 32px; height: 32px;"
           >
-            +{{card().userApprovalResponses.length}}
+            +{{card().reviewers.length}}
           </button>
           <ng-template #tipContent>
-            @for(approval of card().userApprovalResponses; track approval.id) {
+            @for(reviewer of card().reviewers; track reviewer.id) {
             <img
-              [src]="approval.userIcon"
-              [alt]="approval.userName"
+              [src]="reviewer.icon"
+              [alt]="reviewer.name"
               class="status-image me-2"
               [class]="eventListTableRowService.getApprovalStatus(card().status).class"
             />
             }
           </ng-template>
-          } @else { @for(approval of card().userApprovalResponses; track
-          approval.id) {
+          } @else { @for(reviewer of card().reviewers; track
+          reviewer.id) {
           <img
-            [src]="approval.userIcon"
-            [alt]="approval.userName"
+            [src]="reviewer.icon"
+            [alt]="reviewer.name"
             class="status-image me-2"
             [class]="eventListTableRowService.getApprovalStatus(card().status).class"
           />

@@ -19,7 +19,8 @@ export interface EventModel {
   userName: string,
   userIcon: string,
   status: EventStatus;
-  userApprovalResponses: EventApproval[];
+  //userApprovalResponses: EventApproval[];
+  reviewers: EventReviewer[],
   fromDate: Date,
   toDate: Date | undefined
 }
@@ -30,6 +31,13 @@ export interface EventApproval {
   userName: string,
   userIcon: string,
   approvalStatus: EventStatus | undefined;
+}
+
+export interface EventReviewer {
+  id: string,
+  name: string,
+  icon: string,
+  approvalStatus: number;
 }
 
 export enum ViewMode {
