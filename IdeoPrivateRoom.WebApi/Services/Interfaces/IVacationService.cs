@@ -5,10 +5,10 @@ using IdeoPrivateRoom.WebApi.Models.Responses;
 using LightResults;
 
 namespace IdeoPrivateRoom.WebApi.Services.Interfaces;
-public interface IVocationService
+public interface IVacationService
 {
-    Task<Result<PagedList<VocationResponse>>> GetAll(VocationQueryFilters filters);
-    Task<Result<Guid>> Create(CreateVocationRequest vocation);
+    Task<Result<PagedList<VacationResponse>>> GetAll(VacationQueryFilters filters);
+    Task<Result<Guid>> Create(CreateVacationRequest vacation);
     Task<Result<Guid?>> Delete(Guid id);
-    Task<Result<Guid?>> Update(Guid id, UpdateVocationRequest vocation);
+    Task<Result<Guid?>> Update(Guid id, UpdateVocationRequest vacation);
 }

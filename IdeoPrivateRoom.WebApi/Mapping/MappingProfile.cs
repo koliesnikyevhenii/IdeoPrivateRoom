@@ -21,7 +21,7 @@ public class MappingProfile : Profile
             .ForMember(u => u.Icon, conf => conf.MapFrom(scr => scr.UserIcon))
             .ForMember(u => u.Roles, conf => conf.MapFrom(scr => scr.RoleMappings));
 
-        CreateMap<UserEntity, VocationUserResponse>()
+        CreateMap<UserEntity, VacationUserResponse>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
             .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.UserIcon));
 
@@ -32,31 +32,31 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Role.Id))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Role.Name));
 
-        CreateMap<VocationRequestEntity, VocationResponse>()
+        CreateMap<VacationRequestEntity, VacationResponse>()
             .ForMember(r => r.Start, conf => conf.MapFrom(scr => scr.StartDate))
             .ForMember(r => r.End, conf => conf.MapFrom(scr => scr.EndDate))
-            .ForMember(r => r.Status, conf => conf.MapFrom(scr => scr.VocationStatus))
-            .ForMember(r => r.Reviewers, conf => conf.MapFrom(scr => scr.User.LinkedUsers.Select(lu => new VocationReviewerResponse
+            .ForMember(r => r.Status, conf => conf.MapFrom(scr => scr.VacationStatus))
+            .ForMember(r => r.Reviewers, conf => conf.MapFrom(scr => scr.User.LinkedUsers.Select(lu => new VacationReviewerResponse
             {
                 Id = lu.AssociatedUser.Id,
                 Name = lu.AssociatedUser.FirstName + " " + lu.AssociatedUser.LastName,
                 Icon = lu.AssociatedUser.UserIcon,
-                ApprovalStatus = lu.AssociatedUser.UserApprovalResponses.FirstOrDefault(ar => ar.VocationRequestId == scr.Id) != null 
-                    ? lu.AssociatedUser.UserApprovalResponses.FirstOrDefault(ar => ar.VocationRequestId == scr.Id)!.ApprovalStatus.ToEnum(ApprovalStatus.Pending)
+                ApprovalStatus = lu.AssociatedUser.UserApprovalResponses.FirstOrDefault(ar => ar.VacationRequestId == scr.Id) != null 
+                    ? lu.AssociatedUser.UserApprovalResponses.FirstOrDefault(ar => ar.VacationRequestId == scr.Id)!.ApprovalStatus.ToEnum(ApprovalStatus.Pending)
                     : ApprovalStatus.Pending
             }).ToList()));
 
-        CreateMap<UserApprovalResponseEntity, VocationUserApprovalResponse>()
+        CreateMap<UserApprovalResponseEntity, VacationUserApprovalResponse>()
             .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
             .ForMember(dest => dest.ApprovalStatus, opt => opt.MapFrom(src => int.Parse(src.ApprovalStatus).ToString()));
 
-        CreateMap<UpdateVocationRequest, VocationRequestEntity>()
+        CreateMap<UpdateVacationRequest, VacationRequestEntity>()
             .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.Start))
             .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.End))
-            .ForMember(dest => dest.VocationStatus, opt => opt.MapFrom(src => src.Status));
+            .ForMember(dest => dest.VacationStatus, opt => opt.MapFrom(src => src.Status));
 
-        CreateMap(typeof(PagedList<VocationRequestEntity>), typeof(PagedList<VocationResponse>))
-            .ConvertUsing(typeof(VocationsPagedListConverter<VocationRequestEntity, VocationResponse>));
+        CreateMap(typeof(PagedList<VacationRequestEntity>), typeof(PagedList<VacationResponse>))
+            .ConvertUsing(typeof(VacationsPagedListConverter<VacationRequestEntity, VacationResponse>));
 
     }
 }

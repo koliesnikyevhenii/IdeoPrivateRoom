@@ -9,6 +9,6 @@ var app = builder.Build();
 
 app.RegisterMiddlewares();
 app.RegisterUserEndpoints();
-app.RegisterVocationEndpoints();
+app.RegisterVacationEndpoints();
 
 app.Run();

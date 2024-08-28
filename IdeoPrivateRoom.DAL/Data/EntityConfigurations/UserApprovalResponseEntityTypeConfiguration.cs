@@ -22,9 +22,9 @@ public class UserApprovalResponseEntityTypeConfiguration : IEntityTypeConfigurat
             .WithMany(u => u.UserApprovalResponses)
             .HasForeignKey(u => u.UserId);
 
-        builder.HasOne(u => u.VocationRequest)
+        builder.HasOne(u => u.VacationRequest)
             .WithMany(u => u.UserApprovalResponses)
-            .HasForeignKey(u => u.VocationRequestId);
+            .HasForeignKey(u => u.VacationRequestId);
 
 
     }

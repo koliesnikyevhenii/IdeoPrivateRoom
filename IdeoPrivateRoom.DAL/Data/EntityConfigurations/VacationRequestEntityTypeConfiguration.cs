@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace IdeoPrivateRoom.DAL.Data.EntityConfigurations;
 
-public class VocationRequestEntityTypeConfiguration : IEntityTypeConfiguration<VocationRequestEntity>
+public class VacationRequestEntityTypeConfiguration : IEntityTypeConfiguration<VacationRequestEntity>
 {
-    public void Configure(EntityTypeBuilder<VocationRequestEntity> builder)
+    public void Configure(EntityTypeBuilder<VacationRequestEntity> builder)
     {
-        builder.ToTable("VocationRequest");
+        builder.ToTable("VacationRequest");
 
         builder.HasKey(v => v.Id);
 
@@ -30,11 +30,11 @@ public class VocationRequestEntityTypeConfiguration : IEntityTypeConfiguration<V
         builder.Property(v => v.UpdatedDate)
             .IsRequired();
 
-        builder.Property(v => v.VocationStatus)
+        builder.Property(v => v.VacationStatus)
             .HasMaxLength(15);
 
         builder.HasOne(v => v.User)
-            .WithMany(u => u.VocationRequests)
+            .WithMany(u => u.VacationRequests)
             .HasForeignKey(v => v.UserId);
 
     }

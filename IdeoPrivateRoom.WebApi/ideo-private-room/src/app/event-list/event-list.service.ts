@@ -11,7 +11,7 @@ import { mapEvent } from './event-list.mapping';
 })
 export class EventListService {
   private http = inject(HttpClient);
-  private eventsUrl = `${environment.apiUrl}/vocations`;
+  private eventsUrl = `${environment.apiUrl}/vacations`;
 
   private events = signal<EventModel[]>([]);
 

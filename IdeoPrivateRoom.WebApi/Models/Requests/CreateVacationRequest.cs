@@ -1,6 +1,6 @@
 ﻿namespace IdeoPrivateRoom.WebApi.Models.Requests;
 
-public class CreateVocationRequest
+public class CreateVacationRequest
 {
     public string UserId { get; set; } = string.Empty;
     public DateTime StartDate { get; set; }

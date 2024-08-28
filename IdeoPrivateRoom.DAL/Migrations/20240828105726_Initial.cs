@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace IdeoPrivateRoom.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -49,10 +49,10 @@ namespace IdeoPrivateRoom.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    LinkedUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    LinkedUserId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -76,10 +76,10 @@ namespace IdeoPrivateRoom.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -99,23 +99,23 @@ namespace IdeoPrivateRoom.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "VocationRequest",
+                name: "VacationRequest",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Comment = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    VocationStatus = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false)
+                    VacationStatus = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_VocationRequest", x => x.Id);
+                    table.PrimaryKey("PK_VacationRequest", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_VocationRequest_User_UserId",
+                        name: "FK_VacationRequest_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
@@ -127,11 +127,11 @@ namespace IdeoPrivateRoom.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    VocationRequestId = table.Column<Guid>(type: "uuid", nullable: false),
                     ApprovalStatus = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    VacationRequestId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -143,9 +143,9 @@ namespace IdeoPrivateRoom.DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserApprovalResponse_VocationRequest_VocationRequestId",
-                        column: x => x.VocationRequestId,
-                        principalTable: "VocationRequest",
+                        name: "FK_UserApprovalResponse_VacationRequest_VacationRequestId",
+                        column: x => x.VacationRequestId,
+                        principalTable: "VacationRequest",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -166,9 +166,9 @@ namespace IdeoPrivateRoom.DAL.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserApprovalResponse_VocationRequestId",
+                name: "IX_UserApprovalResponse_VacationRequestId",
                 table: "UserApprovalResponse",
-                column: "VocationRequestId");
+                column: "VacationRequestId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRoleMapping_RoleId",
@@ -181,8 +181,8 @@ namespace IdeoPrivateRoom.DAL.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_VocationRequest_UserId",
-                table: "VocationRequest",
+                name: "IX_VacationRequest_UserId",
+                table: "VacationRequest",
                 column: "UserId");
         }
 
@@ -199,7 +199,7 @@ namespace IdeoPrivateRoom.DAL.Migrations
                 name: "UserRoleMapping");
 
             migrationBuilder.DropTable(
-                name: "VocationRequest");
+                name: "VacationRequest");
 
             migrationBuilder.DropTable(
                 name: "Role");

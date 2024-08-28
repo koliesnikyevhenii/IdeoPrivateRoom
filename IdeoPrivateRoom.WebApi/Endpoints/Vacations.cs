@@ -8,18 +8,18 @@ using IdeoPrivateRoom.WebApi.Services.Interfaces;
 
 namespace IdeoPrivateRoom.WebApi.Endpoints;
 
-public static class Vocations
+public static class Vacations
 {
-    public static void RegisterVocationEndpoints(this IEndpointRouteBuilder routes)
+    public static void RegisterVacationEndpoints(this IEndpointRouteBuilder routes)
     {
-        var vocations = routes.MapGroup("/api/vocations")
-            .WithTags("Vocations");
+        var vacations = routes.MapGroup("/api/vacations")
+            .WithTags("Vacations");
 
-        vocations.MapGet("", async (
-            [AsParameters] VocationQueryFilters filters,
-            IVocationService vocationService) =>
+        vacations.MapGet("", async (
+            [AsParameters] VacationQueryFilters filters,
+            IVacationService vacationService) =>
         {
-            var result = await vocationService.GetAll(filters);
+            var result = await vacationService.GetAll(filters);
             return result.IsSuccess
                 ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);
@@ -27,31 +27,31 @@ public static class Vocations
         .Produces<PagedList<VocationResponse>>()
         .WithOpenApi();
 
-        vocations.MapPost("", async (CreateVocationRequest request, IVocationService vocationService, IMapper mapper) =>
+        vacations.MapPost("", async (CreateVacationRequest request, IVocationService vacationService, IMapper mapper) =>
         {
-            var result = await vocationService.Create(request);
+            var result = await vacationService.Create(request);
             return result.IsSuccess
                 ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);
         })
-        .WithRequestValidation<CreateVocationRequest>()
+        .WithRequestValidation<CreateVacationRequest>()
         .Produces<Guid>()
         .WithOpenApi();
 
-        vocations.MapPut("/{id}", async (Guid id, UpdateVocationRequest request, IVocationService vocationService) =>
+        vacations.MapPut("/{id}", async (Guid id, UpdateVacationRequest request, IVacationService vacationService) =>
         {
-            var result = await vocationService.Update(id, request);
+            var result = await vacationService.Update(id, request);
             return result.IsSuccess
                 ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);
         })
-        .WithRequestValidation<UpdateVocationRequest>()
+        .WithRequestValidation<UpdateVacationRequest>()
         .Produces<Guid>()
         .WithOpenApi();
 
-        vocations.MapDelete("/{id}", async (Guid id, IVocationService vocationService) =>
+        vacations.MapDelete("/{id}", async (Guid id, IVacationService vacationService) =>
         {
-            var result = await vocationService.Delete(id);
+            var result = await vacationService.Delete(id);
             return result.IsSuccess
                 ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);

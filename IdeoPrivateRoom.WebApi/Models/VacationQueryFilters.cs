@@ -1,6 +1,6 @@
 ﻿namespace IdeoPrivateRoom.WebApi.Models;
 
-public class VocationQueryFilters
+public class VacationQueryFilters
 {
     public string? StartDate { get; set; }
     public string? EndDate { get; set; }

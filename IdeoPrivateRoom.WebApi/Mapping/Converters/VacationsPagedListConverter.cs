@@ -3,11 +3,11 @@ using IdeoPrivateRoom.DAL.Models;
 
 namespace IdeoPrivateRoom.WebApi.Mapping.Converters;
 
-public class VocationsPagedListConverter<TSource, TDestination> : ITypeConverter<PagedList<TSource>, PagedList<TDestination>>
+public class VacationsPagedListConverter<TSource, TDestination> : ITypeConverter<PagedList<TSource>, PagedList<TDestination>>
 {
     private readonly IMapper _mapper;
 
-    public VocationsPagedListConverter(IMapper mapper)
+    public VacationsPagedListConverter(IMapper mapper)
     {
         _mapper = mapper;
     }

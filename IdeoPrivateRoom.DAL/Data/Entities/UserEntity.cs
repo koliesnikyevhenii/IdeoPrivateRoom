@@ -13,7 +13,7 @@ public class UserEntity
     public bool IsEmailConfirmed { get; set; }
 
     public ICollection<UserRoleMappingEntity> RoleMappings { get; set; } = [];
-    public ICollection<VocationRequestEntity> VocationRequests { get; set; } = [];
+    public ICollection<VacationRequestEntity> VacationRequests { get; set; } = [];
     public ICollection<LinkedUserEntity> LinkedUsers { get; set; } = [];
     public ICollection<LinkedUserEntity> AssociatedUsers { get; set; } = [];
     public ICollection<UserApprovalResponseEntity> UserApprovalResponses { get; set; } = [];

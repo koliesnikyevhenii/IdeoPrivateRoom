@@ -7,7 +7,7 @@ public class UserApprovalResponse
 {
     public Guid Id { get; set; }
     public User User { get; set; } = null!;
-    public VocationRequestEntity VocationRequest { get; set; } = null!;
+    public VacationRequestEntity VacationRequest { get; set; } = null!;
     public ApprovalStatus ApprovalStatus { get; set; }
     public DateTime CreatedDate { get; set; }
     public DateTime UpdatedDate { get; set; }

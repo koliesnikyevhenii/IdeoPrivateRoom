@@ -9,6 +9,6 @@ public class UserApprovalResponseEntity
 
     public Guid UserId { get; set; }
     public UserEntity User { get; set; } = null!;
-    public Guid VocationRequestId { get; set; }
-    public VocationRequestEntity VocationRequest { get; set; } = null!;
+    public Guid VacationRequestId { get; set; }
+    public VacationRequestEntity VacationRequest { get; set; } = null!;
 }

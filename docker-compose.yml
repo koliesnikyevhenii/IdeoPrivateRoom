@@ -23,6 +23,8 @@ services:
      - AzureAd__Instance
     env_file:
       - .env
+    networks:
+      default:
 
   ideoprivateroom.angular:
     image: ${DOCKER_REGISTRY-}ideoprivateroomangular
@@ -48,6 +50,9 @@ services:
       - 5432:5432
     env_file:
       - .env
+    restart: always
+    networks:
+      default:
 
   pgadmin4:
     image: dpage/pgadmin4
@@ -59,6 +64,15 @@ services:
       - ideoprivateroom.database
     ports:
       - 8001:80
-
     env_file:
       - .env
+    networks:
+      default:
+
+volumes:
+  .containers:
+    driver: local
+
+networks:
+  default:
+    driver: bridge

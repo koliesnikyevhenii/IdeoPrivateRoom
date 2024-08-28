@@ -10,16 +10,17 @@ using IdeoPrivateRoom.WebApi.Configurations;
 using IdeoPrivateRoom.WebApi.Services.Interfaces;
 using LightResults;
 using Microsoft.Extensions.Options;
+using System;
 
 namespace IdeoPrivateRoom.WebApi.Services;
 
-public class VocationService(
-    IVocationRepository _vocationRepository, 
+public class VacationService(
+    IVacationRepository _vacationRepository, 
     IMapper _mapper,
-    IOptions<VocationsListSettings> settings,
-    ILogger<VocationService> _logger) : IVocationService
+    IOptions<VacationsListSettings> settings,
+    ILogger<VacationService> _logger) : IVacationService
 {
-    public async Task<Result<PagedList<VocationResponse>>> GetAll(VocationQueryFilters filters)
+    public async Task<Result<PagedList<VacationResponse>>> GetAll(VacationQueryFilters filters)
     {
         var page = filters.Page ?? 1;
         var pageSize = filters.PageSize ?? settings.Value.PageSize;
@@ -37,44 +38,44 @@ public class VocationService(
             .Select(s => s.Trim())
             .ToArray();
 
-        var vocations = await _vocationRepository
+        var vacations = await _vacationRepository
             .Get(page, pageSize, start, end, ids, statuses);
 
-        if (vocations.TotalRecords == 0)
+        if (vacations.TotalRecords == 0)
         {
-            return Result.Fail<PagedList<VocationResponse>>("No vocations was found. Please check your filter criteria.");
+            return Result.Fail<PagedList<VacationResponse>>("No vocations was found. Please check your filter criteria.");
         }
 
-        return Result.Ok(_mapper.Map<PagedList<VocationResponse>>(vocations));
+        return Result.Ok(_mapper.Map<PagedList<VacationResponse>>(vacations));
     }
 
     public async Task<Result<Guid>> Create(CreateVocationRequest vocation)
     {
-        var createdVocation = new VocationRequestEntity
+        var createdVacation = new VacationRequestEntity
         {
             UserId = Guid.Parse(vocation.UserId),
-            StartDate = vocation.StartDate,
-            EndDate = vocation.EndDate,
+            StartDate = vacation.StartDate,
+            EndDate = vacation.EndDate,
             CreatedDate = DateTime.UtcNow,
             UpdatedDate = DateTime.UtcNow,
-            VocationStatus = ((int)ApprovalStatus.Pending).ToString()
+            VacationStatus = ((int)ApprovalStatus.Pending).ToString()
         };
         
-        var result = await _vocationRepository.Create(createdVocation);
+        var result = await _vacationRepository.Create(createdVacation);
 
         return Result.Ok(result);
     }
 
-    public async Task<Result<Guid?>> Update(Guid id, UpdateVocationRequest vocation)
+    public async Task<Result<Guid?>> Update(Guid id, UpdateVocationRequest vacation)
     {
-        var result = await _vocationRepository.Update(id, _mapper.Map<VocationRequestEntity>(vocation));
+        var result = await _vacationRepository.Update(id, _mapper.Map<VacationRequestEntity>(vacation));
 
         return Result.Ok(result);
     }
 
     public async Task<Result<Guid?>> Delete(Guid id)
     {
-        var result = await _vocationRepository.Delete(id);
+        var result = await _vacationRepository.Delete(id);
 
         return Result.Ok(result);
     }
