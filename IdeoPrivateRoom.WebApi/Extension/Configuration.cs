@@ -11,6 +11,7 @@ using Microsoft.Identity.Web.UI;
 using IdeoPrivateRoom.WebApi.Models.Options;
 using IdeoPrivateRoom.WebApi.Configurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using FluentValidation;
 
 namespace IdeoPrivateRoom.WebApi.Extension;
 
@@ -32,7 +33,7 @@ public static class Configuration
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        builder.Services.Configure<VocationsListSettings>(builder.Configuration.GetSection(nameof(VocationsListSettings)));
+        builder.Services.Configure<VacationsListSettings>(builder.Configuration.GetSection(nameof(VacationsListSettings)));
 
         var corsOptions = builder.Configuration.GetSection(CorsOptions.Section).Get<CorsOptions>();
         var allowedOrigins = corsOptions?.AllowedOrigins?.Split(',') ?? [];
@@ -48,13 +49,15 @@ public static class Configuration
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("IdeoPrivateRoomDB")));
 
+        builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
         builder.Services.AddAutoMapper(typeof(MappingProfile));
 
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IUserService, UserService>();
 
-        builder.Services.AddScoped<IVocationRepository, VocationRepository>();
-        builder.Services.AddScoped<IVocationService, VocationService>();
+        builder.Services.AddScoped<IVacationRepository, VacationRepository>();
+        builder.Services.AddScoped<IVacationService, VacationService>();
     }
 
     public static void RegisterMiddlewares(this WebApplication app)

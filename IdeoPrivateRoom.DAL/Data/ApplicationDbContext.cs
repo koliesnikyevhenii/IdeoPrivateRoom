@@ -9,7 +9,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<RoleEntity> Roles { get; set; }
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<UserRoleMappingEntity> UserRoleMappings { get; set; }
-    public DbSet<VocationRequestEntity> VocationRequests { get; set; }
+    public DbSet<VacationRequestEntity> VacationRequests { get; set; }
     public DbSet<LinkedUserEntity> LinkedUsers { get; set; }
     public DbSet<UserApprovalResponseEntity> UserApprovalResponses { get; set; }
 
@@ -19,7 +19,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new UserRoleMappingEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new LinkedUserEntityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new VocationRequestEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new VacationRequestEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new UserApprovalResponseEntityTypeConfiguration());
     }
 }

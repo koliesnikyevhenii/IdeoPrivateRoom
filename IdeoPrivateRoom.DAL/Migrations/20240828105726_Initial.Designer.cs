@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IdeoPrivateRoom.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240821072836_initial")]
-    partial class initial
+    [Migration("20240828105726_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -94,14 +94,14 @@ namespace IdeoPrivateRoom.DAL.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("VocationRequestId")
+                    b.Property<Guid>("VacationRequestId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("VocationRequestId");
+                    b.HasIndex("VacationRequestId");
 
                     b.ToTable("UserApprovalResponse", (string)null);
                 });
@@ -178,7 +178,7 @@ namespace IdeoPrivateRoom.DAL.Migrations
                     b.ToTable("UserRoleMapping", (string)null);
                 });
 
-            modelBuilder.Entity("IdeoPrivateRoom.DAL.Data.Entities.VocationRequestEntity", b =>
+            modelBuilder.Entity("IdeoPrivateRoom.DAL.Data.Entities.VacationRequestEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -203,7 +203,7 @@ namespace IdeoPrivateRoom.DAL.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("VocationStatus")
+                    b.Property<string>("VacationStatus")
                         .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("character varying(15)");
@@ -212,7 +212,7 @@ namespace IdeoPrivateRoom.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("VocationRequest", (string)null);
+                    b.ToTable("VacationRequest", (string)null);
                 });
 
             modelBuilder.Entity("IdeoPrivateRoom.DAL.Data.Entities.LinkedUserEntity", b =>
@@ -242,15 +242,15 @@ namespace IdeoPrivateRoom.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("IdeoPrivateRoom.DAL.Data.Entities.VocationRequestEntity", "VocationRequest")
+                    b.HasOne("IdeoPrivateRoom.DAL.Data.Entities.VacationRequestEntity", "VacationRequest")
                         .WithMany("UserApprovalResponses")
-                        .HasForeignKey("VocationRequestId")
+                        .HasForeignKey("VacationRequestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
 
-                    b.Navigation("VocationRequest");
+                    b.Navigation("VacationRequest");
                 });
 
             modelBuilder.Entity("IdeoPrivateRoom.DAL.Data.Entities.UserRoleMappingEntity", b =>
@@ -272,10 +272,10 @@ namespace IdeoPrivateRoom.DAL.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("IdeoPrivateRoom.DAL.Data.Entities.VocationRequestEntity", b =>
+            modelBuilder.Entity("IdeoPrivateRoom.DAL.Data.Entities.VacationRequestEntity", b =>
                 {
                     b.HasOne("IdeoPrivateRoom.DAL.Data.Entities.UserEntity", "User")
-                        .WithMany("VocationRequests")
+                        .WithMany("VacationRequests")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -298,10 +298,10 @@ namespace IdeoPrivateRoom.DAL.Migrations
 
                     b.Navigation("UserApprovalResponses");
 
-                    b.Navigation("VocationRequests");
+                    b.Navigation("VacationRequests");
                 });
 
-            modelBuilder.Entity("IdeoPrivateRoom.DAL.Data.Entities.VocationRequestEntity", b =>
+            modelBuilder.Entity("IdeoPrivateRoom.DAL.Data.Entities.VacationRequestEntity", b =>
                 {
                     b.Navigation("UserApprovalResponses");
                 });

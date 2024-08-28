@@ -17,13 +17,13 @@
   </div>
 
   <div class="approval-icons">
-    @for (item of card().userApprovalResponses; track item.id){
+    @for (reviewer of card().reviewers; track reviewer.id){
       <img
-      [src]="item.userIcon"
+      [src]="reviewer.icon"
       alt="User Photo 1"
       class="approval-pending"
     />
-    <span>{{ item.approvalStatus}}</span>
+    <span>{{ reviewer.approvalStatus}}</span>
     }
     <!-- <img
       src="https://via.placeholder.com/40?text=👤"

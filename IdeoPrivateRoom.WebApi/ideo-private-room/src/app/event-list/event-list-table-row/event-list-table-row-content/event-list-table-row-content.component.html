@@ -18,17 +18,17 @@
     <div class="col-12">
       <table class="table table-borderless mb-0">
         <tbody>
-          @for(response of card().userApprovalResponses; track response.id) {
+          @for(reviewer of card().reviewers; track reviewer.id) {
           <tr>
             <td>
               <img
-                [src]="response.userIcon"
+                [src]="reviewer.icon"
                 class="img-fluid"
                 alt="Icon"
                 width="32"
                 height="32"
               />
-              <span class="ms-2">{{ response.userName }}</span>
+              <span class="ms-2">{{ reviewer.name }}</span>
             </td>
             <td>
               <h5 class="mb-0">

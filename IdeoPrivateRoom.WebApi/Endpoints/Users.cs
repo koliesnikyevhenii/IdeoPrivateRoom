@@ -1,4 +1,5 @@
-﻿using IdeoPrivateRoom.WebApi.Services.Interfaces;
+﻿using IdeoPrivateRoom.WebApi.Models.Responses;
+using IdeoPrivateRoom.WebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 
@@ -34,6 +35,7 @@ public static class Users
                 ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);
         })
+        .Produces<List<UserResponse>>()
         .WithOpenApi();
 
         users.MapGet("/{id}", async (Guid id, IUserService userService) =>
@@ -44,6 +46,7 @@ public static class Users
                 ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);
         })
+        .Produces<UserResponse>()
         .WithOpenApi();
 
 

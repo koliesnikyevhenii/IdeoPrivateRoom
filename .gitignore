@@ -389,8 +389,8 @@ FodyWeavers.xsd
 .history/
 
 # Containers data
-.containers/
-.containers/*
+/.containers/
+/.containers/*
 
 # Windows Installer files from build outputs
 *.cab

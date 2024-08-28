@@ -2,7 +2,7 @@ import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { ApiEvent } from '../api-models/event.model';
+import { ApiEvent, ApiPaginatedResponse } from '../api-models/event.model';
 import { EventModel, EventStatus, ViewMode } from './event-list.models';
 import { mapEvent } from './event-list.mapping';
 
@@ -11,7 +11,7 @@ import { mapEvent } from './event-list.mapping';
 })
 export class EventListService {
   private http = inject(HttpClient);
-  private eventsUrl = `${environment.apiUrl}/vocations`;
+  private eventsUrl = `${environment.apiUrl}/vacations`;
 
   private events = signal<EventModel[]>([]);
 
@@ -85,9 +85,9 @@ export class EventListService {
   }
 
   fetchEvents(errorMessage: string): Observable<EventModel[]> {
-    return this.http.get<ApiEvent[]>(this.eventsUrl).pipe(
+    return this.http.get<ApiPaginatedResponse<ApiEvent>>(this.eventsUrl).pipe(
       map((events) => {
-        return events.map(mapEvent);
+        return events.data.map(mapEvent);
       }),
       catchError((error) => {
         console.error(error);

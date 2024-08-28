@@ -1,6 +1,6 @@
 ﻿namespace IdeoPrivateRoom.WebApi.Configurations;
 
-public class VocationsListSettings
+public class VacationsListSettings
 {
     public int PageSize { get; set; }
 }

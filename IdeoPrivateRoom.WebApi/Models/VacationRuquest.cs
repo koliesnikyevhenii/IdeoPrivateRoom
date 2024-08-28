@@ -2,7 +2,7 @@
 
 namespace IdeoPrivateRoom.WebApi.Models;
 
-public class VocationRuquest
+public class VacationRuquest
 {
     public Guid Id { get; set; }
     public User User { get; set; } = null!;
@@ -11,6 +11,6 @@ public class VocationRuquest
     public string Title { get; set; } = string.Empty;
     public DateTime CreatedDate { get; set; }
     public DateTime UpdatedDate { get; set; }
-    public ApprovalStatus VocationStatus { get; set; }
+    public ApprovalStatus VacationStatus { get; set; }
     public IEnumerable<UserApprovalResponse> UserApprovalResponses { get; set; }
 }
