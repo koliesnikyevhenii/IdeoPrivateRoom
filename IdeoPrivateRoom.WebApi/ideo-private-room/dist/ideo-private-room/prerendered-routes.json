@@ -1,7 +1,0 @@
-{
-  "routes": [
-    "/calendar",
-    "/event-list",
-    "/login"
-  ]
-}

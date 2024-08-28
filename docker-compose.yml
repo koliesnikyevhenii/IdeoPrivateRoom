@@ -24,6 +24,20 @@ services:
     env_file:
       - .env
 
+  ideoprivateroom.email:
+    image: ${DOCKER_REGISTRY-}ideoprivateroomemail
+    container_name: ideoprivateroom.email
+    build:
+      context: .
+      dockerfile: IdeoPrivateRoom.Email/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5002
+      - ASPNETCORE_HTTPS_PORTS=5003
+    ports:
+      - "5002:5002"
+      - "5003:5003"
+
   ideoprivateroom.angular:
     image: ${DOCKER_REGISTRY-}ideoprivateroomangular
     container_name: ideoprivateroom.front
