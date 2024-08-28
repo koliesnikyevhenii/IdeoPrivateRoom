@@ -6,14 +6,6 @@ using Microsoft.EntityFrameworkCore;
 namespace IdeoPrivateRoom.DAL.Repositories;
 public class UserRepository(ApplicationDbContext _dbContext) : IUserRepository
 {
-    public async Task<Guid> Create(UserEntity user)
-    {
-        var createdUser = await _dbContext.Users.AddAsync(user);
-        await _dbContext.SaveChangesAsync();
-
-        return createdUser.Entity.Id;
-    }
-
     public async Task<List<UserEntity>> Get()
     {
         return await _dbContext.Users
@@ -31,6 +23,14 @@ public class UserRepository(ApplicationDbContext _dbContext) : IUserRepository
             .Include(u => u.RoleMappings)
                 .ThenInclude(rm => rm.Role)
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<Guid> Create(UserEntity user)
+    {
+        var createdUser = await _dbContext.Users.AddAsync(user);
+        await _dbContext.SaveChangesAsync();
+
+        return createdUser.Entity.Id;
     }
 
     public async Task<Guid?> Update(Guid id, UserEntity user)
@@ -57,43 +57,4 @@ public class UserRepository(ApplicationDbContext _dbContext) : IUserRepository
 
         return id;
     }
-
-    /*public async Task<List<UserDtoTest>> GetAll()
-    {
-        return await _dbContext.Users
-            .Include(u => u.RoleMappings)
-                .ThenInclude(urm => urm.Role)
-            .Include(u => u.VocationRequests)
-            .Include(u => u.LinkedUsers)
-                .ThenInclude(lu => lu.AssociatedUser)
-            .Select(u => new UserDtoTest
-            {
-                Id = u.Id,
-                Email = u.Email,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                UserIcon = u.UserIcon,
-                IsEmailConfirmed = u.IsEmailConfirmed,
-                CreatedDate = u.CreatedDate,
-                UpdatedDate = u.UpdatedDate,
-                Roles = u.RoleMappings.Select(urm => new RoleDtoTest
-                {
-                    Id = urm.Role.Id,
-                    Name = urm.Role.Name
-                }),
-                Vocations = u.VocationRequests.Select(v => new VocationRequestDtoTest
-                {
-                    Id = v.Id,
-                    StartDate = v.StartDate,
-                    EndDate = v.EndDate,
-                    VocationStatus = (ApprovalStatus)int.Parse(v.VocationStatus)
-                }),
-                LinkedUsers = u.LinkedUsers.Select(lu => new LinkedUserDtoTest
-                {
-                    LinkedUserId = lu.AssociatedUser.Id,
-                    LinkedUserName = $"{lu.AssociatedUser.FirstName} {lu.AssociatedUser.LastName}"
-                })
-            })
-            .ToListAsync();
-    }*/
 }

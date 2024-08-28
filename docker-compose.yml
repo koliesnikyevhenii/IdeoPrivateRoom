@@ -12,6 +12,17 @@ services:
     ports:
       - "5000:5000"
       - "5001:5001"
+    environment: 
+     - ConnectionStrings__IdeoPrivateRoomDB
+     - AzureAd__Issuer
+     - AzureAd__Audience
+     - AzureAd__ClientSecret
+     - AzureAd__ClientId
+     - AzureAd__TenantId
+     - AzureAd__Domain
+     - AzureAd__Instance
+    env_file:
+      - .env
 
   ideoprivateroom.angular:
     image: ${DOCKER_REGISTRY-}ideoprivateroomangular
@@ -21,6 +32,8 @@ services:
       dockerfile: IdeoPrivateRoom.WebApi/ideo-private-room/Dockerfile
     ports:
       - "8080:4000"
+    env_file:
+      - .env
 
   ideoprivateroom.database:
     image: postgres:latest
@@ -33,6 +46,8 @@ services:
       - ./.containers/ideoprivateroom-db:/var/lib/postgresql/data
     ports:
       - 5432:5432
+    env_file:
+      - .env
 
   pgadmin4:
     image: dpage/pgadmin4
@@ -44,3 +59,6 @@ services:
       - ideoprivateroom.database
     ports:
       - 8001:80
+
+    env_file:
+      - .env
