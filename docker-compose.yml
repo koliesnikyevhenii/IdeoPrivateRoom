@@ -64,10 +64,8 @@ services:
       - ideoprivateroom.database
     ports:
       - 8001:80
-
     env_file:
       - .env
-      - 8001:80
     networks:
       default:
 
