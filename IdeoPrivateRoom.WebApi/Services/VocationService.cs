@@ -32,14 +32,17 @@ public class VocationService(
             .Where(i => i != Guid.Empty)
             .ToArray();
 
-        var statuses = filters.Statuses?.Split(",");
+        var statuses = filters.Statuses?
+            .Split(",")
+            .Select(s => s.Trim())
+            .ToArray();
 
         var vocations = await _vocationRepository
             .Get(page, pageSize, start, end, ids, statuses);
 
         if (vocations.TotalRecords == 0)
         {
-            return Result.Fail<PagedList<VocationResponse>>("No vocations was found.");
+            return Result.Fail<PagedList<VocationResponse>>("No vocations was found. Please check your filter criteria.");
         }
 
         return Result.Ok(_mapper.Map<PagedList<VocationResponse>>(vocations));
@@ -62,7 +65,7 @@ public class VocationService(
         return Result.Ok(result);
     }
 
-    public async Task<Result<Guid?>> Update(Guid id, VocationRequestEntity vocation)
+    public async Task<Result<Guid?>> Update(Guid id, UpdateVocationRequest vocation)
     {
         var result = await _vocationRepository.Update(id, _mapper.Map<VocationRequestEntity>(vocation));
 

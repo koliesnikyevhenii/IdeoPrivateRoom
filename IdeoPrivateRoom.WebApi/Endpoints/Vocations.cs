@@ -34,8 +34,19 @@ public static class Vocations
                 ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);
         })
-        .Produces<Guid>()
         .WithRequestValidation<CreateVocationRequest>()
+        .Produces<Guid>()
+        .WithOpenApi();
+
+        vocations.MapPut("/{id}", async (Guid id, UpdateVocationRequest request, IVocationService vocationService) =>
+        {
+            var result = await vocationService.Update(id, request);
+            return result.IsSuccess
+                ? Results.Ok(result.Value)
+                : Results.BadRequest(result.Error.Message);
+        })
+        .WithRequestValidation<UpdateVocationRequest>()
+        .Produces<Guid>()
         .WithOpenApi();
 
         vocations.MapDelete("/{id}", async (Guid id, IVocationService vocationService) =>
@@ -45,6 +56,7 @@ public static class Vocations
                 ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);
         })
+        .Produces<Guid>()
         .WithOpenApi();
     }
 }

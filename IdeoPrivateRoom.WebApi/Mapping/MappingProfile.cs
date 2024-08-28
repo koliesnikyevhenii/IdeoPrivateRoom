@@ -50,6 +50,11 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
             .ForMember(dest => dest.ApprovalStatus, opt => opt.MapFrom(src => int.Parse(src.ApprovalStatus).ToString()));
 
+        CreateMap<UpdateVocationRequest, VocationRequestEntity>()
+            .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.Start))
+            .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.End))
+            .ForMember(dest => dest.VocationStatus, opt => opt.MapFrom(src => src.Status));
+
         CreateMap(typeof(PagedList<VocationRequestEntity>), typeof(PagedList<VocationResponse>))
             .ConvertUsing(typeof(VocationsPagedListConverter<VocationRequestEntity, VocationResponse>));
 

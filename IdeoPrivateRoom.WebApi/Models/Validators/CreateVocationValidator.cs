@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using IdeoPrivateRoom.WebApi.Models.Requests;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace IdeoPrivateRoom.WebApi.Models.Validators;
 
@@ -8,8 +7,8 @@ public class CreateVocationValidator : AbstractValidator<CreateVocationRequest>
 {
     public CreateVocationValidator()
     {
-        RuleFor(x => x.UserId).NotEmpty();
-        RuleFor(x => x.EndDate).NotEmpty();
+        RuleFor(x => x.UserId).Must(x => Guid.TryParse(x, out var _)).WithMessage("Please specify a valid User Id.");
         RuleFor(x => x.StartDate).NotEmpty();
+        RuleFor(x => x.EndDate).NotEmpty().GreaterThan(x => x.StartDate).WithMessage("End date cannot be earlier than the start date.");
     }
 }

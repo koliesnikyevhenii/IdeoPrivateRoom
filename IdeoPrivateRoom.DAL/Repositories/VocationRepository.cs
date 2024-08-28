@@ -64,6 +64,7 @@ public class VocationRepository(ApplicationDbContext _dbContext) : IVocationRepo
             .ExecuteUpdateAsync(v => v
                 .SetProperty(p => p.StartDate, p => vocation.StartDate)
                 .SetProperty(p => p.EndDate, p => vocation.EndDate)
+                .SetProperty(p => p.Comment, p => vocation.Comment)
                 .SetProperty(p => p.UpdatedDate, p => vocation.UpdatedDate)
                 .SetProperty(p => p.CreatedDate, p => vocation.CreatedDate)
                 .SetProperty(p => p.VocationStatus, p => vocation.VocationStatus));
