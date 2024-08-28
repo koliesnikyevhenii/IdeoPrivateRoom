@@ -2,6 +2,7 @@ import {
   ApplicationConfig,
   importProvidersFrom,
   provideZoneChangeDetection,
+  APP_INITIALIZER 
 } from '@angular/core';
 import {
   provideRouter,
@@ -29,7 +30,14 @@ import {
 import { PublicClientApplication, IPublicClientApplication, InteractionType, BrowserCacheLocation, LogLevel} from '@azure/msal-browser';
 import { environment } from '../environments/environment';
 
-
+export function initializeMsal(msalService: MsalService) {
+  return () => {
+    const accounts = msalService.instance.getAllAccounts();
+    if (accounts.length > 0) {
+      msalService.instance.setActiveAccount(accounts[0]);
+    }
+  };
+}
 
 export function loggerCallback(logLevel: LogLevel, message: string) {
   console.log(message);
@@ -40,12 +48,14 @@ export function MSALInstanceFactory(): IPublicClientApplication {
     auth: {
       clientId: environment.msalConfig.auth.clientId,
       authority: environment.msalConfig.auth.authority,
-      redirectUri: 'http://localhost:8080/calendar',
-      postLogoutRedirectUri: '/',
+      redirectUri: '/calendar',
+      postLogoutRedirectUri: '/login',
+      navigateToLoginRequestUrl: true
+
     },
     cache: {
       cacheLocation: BrowserCacheLocation.LocalStorage,
-      storeAuthStateInCookie: true
+     // storeAuthStateInCookie: true
     },
     system: {
       allowNativeBroker: false, // Disables WAM Broker
@@ -65,6 +75,12 @@ export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
     environment.apiConfig.scopes
   );
 
+
+  protectedResourceMap.set(
+    environment.apiConfig.backuri,
+    environment.apiConfig.backscopes
+  );
+
   return {
     interactionType: InteractionType.Redirect,
     protectedResourceMap,
@@ -77,7 +93,7 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
     authRequest: {
       scopes: [...environment.apiConfig.scopes],
     },
-    loginFailedRoute: '/login-failed',
+    loginFailedRoute: '/login'
   };
 }
 
@@ -119,7 +135,12 @@ export const appConfig: ApplicationConfig = {
       }),
       NgMultiSelectDropDownModule.forRoot()
     ),
-
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeMsal,
+      deps: [MsalService],
+      multi: true,
+    },
     provideAnimations()
   ],
 };
