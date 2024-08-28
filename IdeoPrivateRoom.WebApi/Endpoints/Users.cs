@@ -1,5 +1,7 @@
 ﻿using IdeoPrivateRoom.WebApi.Models.Responses;
 using IdeoPrivateRoom.WebApi.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IdeoPrivateRoom.WebApi.Endpoints;
 
@@ -7,6 +9,22 @@ public static class Users
 {
     public static void RegisterUserEndpoints(this IEndpointRouteBuilder routes)
     {
+        routes.MapGet("/api/authcheck",  [Authorize] async (IUserService userService, HttpContext context) =>
+        {
+
+            var result = await context.AuthenticateAsync();
+
+            if (!result.Succeeded || !result.Principal?.HasClaim("scp", "access_as_user") == true)
+            {
+               
+            }
+
+            return userService.GetAll();
+        })
+        .WithOpenApi()
+        .RequireAuthorization("AccessAsUser");
+
+
         var users = routes.MapGroup("/api/users")
             .WithTags("Users");
 
@@ -30,6 +48,7 @@ public static class Users
         })
         .Produces<UserResponse>()
         .WithOpenApi();
+
 
         /*users.MapGet("/all", (IUserRepository userRepository) =>
         {

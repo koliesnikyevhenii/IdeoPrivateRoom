@@ -54,8 +54,4 @@ export class LoginComponent  {
       this.authService.loginRedirect();
     }
   }
-
-  logout() {
-    this.authService.logoutRedirect();
-  }
 }
