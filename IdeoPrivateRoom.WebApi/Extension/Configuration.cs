@@ -17,8 +17,8 @@ public static class Configuration
 {
     public static void RegisterServices(this WebApplicationBuilder builder)
     {
-        builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-          .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+        //builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+          //.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
           //.EnableTokenAcquisitionToCallDownstreamApi(new string[] { "https://graph.microsoft.com/.default" })
           //.AddMicrosoftGraph(builder.Configuration.GetSection("GraphApi"))
           //.AddInMemoryTokenCaches();
@@ -30,7 +30,7 @@ public static class Configuration
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        builder.Services.Configure<VocationsListSettings>(builder.Configuration.GetSection(nameof(VocationsListSettings)));
+        builder.Services.Configure<VacationsListSettings>(builder.Configuration.GetSection(nameof(VacationsListSettings)));
 
         var corsOptions = builder.Configuration.GetSection(CorsOptions.Section).Get<CorsOptions>();
         var allowedOrigins = corsOptions?.AllowedOrigins?.Split(',') ?? [];
@@ -51,8 +51,8 @@ public static class Configuration
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IUserService, UserService>();
 
-        builder.Services.AddScoped<IVocationRepository, VocationRepository>();
-        builder.Services.AddScoped<IVocationService, VocationService>();
+        builder.Services.AddScoped<IVacationRepository, VacationRepository>();
+        builder.Services.AddScoped<IVacationService, VacationService>();
     }
 
     public static void RegisterMiddlewares(this WebApplication app)

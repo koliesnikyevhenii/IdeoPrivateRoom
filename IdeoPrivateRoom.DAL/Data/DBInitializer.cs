@@ -9,9 +9,9 @@ public class DBInitializer
         var users = SeedUsers();
         var roles = SeedRoles();
         var roleMapping = SeedUserRoleMapping(users, roles);
-        var vocations = SeedVocations(users);
+        var vacations = SeedVacations(users);
         var linkedUsers = SeedLinkedUsers(users);
-        var userApprovalResponses = SeedUserApprovalResponses(users, vocations);
+        var userApprovalResponses = SeedUserApprovalResponses(users, vacations);
 
         if (context == null)
             return;
@@ -34,9 +34,9 @@ public class DBInitializer
             context.SaveChanges();
         }
 
-        if (!context.VocationRequests.Any())
+        if (!context.VacationRequests.Any())
         {
-            context.VocationRequests.AddRange(vocations);
+            context.VacationRequests.AddRange(vacations);
             context.SaveChanges();
         }
 
@@ -313,11 +313,11 @@ public class DBInitializer
         ];
     }
 
-    private static List<VocationRequestEntity> SeedVocations(List<UserEntity> users)
+    private static List<VacationRequestEntity> SeedVacations(List<UserEntity> users)
     {
         return
         [
-            new VocationRequestEntity
+            new VacationRequestEntity
             {
                 Id = Guid.NewGuid(),
                 UserId = users[0].Id,
@@ -326,9 +326,9 @@ public class DBInitializer
                 EndDate = new DateTime(2024, 9, 14, 0, 0, 0, DateTimeKind.Utc),
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow,
-                VocationStatus = "1"
+                VacationStatus = "1"
             },
-            new VocationRequestEntity
+            new VacationRequestEntity
             {
                 Id = Guid.NewGuid(),
                 UserId = users[1].Id,
@@ -337,9 +337,9 @@ public class DBInitializer
                 EndDate = new DateTime(2024, 10, 22, 0, 0, 0, DateTimeKind.Utc),
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow,
-                VocationStatus = "2"
+                VacationStatus = "2"
             },
-            new VocationRequestEntity
+            new VacationRequestEntity
             {
                 Id = Guid.NewGuid(),
                 UserId = users[2].Id,
@@ -348,9 +348,9 @@ public class DBInitializer
                 EndDate = new DateTime(2024, 11, 6, 0, 0, 0, DateTimeKind.Utc),
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow,
-                VocationStatus = "2"
+                VacationStatus = "2"
             },
-            new VocationRequestEntity
+            new VacationRequestEntity
             {
                 Id = Guid.NewGuid(),
                 UserId = users[3].Id,
@@ -359,7 +359,7 @@ public class DBInitializer
                 EndDate = new DateTime(2024, 11, 19, 0, 0, 0, DateTimeKind.Utc),
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow,
-                VocationStatus = "1"
+                VacationStatus = "1"
             }
         ];
     }
@@ -405,13 +405,13 @@ public class DBInitializer
             }
         ];
     }
-    private static List<UserApprovalResponseEntity> SeedUserApprovalResponses(List<UserEntity> users, List<VocationRequestEntity> vocations)
+    private static List<UserApprovalResponseEntity> SeedUserApprovalResponses(List<UserEntity> users, List<VacationRequestEntity> vacations)
     {
         return
         [
             new UserApprovalResponseEntity
             {
-                VocationRequestId = vocations[0].Id,
+                VacationRequestId = vacations[0].Id,
                 UserId = users[6].Id,
                 ApprovalStatus = "1",
                 CreatedDate = DateTime.UtcNow,
@@ -419,7 +419,7 @@ public class DBInitializer
             },
             new UserApprovalResponseEntity
             {
-                VocationRequestId = vocations[0].Id,
+                VacationRequestId = vacations[0].Id,
                 UserId = users[7].Id,
                 ApprovalStatus = "2",
                 CreatedDate = DateTime.UtcNow,
@@ -427,7 +427,7 @@ public class DBInitializer
             },
             new UserApprovalResponseEntity
             {
-                VocationRequestId = vocations[2].Id,
+                VacationRequestId = vacations[2].Id,
                 UserId = users[6].Id,
                 ApprovalStatus = "1",
                 CreatedDate = DateTime.UtcNow,
@@ -435,7 +435,7 @@ public class DBInitializer
             },
             new UserApprovalResponseEntity
             {
-                VocationRequestId = vocations[3].Id,
+                VacationRequestId = vacations[3].Id,
                 UserId = users[6].Id,
                 ApprovalStatus = "1",
                 CreatedDate = DateTime.UtcNow,

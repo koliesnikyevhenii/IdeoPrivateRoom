@@ -19,7 +19,7 @@ public class MappingProfile : Profile
             .ForMember(u => u.Icon, conf => conf.MapFrom(scr => scr.UserIcon))
             .ForMember(u => u.Roles, conf => conf.MapFrom(scr => scr.RoleMappings));
 
-        CreateMap<UserEntity, VocationUserResponse>()
+        CreateMap<UserEntity, VacationUserResponse>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
             .ForMember(dest => dest.Icon, opt => opt.MapFrom(src => src.UserIcon));
 
@@ -30,17 +30,17 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Role.Id))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Role.Name));
 
-        CreateMap<VocationRequestEntity, VocationResponse>()
+        CreateMap<VacationRequestEntity, VacationResponse>()
             .ForMember(r => r.Start, conf => conf.MapFrom(scr => scr.StartDate))
             .ForMember(r => r.End, conf => conf.MapFrom(scr => scr.EndDate))
-            .ForMember(r => r.Status, conf => conf.MapFrom(scr => scr.VocationStatus));
+            .ForMember(r => r.Status, conf => conf.MapFrom(scr => scr.VacationStatus));
 
-        CreateMap<UserApprovalResponseEntity, VocationUserApprovalResponse>()
+        CreateMap<UserApprovalResponseEntity, VacationUserApprovalResponse>()
             .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
             .ForMember(dest => dest.ApprovalStatus, opt => opt.MapFrom(src => int.Parse(src.ApprovalStatus).ToString()));
 
-        CreateMap(typeof(PagedList<VocationRequestEntity>), typeof(PagedList<VocationResponse>))
-            .ConvertUsing(typeof(VocationsPagedListConverter<VocationRequestEntity, VocationResponse>));
+        CreateMap(typeof(PagedList<VacationRequestEntity>), typeof(PagedList<VacationResponse>))
+            .ConvertUsing(typeof(VacationsPagedListConverter<VacationRequestEntity, VacationResponse>));
 
     }
 }
