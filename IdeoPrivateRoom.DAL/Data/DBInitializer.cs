@@ -326,7 +326,7 @@ public class DBInitializer
                 EndDate = new DateTime(2024, 9, 14, 0, 0, 0, DateTimeKind.Utc),
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow,
-                VacationStatus = "1"
+                VacationStatus = "2"
             },
             new VacationRequestEntity
             {
@@ -337,7 +337,7 @@ public class DBInitializer
                 EndDate = new DateTime(2024, 10, 22, 0, 0, 0, DateTimeKind.Utc),
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow,
-                VacationStatus = "2"
+                VacationStatus = "0"
             },
             new VacationRequestEntity
             {
@@ -348,7 +348,7 @@ public class DBInitializer
                 EndDate = new DateTime(2024, 11, 6, 0, 0, 0, DateTimeKind.Utc),
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow,
-                VacationStatus = "2"
+                VacationStatus = "0"
             },
             new VacationRequestEntity
             {
@@ -360,6 +360,39 @@ public class DBInitializer
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow,
                 VacationStatus = "1"
+            },
+            new VacationRequestEntity
+            {
+                Id = Guid.NewGuid(),
+                UserId = users[4].Id,
+                User = users[4],
+                StartDate = new DateTime(2024, 12, 1, 0, 0, 0, DateTimeKind.Utc),
+                EndDate = new DateTime(2024, 12, 7, 0, 0, 0, DateTimeKind.Utc),
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow,
+                VacationStatus = "0"
+            },
+            new VacationRequestEntity
+            {
+                Id = Guid.NewGuid(),
+                UserId = users[5].Id,
+                User = users[5],
+                StartDate = new DateTime(2025, 1, 10, 0, 0, 0, DateTimeKind.Utc),
+                EndDate = new DateTime(2025, 1, 15, 0, 0, 0, DateTimeKind.Utc),
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow,
+                VacationStatus = "0"
+            },
+            new VacationRequestEntity
+            {
+                Id = Guid.NewGuid(),
+                UserId = users[6].Id,
+                User = users[6],
+                StartDate = new DateTime(2025, 2, 1, 0, 0, 0, DateTimeKind.Utc),
+                EndDate = new DateTime(2025, 2, 5, 0, 0, 0, DateTimeKind.Utc),
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow,
+                VacationStatus = "0"
             }
         ];
     }
@@ -402,7 +435,70 @@ public class DBInitializer
                 LinkedUserId = users[7].Id,
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
-            }
+            },
+            new LinkedUserEntity
+            {
+                UserId = users[1].Id,
+                LinkedUserId = users[5].Id,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            },
+            new LinkedUserEntity
+            {
+                UserId = users[1].Id,
+                LinkedUserId = users[6].Id,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            },
+            new LinkedUserEntity
+            {
+                UserId = users[2].Id,
+                LinkedUserId = users[4].Id,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            },
+            new LinkedUserEntity
+            {
+                UserId = users[3].Id,
+                LinkedUserId = users[7].Id,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            },
+            new LinkedUserEntity
+            {
+                UserId = users[5].Id,
+                LinkedUserId = users[7].Id,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            },
+            new LinkedUserEntity
+            {
+                UserId = users[5].Id,
+                LinkedUserId = users[6].Id,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            },
+            new LinkedUserEntity
+            {
+                UserId = users[5].Id,
+                LinkedUserId = users[2].Id,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            },
+            new LinkedUserEntity
+            {
+                UserId = users[6].Id,
+                LinkedUserId = users[5].Id,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            },
+            new LinkedUserEntity
+            {
+                UserId = users[6].Id,
+                LinkedUserId = users[2].Id,
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            },
         ];
     }
     private static List<UserApprovalResponseEntity> SeedUserApprovalResponses(List<UserEntity> users, List<VacationRequestEntity> vacations)
@@ -414,6 +510,30 @@ public class DBInitializer
                 VacationRequestId = vacations[0].Id,
                 UserId = users[6].Id,
                 ApprovalStatus = "1",
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            },
+            new UserApprovalResponseEntity
+            {
+                VacationRequestId = vacations[3].Id,
+                UserId = users[7].Id,
+                ApprovalStatus = "1",
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            },
+            new UserApprovalResponseEntity
+            {
+                VacationRequestId = vacations[6].Id,
+                UserId = users[2].Id,
+                ApprovalStatus = "1",
+                CreatedDate = DateTime.UtcNow,
+                UpdatedDate = DateTime.UtcNow
+            },
+            new UserApprovalResponseEntity
+            {
+                VacationRequestId = vacations[1].Id,
+                UserId = users[1].Id,
+                ApprovalStatus = "2",
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow
             },

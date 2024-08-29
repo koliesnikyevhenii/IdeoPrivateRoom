@@ -35,10 +35,10 @@
                 <span
                   class="badge mx-auto"
                   [class]="
-                    eventListTableRowService.getApprovalStatus(card().status)
+                    eventListTableRowService.getApprovalStatus(reviewer.approvalStatus)
                       .badgeClass
                   "
-                  >{{ approvalStatus() }}</span
+                  >{{ eventListTableRowService.getApprovalStatus(reviewer.approvalStatus).name }}</span
                 >
               </h5>
             </td>
