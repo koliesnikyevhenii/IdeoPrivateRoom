@@ -1,13 +1,31 @@
-# Angular setup
+# Step 1: Build the Angular application
 FROM node:18-alpine as build
 WORKDIR /app/src
-COPY IdeoPrivateRoom.WebApi/ideo-private-room/package*.json ./
+
+# Copy the package.json and package-lock.json files
+COPY IdeoPrivateRoom.AngularApp/ideo-private-room/package*.json ./
+
+# Install dependencies
 RUN npm install
-COPY IdeoPrivateRoom.WebApi/ideo-private-room ./
+
+# Copy the rest of the application code
+COPY IdeoPrivateRoom.AngularApp/ideo-private-room ./
+
+# Build the Angular application (non-SSR)
 RUN npm run build
 
-FROM node:18-alpine
-WORKDIR /usr/app
-COPY --from=build /app/src/dist/ideo-private-room ./
-CMD node server/server.mjs
-EXPOSE 4000
+# Step 2: Serve the built Angular application using NGINX
+FROM nginx:alpine
+WORKDIR /usr/share/nginx/html
+
+# Copy the built Angular application from the build stage
+COPY --from=build /app/src/dist/ideo-private-room .
+
+# Copy the custom Nginx configuration
+COPY IdeoPrivateRoom.AngularApp/ideo-private-room/nginx.conf /etc/nginx/nginx.conf
+
+# Expose port 80 for the NGINX server
+EXPOSE 80
+
+# Start NGINX server
+CMD ["nginx", "-g", "daemon off;"]

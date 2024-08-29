@@ -47,7 +47,7 @@ services:
       context: .
       dockerfile: IdeoPrivateRoom.AngularApp/ideo-private-room/Dockerfile
     ports:
-      - "8080:80"
+      - "8085:80"
     env_file:
       - .env
 
