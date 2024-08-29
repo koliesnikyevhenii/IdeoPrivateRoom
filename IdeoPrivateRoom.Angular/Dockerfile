@@ -3,13 +3,13 @@ FROM node:18-alpine as build
 WORKDIR /app/src
 
 # Copy the package.json and package-lock.json files
-COPY IdeoPrivateRoom.AngularApp/ideo-private-room/package*.json ./
+COPY IdeoPrivateRoom.Angular/package*.json ./
 
 # Install dependencies
 RUN npm install
 
 # Copy the rest of the application code
-COPY IdeoPrivateRoom.AngularApp/ideo-private-room ./
+COPY IdeoPrivateRoom.Angular/ ./
 
 # Build the Angular application (non-SSR)
 RUN npm run build
@@ -22,7 +22,7 @@ WORKDIR /usr/share/nginx/html
 COPY --from=build /app/src/dist/ideo-private-room .
 
 # Copy the custom Nginx configuration
-COPY IdeoPrivateRoom.AngularApp/ideo-private-room/nginx.conf /etc/nginx/nginx.conf
+COPY IdeoPrivateRoom.Angular/nginx.conf /etc/nginx/nginx.conf
 
 # Expose port 80 for the NGINX server
 EXPOSE 80
