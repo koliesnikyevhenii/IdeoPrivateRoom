@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdeoPrivateRoom.DAL", "Ideo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdeoPrivateRoom.Email", "IdeoPrivateRoom.Email\IdeoPrivateRoom.Email.csproj", "{95046635-CF49-487C-9252-CBD95722A4B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdeoPrivateRoom.AngularApp", "IdeoPrivateRoom.AngularApp\IdeoPrivateRoom.AngularApp.csproj", "{47DB8B56-3964-49C6-AE9C-41A16AD49F05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{95046635-CF49-487C-9252-CBD95722A4B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95046635-CF49-487C-9252-CBD95722A4B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95046635-CF49-487C-9252-CBD95722A4B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47DB8B56-3964-49C6-AE9C-41A16AD49F05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47DB8B56-3964-49C6-AE9C-41A16AD49F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47DB8B56-3964-49C6-AE9C-41A16AD49F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47DB8B56-3964-49C6-AE9C-41A16AD49F05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
