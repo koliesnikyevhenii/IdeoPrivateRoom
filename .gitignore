@@ -442,3 +442,4 @@ FodyWeavers.xsd
 /.env
 /IdeoPrivateRoom.WebApi/ideo-private-room/dist/ideo-private-room
 /IdeoPrivateRoom.AngularApp/ideo-private-room/.vscode
+/IdeoPrivateRoom.AngularApp/ideo-private-room/dist/ideo-private-room
