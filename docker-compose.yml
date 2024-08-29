@@ -45,9 +45,9 @@ services:
     container_name: ideoprivateroom.front
     build:
       context: .
-      dockerfile: IdeoPrivateRoom.WebApi/ideo-private-room/Dockerfile
+      dockerfile: IdeoPrivateRoom.Angular/Dockerfile
     ports:
-      - "8080:4000"
+      - "8085:80"
     env_file:
       - .env
 
