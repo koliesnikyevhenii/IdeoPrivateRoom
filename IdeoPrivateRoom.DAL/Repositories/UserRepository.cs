@@ -46,6 +46,8 @@ public class UserRepository(ApplicationDbContext _dbContext) : IUserRepository
                 .SetProperty(p => p.PasswordHash, p => user.PasswordHash)
                 .SetProperty(p => p.IsEmailConfirmed, p => user.IsEmailConfirmed));
 
+        await _dbContext.SaveChangesAsync();
+
         return user.Id;
     }
 
@@ -54,6 +56,8 @@ public class UserRepository(ApplicationDbContext _dbContext) : IUserRepository
         await _dbContext.Users
             .Where(u => u.Id == id)
             .ExecuteDeleteAsync();
+
+        await _dbContext.SaveChangesAsync();
 
         return id;
     }

@@ -38,6 +38,16 @@ public static class Vacations
         .Produces<Guid>()
         .WithOpenApi();
 
+        vacations.MapPut("/status", async (UpdateApprovalStatusRequest request, IUserApprovalVacationService approvalService) =>
+        {
+            var result = await approvalService.Update(request);
+            return result.IsSuccess
+                ? Results.Ok(result.Value)
+                : Results.BadRequest(result.Error.Message);
+        })
+        .Produces<Guid>()
+        .WithOpenApi();
+
         vacations.MapPut("/{id}", async (Guid id, UpdateVacationRequest request, IVacationService vacationService) =>
         {
             var result = await vacationService.Update(id, request);
