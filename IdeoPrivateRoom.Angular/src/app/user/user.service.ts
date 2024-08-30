@@ -51,12 +51,4 @@ export class UserService {
       })
     );
   }
-
-  // TODO: add user interaction functionality
-  // private refreshUsers(errorMessage: string): void {
-  //   this.fetchUsers(errorMessage).subscribe({
-  //     next: (users) => this.users.set(users),
-  //     error: (err) => console.error(err),
-  //   });
-  // }
 }
