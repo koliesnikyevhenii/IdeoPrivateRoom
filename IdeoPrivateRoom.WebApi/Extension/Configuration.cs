@@ -5,13 +5,12 @@ using IdeoPrivateRoom.WebApi.Mapping;
 using IdeoPrivateRoom.DAL.Data;
 using IdeoPrivateRoom.DAL.Repositories.Interfaces;
 using IdeoPrivateRoom.DAL.Repositories;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
-using Microsoft.Identity.Web.UI;
 using IdeoPrivateRoom.WebApi.Models.Options;
 using IdeoPrivateRoom.WebApi.Configurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using FluentValidation;
+using Microsoft.IdentityModel.Tokens;
 
 namespace IdeoPrivateRoom.WebApi.Extension;
 
@@ -19,17 +18,17 @@ public static class Configuration
 {
     public static void RegisterServices(this WebApplicationBuilder builder)
     {
-        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
-          
 
-        builder.Services.AddAuthorization(options =>
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddMicrosoftIdentityWebApi(options =>
         {
-            options.AddPolicy("AccessAsUser", policy =>
-                policy.RequireClaim("scp", "access_as_user"));
+            builder.Configuration.Bind("AzureAd", options);
+        }, options =>
+        {
+            builder.Configuration.Bind("AzureAd", options);
         });
 
-  
+
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
@@ -72,12 +71,10 @@ public static class Configuration
             DBInitializer.Seed(context);
         }
 
-
         app.UseHttpsRedirection();
         app.UseCors();
         app.UseAuthentication();
         app.UseAuthorization();
 
-      
     }
 }

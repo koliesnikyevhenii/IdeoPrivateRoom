@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdeoPrivateRoom.DAL", "Ideo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdeoPrivateRoom.Email", "IdeoPrivateRoom.Email\IdeoPrivateRoom.Email.csproj", "{95046635-CF49-487C-9252-CBD95722A4B0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdeoPrivateRoom.AngularApp", "IdeoPrivateRoom.AngularApp\IdeoPrivateRoom.AngularApp.csproj", "{47DB8B56-3964-49C6-AE9C-41A16AD49F05}"
-EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "IdeoPrivateRoom.Angular", "IdeoPrivateRoom.Angular\IdeoPrivateRoom.Angular.esproj", "{50611C5B-023A-4745-B708-B18B4C63C4C7}"
 EndProject
 Global
@@ -43,10 +41,6 @@ Global
 		{95046635-CF49-487C-9252-CBD95722A4B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95046635-CF49-487C-9252-CBD95722A4B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95046635-CF49-487C-9252-CBD95722A4B0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{47DB8B56-3964-49C6-AE9C-41A16AD49F05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{47DB8B56-3964-49C6-AE9C-41A16AD49F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{47DB8B56-3964-49C6-AE9C-41A16AD49F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{47DB8B56-3964-49C6-AE9C-41A16AD49F05}.Release|Any CPU.Build.0 = Release|Any CPU
 		{50611C5B-023A-4745-B708-B18B4C63C4C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{50611C5B-023A-4745-B708-B18B4C63C4C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50611C5B-023A-4745-B708-B18B4C63C4C7}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
