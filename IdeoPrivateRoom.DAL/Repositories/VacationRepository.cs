@@ -8,12 +8,15 @@ namespace IdeoPrivateRoom.DAL.Repositories;
 
 public class VacationRepository(ApplicationDbContext _dbContext) : IVacationRepository
 {
+    private const string DefaultApprovalStatus = "1";
+
     public Task<VacationRequestEntity?> Get(Guid vacationId)
     {
         return _dbContext.VacationRequests
             .AsNoTracking()
             .FirstOrDefaultAsync(v => v.Id == vacationId);
     }
+
     public async Task<PagedList<VacationRequestEntity>> Get(int page, int pageSize, DateTimeOffset? startDate, DateTimeOffset? endDate, Guid[]? userIds, string[]? statuses)
     {
         var vacations = _dbContext.VacationRequests
@@ -63,25 +66,16 @@ public class VacationRepository(ApplicationDbContext _dbContext) : IVacationRepo
         return createdVacation.Entity.Id;
     }
 
-
-    public async Task<List<LinkedUserApprovalStatusDto>> GetVacationApprovaStatuses(Guid vacationId)
+    public Task<List<string>> GetVacationApprovaStatuses(Guid vacationId)
     {
-        var results = await _dbContext.VacationRequests
+        return _dbContext.VacationRequests
         .Where(v => v.Id == vacationId)
-        .SelectMany(v => v.User.LinkedUsers, (v, lu) => new { v, lu })
-        .SelectMany(x => x.lu.AssociatedUser.UserApprovalResponses
+        .SelectMany(v => v.User.LinkedUsers, (vacation, linkedUser) => new { vacation, linkedUser })
+        .SelectMany(x => x.linkedUser.AssociatedUser.UserApprovalResponses
                             .Where(r => r.VacationRequestId == vacationId)
                             .DefaultIfEmpty(),
-            (x, ur) =>  new LinkedUserApprovalStatusDto
-            {
-                LinkedUserId = x.lu.LinkedUserId,
-                LinkedUserName = x.lu.AssociatedUser.FirstName,
-                ApprovalStatus = ur != null ? ur.ApprovalStatus : "1"
-            }
-        )
+            (x, ur) => ur != null ? ur.ApprovalStatus : DefaultApprovalStatus)
         .ToListAsync();
-
-        return results;
     }
 
     public async Task<Guid?> Update(Guid id, VacationRequestEntity vacation)
@@ -110,11 +104,4 @@ public class VacationRepository(ApplicationDbContext _dbContext) : IVacationRepo
 
         return id;
     }
-}
-
-public class LinkedUserApprovalStatusDto
-{
-    public Guid LinkedUserId { get; set; }
-    public string LinkedUserName { get; set; }
-    public string ApprovalStatus { get; set; }
 }

@@ -45,6 +45,7 @@ public static class Vacations
                 ? Results.Ok(result.Value)
                 : Results.BadRequest(result.Error.Message);
         })
+        .WithRequestValidation<UpdateApprovalStatusRequest>()
         .Produces<Guid>()
         .WithOpenApi();
 

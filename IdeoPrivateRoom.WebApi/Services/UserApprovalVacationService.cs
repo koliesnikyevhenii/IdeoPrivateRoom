@@ -18,6 +18,30 @@ public class UserApprovalVacationService(
         var userId = Guid.Parse(request.UserId);
         var vacationId = Guid.Parse(request.VacationId);
 
+        await CreateOrUpdateApprovalResponse(request, userId, vacationId);
+
+        await CalculateAndUpdateVacationStatus(vacationId);
+
+        return Result.Ok(vacationId);
+    }
+
+    private async Task CalculateAndUpdateVacationStatus(Guid vacationId)
+    {
+        var statuses = (await _vacationRepository.GetVacationApprovaStatuses(vacationId))
+                    .Select(s => s.ToEnum(ApprovalStatus.Pending))
+                    .ToList();
+
+        var vacationStatus = ((int)(object)CalculateVacationStatus(statuses)).ToString();
+
+        var vacation = await _vacationRepository.Get(vacationId);
+
+        vacation!.VacationStatus = vacationStatus;
+
+        await _vacationRepository.Update(vacationId, vacation);
+    }
+
+    private async Task CreateOrUpdateApprovalResponse(UpdateApprovalStatusRequest request, Guid userId, Guid vacationId)
+    {
         var approvalResponse = await _userApprovalVacationRepository.GetByUserIdAndVacationId(userId, vacationId);
 
         if (approvalResponse == null)
@@ -37,23 +61,9 @@ public class UserApprovalVacationService(
             approvalResponse.ApprovalStatus = request.Status;
             await _userApprovalVacationRepository.Update(approvalResponse);
         }
-
-        var approvalResponses = await _vacationRepository.GetVacationApprovaStatuses(vacationId);
-
-        var statuses = approvalResponses.Select(r => r.ApprovalStatus.ToEnum(ApprovalStatus.Pending)).ToList();
-
-        var vacationStatus = ((int)CalculateGeneralStatus(statuses)).ToString();
-
-        var vacation = await _vacationRepository.Get(vacationId);
-
-        vacation!.VacationStatus = vacationStatus;
-
-        await _vacationRepository.Update(vacationId, vacation);
-
-        return Result.Ok(vacationId);
     }
 
-    private static ApprovalStatus CalculateGeneralStatus(List<ApprovalStatus> statuses)
+    private static ApprovalStatus CalculateVacationStatus(List<ApprovalStatus> statuses)
     {
         if (statuses.Contains(ApprovalStatus.Rejected))
         {
