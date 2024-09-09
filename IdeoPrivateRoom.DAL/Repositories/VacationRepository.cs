@@ -8,14 +8,13 @@ namespace IdeoPrivateRoom.DAL.Repositories;
 
 public class VacationRepository(ApplicationDbContext _dbContext) : IVacationRepository
 {
-    public async Task<Guid> Create(VacationRequestEntity vacationRequest)
+    private const string DefaultApprovalStatus = "1";
+
+    public Task<VacationRequestEntity?> Get(Guid vacationId)
     {
-        var createdVacation = await _dbContext.VacationRequests
-            .AddAsync(vacationRequest);
-
-        await _dbContext.SaveChangesAsync();
-
-        return createdVacation.Entity.Id;
+        return _dbContext.VacationRequests
+            .AsNoTracking()
+            .FirstOrDefaultAsync(v => v.Id == vacationId);
     }
 
     public async Task<PagedList<VacationRequestEntity>> Get(int page, int pageSize, DateTimeOffset? startDate, DateTimeOffset? endDate, Guid[]? userIds, string[]? statuses)
@@ -43,18 +42,40 @@ public class VacationRepository(ApplicationDbContext _dbContext) : IVacationRepo
         if (startDate != null && endDate != null)
         {
             vacations = vacations.Where(v => v.StartDate >= startDate && v.EndDate <= endDate
-                || v.EndDate >= startDate && v.EndDate<= endDate);
+                || v.EndDate >= startDate && v.EndDate <= endDate);
         }
 
         var totalRecords = await vacations.CountAsync();
 
-        var data =  await vacations
+        var data = await vacations
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .OrderByDescending(v => v.CreatedDate)
             .ToListAsync();
 
         return new PagedList<VacationRequestEntity>(data, page, pageSize, totalRecords);
+    }
+
+    public async Task<Guid> Create(VacationRequestEntity vacationRequest)
+    {
+        var createdVacation = await _dbContext.VacationRequests
+            .AddAsync(vacationRequest);
+
+        await _dbContext.SaveChangesAsync();
+
+        return createdVacation.Entity.Id;
+    }
+
+    public Task<List<string>> GetVacationApprovaStatuses(Guid vacationId)
+    {
+        return _dbContext.VacationRequests
+        .Where(v => v.Id == vacationId)
+        .SelectMany(v => v.User.LinkedUsers, (vacation, linkedUser) => new { vacation, linkedUser })
+        .SelectMany(x => x.linkedUser.AssociatedUser.UserApprovalResponses
+                            .Where(r => r.VacationRequestId == vacationId)
+                            .DefaultIfEmpty(),
+            (x, ur) => ur != null ? ur.ApprovalStatus : DefaultApprovalStatus)
+        .ToListAsync();
     }
 
     public async Task<Guid?> Update(Guid id, VacationRequestEntity vacation)
@@ -68,6 +89,8 @@ public class VacationRepository(ApplicationDbContext _dbContext) : IVacationRepo
                 .SetProperty(p => p.UpdatedDate, p => vacation.UpdatedDate)
                 .SetProperty(p => p.VacationStatus, p => vacation.VacationStatus));
 
+        await _dbContext.SaveChangesAsync();
+
         return id;
     }
 
@@ -76,6 +99,8 @@ public class VacationRepository(ApplicationDbContext _dbContext) : IVacationRepo
         await _dbContext.VacationRequests
             .Where(v => v.Id == id)
             .ExecuteDeleteAsync();
+
+        await _dbContext.SaveChangesAsync();
 
         return id;
     }

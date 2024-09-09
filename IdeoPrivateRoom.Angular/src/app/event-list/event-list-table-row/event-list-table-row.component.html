@@ -29,7 +29,7 @@
               [src]="reviewer.icon"
               [alt]="reviewer.name"
               class="status-image me-2"
-              [class]="eventListTableRowService.getApprovalStatus(card().status).class"
+              [class]="eventListTableRowService.getApprovalStatus(reviewer.approvalStatus).class"
             />
             }
           </ng-template>
@@ -39,7 +39,7 @@
             [src]="reviewer.icon"
             [alt]="reviewer.name"
             class="status-image me-2"
-            [class]="eventListTableRowService.getApprovalStatus(card().status).class"
+            [class]="eventListTableRowService.getApprovalStatus(reviewer.approvalStatus).class"
           />
           } }
         </td>

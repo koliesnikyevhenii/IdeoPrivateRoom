@@ -57,6 +57,9 @@ public static class Configuration
 
         builder.Services.AddScoped<IVacationRepository, VacationRepository>();
         builder.Services.AddScoped<IVacationService, VacationService>();
+
+        builder.Services.AddScoped<IUserApprovalVacationRepository, UserApprovalVacationRepository>();
+        builder.Services.AddScoped<IUserApprovalVacationService, UserApprovalVacationService>();
     }
 
     public static void RegisterMiddlewares(this WebApplication app)

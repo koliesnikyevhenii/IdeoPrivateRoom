@@ -51,7 +51,7 @@ public class VacationService(
 
     public async Task<Result<Guid>> Create(CreateVacationRequest vacation)
     {
-        var createdVacation = new VacationRequestEntity
+        var newEntity = new VacationRequestEntity
         {
             UserId = Guid.Parse(vacation.UserId),
             StartDate = vacation.StartDate,
@@ -61,7 +61,7 @@ public class VacationService(
             VacationStatus = ((int)ApprovalStatus.Pending).ToString()
         };
         
-        var result = await _vacationRepository.Create(createdVacation);
+        var result = await _vacationRepository.Create(newEntity);
 
         return Result.Ok(result);
     }
