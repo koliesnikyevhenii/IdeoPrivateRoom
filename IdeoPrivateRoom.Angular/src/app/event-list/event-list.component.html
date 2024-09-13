@@ -1,34 +1,41 @@
 <app-event-list-header />
-
-@defer () { @if(viewMode() === 'Table' && cards().length > 0) {
-<table class="table container">
-  <thead class="row">
-    <tr class="row ps-0 pe-4">
-      <th scope="col" class="col-2 ps-0 pe-0">Name</th>
-      <th scope="col" class="col-4 ps-0 pe-0">Dates</th>
-      <th scope="col" class="col-2 ps-0 pe-0">Approvals</th>
-      <th scope="col" class="col-2 ps-0 pe-0">Status</th>
-      <th scope="col" class="col-2 ps-0 pe-0">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    @for(card of cards(); track card.id) {
-    <app-event-list-table-row class="row" [card]="card" />
+@if (cards$ | async; as cards) {
+  @defer () { @if(viewMode() === 'Table' && cards.length > 0) {
+    <table class="table container">
+      <thead class="row">
+        <tr class="row ps-0 pe-4">
+          <th scope="col" class="col-2 ps-0 pe-0">Name</th>
+          <th scope="col" class="col-4 ps-0 pe-0">Dates</th>
+          <th scope="col" class="col-2 ps-0 pe-0">Approvals</th>
+          <th scope="col" class="col-2 ps-0 pe-0">Status</th>
+          <th scope="col" class="col-2 ps-0 pe-0">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (!isFetching()){
+          @for(card of cards; track card.id) {
+          <app-event-list-table-row class="row" [card]="card" />
+          }
+        } @else {
+          <div class="d-flex justify-content-center align-items-center">
+            <span class="loader align-self-center"></span>
+          </div>
+        }
+      </tbody>
+    </table>
+    } @else if(viewMode() === 'Cards' && cards.length > 0) {
+    <div class="container mt-5 d-flex justify-content-start flex-wrap">
+      @for(card of cards; track card.id) {
+      <app-event-card [card]="card" />
+      }
+    </div>
+    } @else {
+    <div class="row text-center">
+      <p>There are no added vacation requests yet.</p>
+    </div>
+    } } @placeholder {
+    <div class="d-flex justify-content-center align-items-center">
+      <span class="loader align-self-center"></span>
+    </div>
     }
-  </tbody>
-</table>
-} @else if(viewMode() === 'Cards' && cards().length > 0) {
-<div class="container mt-5 d-flex justify-content-start flex-wrap">
-  @for(card of cards(); track card.id) {
-  <app-event-card [card]="card" />
-  }
-</div>
-} @else {
-<div class="row text-center">
-  <p>There are no added vacation requests yet.</p>
-</div>
-} } @placeholder {
-<div class="d-flex justify-content-center align-items-center">
-  <span class="loader align-self-center"></span>
-</div>
 }

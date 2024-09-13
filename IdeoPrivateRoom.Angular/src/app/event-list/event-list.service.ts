@@ -1,4 +1,4 @@
-import { catchError, map, Observable, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, tap, throwError } from 'rxjs';
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -21,8 +21,10 @@ export class EventListService {
 
   readonlyViewMode = this.currentViewMode.asReadonly();
 
+  refetchTrigger$ = new BehaviorSubject<void>(undefined);
+
   changeViewMode(mode: ViewMode) {
-    this.currentViewMode.set(mode)
+    this.currentViewMode.set(mode);
   }
 
   loadEvents() {
@@ -73,15 +75,22 @@ export class EventListService {
     const body = {
       userId: userId,
       vacationId: vacationId,
-      status: status
+      status: status,
     };
     return this.http.post(`${this.eventsUrl}/status`, body).pipe(
       tap(() => {
-        this.refreshEvents('Failed to fetch events after updating event status.');
+        this.refreshEvents(
+          'Failed to fetch events after updating event status.'
+        );
       }),
       catchError(() => {
         console.log('failure');
-        return throwError(() => new Error(`Failed to update event status. EventID:${vacationId}; UserID:${userId}.`));
+        return throwError(
+          () =>
+            new Error(
+              `Failed to update event status. EventID:${vacationId}; UserID:${userId}.`
+            )
+        );
       })
     );
   }
@@ -143,24 +152,26 @@ export class EventListService {
     }
 
     if (startDate != null) {
-      queryParams = queryParams.set('startDate', startDate.toString());
+      queryParams = queryParams.set('startDate', startDate.toISOString());
     }
 
     if (endDate != null) {
-      queryParams = queryParams.set('endDate', endDate.toString());
+      queryParams = queryParams.set('endDate', endDate.toISOString());
     }
 
     return this.http
-      .get<ApiPaginatedResponse<ApiEvent>>(this.eventsUrl, { params: queryParams })
+      .get<ApiPaginatedResponse<ApiEvent>>(this.eventsUrl, {
+        params: queryParams,
+      })
       .pipe(
-        tap(() => console.log(params)),
+        tap(() => console.log('Update works!!!')),
         map((events) => {
           return events.data.map(mapEvent);
         }),
         catchError((error) => {
           console.error(error);
           return throwError(() => {
-            return new Error("Something went wrong during fetching events...");
+            return new Error('Something went wrong during fetching events...');
           });
         })
       );

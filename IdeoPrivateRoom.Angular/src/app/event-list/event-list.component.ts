@@ -7,14 +7,16 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { EventCardComponent } from './event-card/event-card.component';
 import { EventListHeaderComponent } from './event-list-header/event-list-header.component';
 import { EventFiltersService } from './event-filters/event-filters.service';
 import { EventListTableRowComponent } from './event-list-table-row/event-list-table-row.component';
 import { EventListService } from './event-list.service';
-import { EventStatus, ViewMode } from './event-list.models';
+import { EventModel, EventStatus, ViewMode } from './event-list.models';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { combineLatest, finalize, switchMap, tap } from 'rxjs';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-event-list',
   standalone: true,
@@ -22,6 +24,7 @@ import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
     EventCardComponent,
     EventListHeaderComponent,
     EventListTableRowComponent,
+    CommonModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './event-list.component.html',
@@ -32,10 +35,32 @@ export class EventListComponent implements OnInit {
   private eventListService = inject(EventListService);
   private destroyRef = inject(DestroyRef);
 
-  cards = computed(() => this.eventFiltersService.loadedEvents());
-  viewMode = computed(() => ViewMode[this.eventListService.readonlyViewMode()])
-  isFetching = signal<boolean>(false);
+  viewMode = computed(() => ViewMode[this.eventListService.readonlyViewMode()]);
   error = signal<string>('');
+  isFetching = signal<boolean>(false);
+
+  filters = this.eventFiltersService.readonlyEventFilters;
+  //cards = computed(() => this.eventFiltersService.loadedEvents());
+
+  cards$ = combineLatest([
+    toObservable(this.filters),
+    this.eventListService.refetchTrigger$,
+  ]).pipe(
+    tap(() => this.isFetching.set(true)),
+    switchMap(([filter]) => {
+      return this.eventListService.fetchEventsNew({
+        userIds: filter?.employee?.map((i) => i.id) ?? [],
+        statuses:
+          filter?.status?.map((i) =>
+            EventStatus[i as keyof typeof EventStatus].toString()
+          ) ?? [],
+        startDate: this.getDate(filter?.dates?.fromDate),
+        endDate: this.getDate(filter?.dates?.toDate),
+      }).pipe(
+        finalize(() => this.isFetching.set(false))
+      );
+    })
+  );
 
   ngOnInit() {
     this.isFetching.set(true);

@@ -29,7 +29,8 @@ export class EventListTableRowContentComponent {
   
   updateStatus(userId: string, status: string): void {
     const eventId = this.card().id
-    this.eventListService.updateEventStatus(userId, eventId, status).subscribe(res => console.log(res));
-    this.eventFiltersService.loadFilteredEvents().subscribe((res) => console.log(res));
+    this.eventListService.updateEventStatus(userId, eventId, status).subscribe(res => {
+      this.eventListService.refetchTrigger$.next();
+    });
   }
 }
