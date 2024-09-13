@@ -44,3 +44,12 @@ export enum ViewMode {
   Table = 0,
   Cards = 1
 }
+
+export interface FetchEventsParams {
+  page?: number | undefined,
+  pageSize?: number | undefined,
+  statuses?: string[],
+  userIds?: string[],
+  startDate?: Date | null | undefined,
+  endDate?: Date | null | undefined
+}

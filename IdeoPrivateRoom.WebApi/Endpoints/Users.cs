@@ -13,7 +13,10 @@ public static class Users
     {
         routes.MapGet("/api/authcheck", [Authorize(Roles = IdeoAppRole.VacationServiceAdminOrUser)] async (IUserService userService, HttpContext context) =>
         {
-            return userService.GetAll();
+            var result = await userService.GetAll();
+            return result.IsSuccess
+                ? Results.Ok(result.Value)
+                : Results.BadRequest(result.Error.Message);
         })
         .WithOpenApi();
      

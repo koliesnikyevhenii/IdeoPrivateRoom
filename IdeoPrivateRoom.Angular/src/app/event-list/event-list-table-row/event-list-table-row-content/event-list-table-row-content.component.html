@@ -43,10 +43,12 @@
               </h5>
             </td>
             <td class="text-end">
-              <button class="btn btn-outline-primary btn-sm me-2">
+              <button class="btn btn-outline-primary btn-sm me-2" (click)="updateStatus(reviewer.id, '1')">
                 Approve
               </button>
-              <button class="btn btn-outline-danger btn-sm">Decline</button>
+              <button class="btn btn-outline-danger btn-sm" (click)="updateStatus(reviewer.id, '2')">
+                Decline
+              </button>
             </td>
           </tr>
           }

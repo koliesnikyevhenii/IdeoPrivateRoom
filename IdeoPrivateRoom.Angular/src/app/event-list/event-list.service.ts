@@ -1,9 +1,9 @@
 import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { inject, Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { ApiEvent, ApiPaginatedResponse } from '../api-models/event.model';
-import { EventModel, EventStatus, ViewMode } from './event-list.models';
+import { EventModel, EventStatus, FetchEventsParams, ViewMode } from './event-list.models';
 import { mapEvent } from './event-list.mapping';
 
 @Injectable({
@@ -69,6 +69,23 @@ export class EventListService {
     );
   }
 
+  updateEventStatus(userId: string, vacationId: string, status: string) {
+    const body = {
+      userId: userId,
+      vacationId: vacationId,
+      status: status
+    };
+    return this.http.post(`${this.eventsUrl}/status`, body).pipe(
+      tap(() => {
+        this.refreshEvents('Failed to fetch events after updating event status.');
+      }),
+      catchError(() => {
+        console.log('failure');
+        return throwError(() => new Error(`Failed to update event status. EventID:${vacationId}; UserID:${userId}.`));
+      })
+    );
+  }
+
   mapColorToEventStatus(status?: number): {
     primary: string;
     secondary: string;
@@ -103,5 +120,49 @@ export class EventListService {
       next: (events) => this.events.set(events),
       error: (err) => console.error(err),
     });
+  }
+
+  fetchEventsNew(params: FetchEventsParams) {
+    const { page, pageSize, statuses, userIds, startDate, endDate } = params;
+    let queryParams = new HttpParams();
+
+    if (page != null) {
+      queryParams = queryParams.set('page', page);
+    }
+
+    if (pageSize != null) {
+      queryParams = queryParams.set('pageSize', pageSize);
+    }
+
+    if (statuses && statuses?.length > 0) {
+      queryParams = queryParams.set('statuses', statuses.join(','));
+    }
+
+    if (userIds && userIds?.length > 0) {
+      queryParams = queryParams.set('userIds', userIds.join(','));
+    }
+
+    if (startDate != null) {
+      queryParams = queryParams.set('startDate', startDate.toString());
+    }
+
+    if (endDate != null) {
+      queryParams = queryParams.set('endDate', endDate.toString());
+    }
+
+    return this.http
+      .get<ApiPaginatedResponse<ApiEvent>>(this.eventsUrl, { params: queryParams })
+      .pipe(
+        tap(() => console.log(params)),
+        map((events) => {
+          return events.data.map(mapEvent);
+        }),
+        catchError((error) => {
+          console.error(error);
+          return throwError(() => {
+            return new Error("Something went wrong during fetching events...");
+          });
+        })
+      );
   }
 }
