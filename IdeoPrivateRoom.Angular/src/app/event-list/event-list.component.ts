@@ -31,7 +31,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './event-list.component.scss',
 })
 export class EventListComponent implements OnInit {
-  private eventFiltersService = inject(EventFiltersService);
+  //private eventFiltersService = inject(EventFiltersService);
   private eventListService = inject(EventListService);
   private destroyRef = inject(DestroyRef);
 
@@ -39,7 +39,7 @@ export class EventListComponent implements OnInit {
   error = signal<string>('');
   isFetching = signal<boolean>(false);
 
-  filters = this.eventFiltersService.readonlyEventFilters;
+  filters = this.eventListService.readonlyEventFilters;
   //cards = computed(() => this.eventFiltersService.loadedEvents());
 
   cards$ = combineLatest([
@@ -63,19 +63,19 @@ export class EventListComponent implements OnInit {
   );
 
   ngOnInit() {
-    this.isFetching.set(true);
-    const sub = this.eventFiltersService.loadFilteredEvents().subscribe({
-      complete: () => {
-        this.isFetching.set(false);
-      },
-      error: (error: Error) => {
-        this.error.set(error.message);
-      },
-    });
+    // this.isFetching.set(true);
+    // const sub = this.eventFiltersService.loadFilteredEvents().subscribe({
+    //   complete: () => {
+    //     this.isFetching.set(false);
+    //   },
+    //   error: (error: Error) => {
+    //     this.error.set(error.message);
+    //   },
+    // });
 
-    this.destroyRef.onDestroy(() => {
-      sub.unsubscribe();
-    });
+    // this.destroyRef.onDestroy(() => {
+    //   sub.unsubscribe();
+    // });
   }
 
   private getDate(date: NgbDate | null | undefined) {

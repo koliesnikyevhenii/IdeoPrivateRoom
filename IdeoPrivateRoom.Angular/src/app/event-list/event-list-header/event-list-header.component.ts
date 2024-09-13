@@ -16,10 +16,10 @@ import { ViewMode } from '../event-list.models';
 export class EventListHeaderComponent {
   private modalService = inject(NgbModal);
   private offcanvasService = inject(NgbOffcanvas)
-  private eventFiltersService = inject(EventFiltersService)
+  //private eventFiltersService = inject(EventFiltersService)
   private eventListService = inject(EventListService)
 
-  activeFilters = this.eventFiltersService.readonlyEventFilters;
+  activeFilters = this.eventListService.readonlyEventFilters;
 
   viewMode = computed(() => ViewMode[this.eventListService.readonlyViewMode()])
 
@@ -32,7 +32,7 @@ export class EventListHeaderComponent {
   }
 
   onClearFilters() {
-    this.eventFiltersService.clearFilters()
+    this.eventListService.clearFilters()
   }
 
   switchCardsMode() {

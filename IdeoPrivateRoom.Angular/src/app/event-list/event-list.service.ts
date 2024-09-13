@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment';
 import { ApiEvent, ApiPaginatedResponse } from '../api-models/event.model';
 import { EventModel, EventStatus, FetchEventsParams, ViewMode } from './event-list.models';
 import { mapEvent } from './event-list.mapping';
+import { EventFilters } from './event-filters/event-filters.models';
 
 @Injectable({
   providedIn: 'root',
@@ -12,10 +13,11 @@ import { mapEvent } from './event-list.mapping';
 export class EventListService {
   private http = inject(HttpClient);
   private eventsUrl = `${environment.apiUrl}/vacations`;
-
+  private eventFilters = signal<EventFilters | null>(null);
   private events = signal<EventModel[]>([]);
 
   loadedEvents = this.events.asReadonly();
+  readonlyEventFilters = this.eventFilters.asReadonly();
 
   private currentViewMode = signal<ViewMode>(ViewMode.Table);
 
@@ -131,6 +133,14 @@ export class EventListService {
     });
   }
 
+  setEventFilters(filters: EventFilters | null) {
+    this.eventFilters.set(filters);
+  }
+
+  clearFilters() {
+    this.eventFilters.set(null);
+  }
+
   fetchEventsNew(params: FetchEventsParams) {
     const { page, pageSize, statuses, userIds, startDate, endDate } = params;
     let queryParams = new HttpParams();
@@ -164,7 +174,6 @@ export class EventListService {
         params: queryParams,
       })
       .pipe(
-        tap(() => console.log('Update works!!!')),
         map((events) => {
           return events.data.map(mapEvent);
         }),
