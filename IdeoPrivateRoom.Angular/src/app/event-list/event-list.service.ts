@@ -1,9 +1,9 @@
-import { BehaviorSubject, catchError, map, Observable, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, tap, throwError } from 'rxjs';
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { ApiEvent, ApiPaginatedResponse } from '../api-models/event.model';
-import { EventModel, EventStatus, FetchEventsParams, ViewMode } from './event-list.models';
+import { EventStatus, FetchEventsParams, ViewMode } from './event-list.models';
 import { mapEvent } from './event-list.mapping';
 import { EventFilters } from './event-filters/event-filters.models';
 
@@ -14,9 +14,7 @@ export class EventListService {
   private http = inject(HttpClient);
   private eventsUrl = `${environment.apiUrl}/vacations`;
   private eventFilters = signal<EventFilters | null>(null);
-  private events = signal<EventModel[]>([]);
-
-  loadedEvents = this.events.asReadonly();
+  
   readonlyEventFilters = this.eventFilters.asReadonly();
 
   private currentViewMode = signal<ViewMode>(ViewMode.Table);
@@ -27,12 +25,6 @@ export class EventListService {
 
   changeViewMode(mode: ViewMode) {
     this.currentViewMode.set(mode);
-  }
-
-  loadEvents() {
-    return this.fetchEvents(
-      'Something gone wrong trying to load events...'
-    ).pipe(tap((events) => this.events.set(events)));
   }
 
   createEvent(
@@ -49,7 +41,7 @@ export class EventListService {
 
     return this.http.post(this.eventsUrl, eventPayload).pipe(
       tap(() => {
-        this.refreshEvents('Failed to fetch events after adding one.');
+        this.refetchTrigger$.next();
       }),
       catchError(() => {
         console.log('failure');
@@ -59,15 +51,11 @@ export class EventListService {
   }
 
   deleteEvent(eventId: string) {
-    const prevEvents = this.events();
-
-    if (prevEvents.some((event) => event.id === eventId)) {
-      this.events.set(prevEvents.filter((event) => event.id !== eventId));
-    }
-
     return this.http.delete(`${this.eventsUrl}/${eventId}`).pipe(
+      tap(() => {
+        this.refetchTrigger$.next();
+      }),
       catchError(() => {
-        this.events.set(prevEvents);
         return throwError(() => new Error('Failed to delete an event.'));
       })
     );
@@ -79,14 +67,12 @@ export class EventListService {
       vacationId: vacationId,
       status: status,
     };
+
     return this.http.post(`${this.eventsUrl}/status`, body).pipe(
       tap(() => {
-        this.refreshEvents(
-          'Failed to fetch events after updating event status.'
-        );
+        this.refetchTrigger$.next();
       }),
       catchError(() => {
-        console.log('failure');
         return throwError(
           () =>
             new Error(
@@ -112,27 +98,6 @@ export class EventListService {
     );
   }
 
-  fetchEvents(errorMessage: string): Observable<EventModel[]> {
-    return this.http.get<ApiPaginatedResponse<ApiEvent>>(this.eventsUrl).pipe(
-      map((events) => {
-        return events.data.map(mapEvent);
-      }),
-      catchError((error) => {
-        console.error(error);
-        return throwError(() => {
-          return new Error(errorMessage);
-        });
-      })
-    );
-  }
-
-  private refreshEvents(errorMessage: string): void {
-    this.fetchEvents(errorMessage).subscribe({
-      next: (events) => this.events.set(events),
-      error: (err) => console.error(err),
-    });
-  }
-
   setEventFilters(filters: EventFilters | null) {
     this.eventFilters.set(filters);
   }
@@ -141,7 +106,7 @@ export class EventListService {
     this.eventFilters.set(null);
   }
 
-  fetchEventsNew(params: FetchEventsParams) {
+  fetchEvents(params: FetchEventsParams) {
     const { page, pageSize, statuses, userIds, startDate, endDate } = params;
     let queryParams = new HttpParams();
 

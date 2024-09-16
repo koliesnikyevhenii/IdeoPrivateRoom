@@ -16,7 +16,6 @@ import {
 import { RangeDatepickerComponent } from '../../../shared/range-datepicker/range-datepicker.component';
 import { RangeDatepickerModel } from '../../../shared/range-datepicker/range-datepicker.model';
 import { EventStatus } from '../../event-list.models';
-import { EventFiltersService } from '../event-filters.service';
 import { EventListService } from '../../event-list.service';
 
 @Component({
@@ -34,7 +33,6 @@ import { EventListService } from '../../event-list.service';
 export class EventFiltersFormComponent implements OnInit {
   private userService = inject(UserService);
   private offCanvasService = inject(NgbActiveOffcanvas);
-  private eventFiltersService = inject(EventFiltersService);
   private eventListService = inject(EventListService);
   private destroyRef = inject(DestroyRef);
 

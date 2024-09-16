@@ -26,7 +26,6 @@ import { DatePipe } from '@angular/common';
 import { UserService } from '../../../user/user.service';
 import { EventListService } from '../../event-list.service';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { EventFiltersService } from '../../event-filters/event-filters.service';
 
 @Component({
   selector: 'app-add-event-form',
@@ -45,7 +44,6 @@ export class AddEventFormComponent implements OnInit {
   private modalService = inject(NgbActiveModal);
   private userService = inject(UserService);
   private eventListService = inject(EventListService);
-  private eventFiltersService = inject(EventFiltersService);
   private destroyRef = inject(DestroyRef);
 
   isFetching = signal<boolean>(false);
@@ -142,7 +140,7 @@ export class AddEventFormComponent implements OnInit {
         .createEvent(userData[0].id, startDate, endDate, comment)
         .subscribe({
           complete: () =>
-            this.eventFiltersService.loadFilteredEvents().subscribe(),
+            this.eventListService.refetchTrigger$.next(),
           error: (error: Error) => {
             this.error.set(error.message);
           },

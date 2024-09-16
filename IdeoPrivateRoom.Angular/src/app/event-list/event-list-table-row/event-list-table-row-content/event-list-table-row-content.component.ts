@@ -3,7 +3,6 @@ import { EventModel, EventStatus } from '../../event-list.models';
 import { DatePipe } from '@angular/common';
 import { EventListTableRowService } from '../event-list-table-row.service';
 import { EventListService } from '../../event-list.service';
-import { EventFiltersService } from '../../event-filters/event-filters.service';
 
 @Component({
   selector: 'app-event-list-table-row-content',
@@ -15,7 +14,6 @@ import { EventFiltersService } from '../../event-filters/event-filters.service';
 export class EventListTableRowContentComponent {
   eventListTableRowService = inject(EventListTableRowService);
   eventListService = inject(EventListService);
-  eventFiltersService = inject(EventFiltersService);
 
   card = input.required<EventModel>();
 
@@ -29,7 +27,7 @@ export class EventListTableRowContentComponent {
   
   updateStatus(userId: string, status: string): void {
     const eventId = this.card().id
-    this.eventListService.updateEventStatus(userId, eventId, status).subscribe(res => {
+    this.eventListService.updateEventStatus(userId, eventId, status).subscribe(() => {
       this.eventListService.refetchTrigger$.next();
     });
   }
