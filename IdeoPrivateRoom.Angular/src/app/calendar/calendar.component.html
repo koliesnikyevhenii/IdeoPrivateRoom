@@ -4,10 +4,11 @@
 
 <main>
   <div [ngSwitch]="view">
-    <mwl-calendar-month-view
+    @if (events$ | async; as events) {
+      <mwl-calendar-month-view
       *ngSwitchCase="'month'"
       [viewDate]="viewDate"
-      [events]="events()"
+      [events]="events"
       [activeDayIsOpen]="false"
       [refresh]="refresh"
       (eventTimesChanged)="eventTimesChanged($event)"
@@ -16,7 +17,7 @@
     <mwl-calendar-week-view
       *ngSwitchCase="'week'"
       [viewDate]="viewDate"
-      [events]="events()"
+      [events]="events"
       [refresh]="refresh"
       (eventTimesChanged)="eventTimesChanged($event)"
     >
@@ -24,10 +25,11 @@
     <mwl-calendar-day-view
       *ngSwitchCase="'day'"
       [viewDate]="viewDate"
-      [events]="events()"
+      [events]="events"
       [refresh]="refresh"
       (eventTimesChanged)="eventTimesChanged($event)"
     >
     </mwl-calendar-day-view>
+    }
   </div>
 </main>

@@ -11,7 +11,6 @@ import { EventModel, EventStatus } from '../event-list.models';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmModalComponent } from '../../shared/confirm-modal/confirm-modal.component';
 import { EventListService } from '../event-list.service';
-import { EventFiltersService } from '../event-filters/event-filters.service';
 
 @Component({
   selector: 'app-event-card',
@@ -23,7 +22,6 @@ import { EventFiltersService } from '../event-filters/event-filters.service';
 export class EventCardComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private eventListService = inject(EventListService);
-  private eventFiltersService = inject(EventFiltersService);
   private modalService = inject(NgbModal);
 
   card = input.required<EventModel>();
@@ -63,7 +61,7 @@ export class EventCardComponent implements OnInit {
         if (result === true) {
           this.eventListService.deleteEvent(this.card().id).subscribe({
             complete: () =>
-              this.eventFiltersService.loadFilteredEvents().subscribe(),
+              this.eventListService.refetchTrigger$.next(),
             error: (error: Error) => {
               console.log(error.message);
             },

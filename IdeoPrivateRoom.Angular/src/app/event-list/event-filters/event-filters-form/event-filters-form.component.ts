@@ -16,7 +16,7 @@ import {
 import { RangeDatepickerComponent } from '../../../shared/range-datepicker/range-datepicker.component';
 import { RangeDatepickerModel } from '../../../shared/range-datepicker/range-datepicker.model';
 import { EventStatus } from '../../event-list.models';
-import { EventFiltersService } from '../event-filters.service';
+import { EventListService } from '../../event-list.service';
 
 @Component({
   selector: 'app-event-filters-form',
@@ -33,7 +33,7 @@ import { EventFiltersService } from '../event-filters.service';
 export class EventFiltersFormComponent implements OnInit {
   private userService = inject(UserService);
   private offCanvasService = inject(NgbActiveOffcanvas);
-  private eventFiltersService = inject(EventFiltersService);
+  private eventListService = inject(EventListService);
   private destroyRef = inject(DestroyRef);
 
   isFetching = signal<boolean>(false);
@@ -64,7 +64,7 @@ export class EventFiltersFormComponent implements OnInit {
   employees = computed(() => this.userService.allUsers());
   // Outputs a list of status keys without values
   statuses = Object.keys(EventStatus).filter((key) => isNaN(Number(key)));
-  activeFilters = this.eventFiltersService.readonlyEventFilters;
+  activeFilters = this.eventListService.readonlyEventFilters;
 
   form = new FormGroup({
     employee: new FormControl<{ id: string; name: string }[] | undefined>(
@@ -88,7 +88,7 @@ export class EventFiltersFormComponent implements OnInit {
     const status = this.form.controls.status.value;
     const dates = this.form.controls.dates.value;
 
-    this.eventFiltersService.setEventFilters({
+    this.eventListService.setEventFilters({
       employee: employee,
       status: status,
       dates: dates,

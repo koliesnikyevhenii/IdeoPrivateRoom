@@ -2,7 +2,6 @@ import { Component, computed, inject, output } from '@angular/core';
 import { NgbDropdownModule, NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { AddEventComponent } from '../add-event/add-event.component';
 import { EventFiltersComponent } from '../event-filters/event-filters.component';
-import { EventFiltersService } from '../event-filters/event-filters.service';
 import { EventListService } from '../event-list.service';
 import { ViewMode } from '../event-list.models';
 
@@ -16,10 +15,9 @@ import { ViewMode } from '../event-list.models';
 export class EventListHeaderComponent {
   private modalService = inject(NgbModal);
   private offcanvasService = inject(NgbOffcanvas)
-  private eventFiltersService = inject(EventFiltersService)
   private eventListService = inject(EventListService)
 
-  activeFilters = this.eventFiltersService.readonlyEventFilters;
+  activeFilters = this.eventListService.readonlyEventFilters;
 
   viewMode = computed(() => ViewMode[this.eventListService.readonlyViewMode()])
 
@@ -32,7 +30,7 @@ export class EventListHeaderComponent {
   }
 
   onClearFilters() {
-    this.eventFiltersService.clearFilters()
+    this.eventListService.clearFilters()
   }
 
   switchCardsMode() {
