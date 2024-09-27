@@ -11,8 +11,8 @@ import { EventListHeaderComponent } from './event-list-header/event-list-header.
 import { EventListTableRowComponent } from './event-list-table-row/event-list-table-row.component';
 import { EventListService } from './event-list.service';
 import { EventStatus, ViewMode } from './event-list.models';
-import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
-import { combineLatest, finalize, startWith, switchMap, tap } from 'rxjs';
+import { NgbDate, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { catchError, combineLatest, finalize, of, startWith, switchMap, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-event-list',
@@ -22,6 +22,7 @@ import { CommonModule } from '@angular/common';
     EventListHeaderComponent,
     EventListTableRowComponent,
     CommonModule,
+    NgbPaginationModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './event-list.component.html',
@@ -36,23 +37,17 @@ export class EventListComponent {
   isStatusUpdating = signal<boolean>(false);
 
   filters = this.eventListService.readonlyEventFilters;
-  //cards = computed(() => this.eventFiltersService.loadedEvents());
+  page = this.eventListService.page;
 
-  cards$ = combineLatest([
-    toObservable(this.filters),
-    this.eventListService.refetchTrigger$.pipe(startWith(null)),
+  paginatedEvents$ = combineLatest([
+    toObservable(this.page),
+    toObservable(this.filters).pipe(tap(() => this.isFetching.set(true))),
+    this.eventListService.refetchTrigger$
   ]).pipe(
-    switchMap(([filter, refetch]) => {
-      const isFilterChanged = refetch === null;
-
-      if (isFilterChanged) {
-        this.isFetching.set(true);
-      } else {
-        this.isStatusUpdating.set(true);
-      }
-
+    switchMap(([page, filter]) => {
       return this.eventListService
         .fetchEvents({
+          page: page,
           userIds: filter?.employee?.map((i) => i.id) ?? [],
           statuses:
             filter?.status?.map((i) =>
@@ -63,12 +58,9 @@ export class EventListComponent {
         })
         .pipe(
           finalize(() => {
-            if (isFilterChanged) {
-              this.isFetching.set(false);
-            } else {
-              this.isStatusUpdating.set(false);
-            }
-          }));
+            this.isFetching.set(false);
+          })
+        );
     })
   );
 
