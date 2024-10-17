@@ -14,7 +14,8 @@ export class EventListService {
   private http = inject(HttpClient);
   private eventsUrl = `${environment.apiUrl}/vacations`;
   private eventFilters = signal<EventFilters | null>(null);
-  
+  page = signal<number>(1);
+
   readonlyEventFilters = this.eventFilters.asReadonly();
 
   private currentViewMode = signal<ViewMode>(ViewMode.Table);
@@ -99,6 +100,7 @@ export class EventListService {
   }
 
   setEventFilters(filters: EventFilters | null) {
+    this.page.set(1);
     this.eventFilters.set(filters);
   }
 
@@ -139,8 +141,11 @@ export class EventListService {
         params: queryParams,
       })
       .pipe(
-        map((events) => {
-          return events.data.map(mapEvent);
+        map((response) => {
+          return {
+            ...response,
+            data: response.data.map(mapEvent),
+          };
         }),
         catchError((error) => {
           console.error(error);

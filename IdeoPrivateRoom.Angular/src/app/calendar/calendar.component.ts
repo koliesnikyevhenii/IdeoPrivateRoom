@@ -38,8 +38,8 @@ export class CalendarComponent {
     tap(() => this.isFetching.set(true)),
     switchMap(() => {
       return this.eventListService.fetchEvents({}).pipe(
-        map((events) => {
-          return events.map(
+        map((pagedEvents) => {
+          return pagedEvents.data.map(
             (event) =>
               <CalendarEvent>{
                 id: event.id,

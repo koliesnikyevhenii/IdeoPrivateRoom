@@ -1,6 +1,6 @@
 <app-event-list-header />
-@if (cards$ | async; as cards) {
-  @defer () { @if(viewMode() === 'Table' && cards.length > 0) {
+@if (paginatedEvents$ | async; as paginatedEvents) {
+  @defer () { @if(viewMode() === 'Table' && paginatedEvents.data.length > 0) {
     <table class="table container">
       <thead class="row">
         <tr class="row ps-0 pe-4">
@@ -13,19 +13,25 @@
       </thead>
       <tbody>
         @if (!isFetching()){
-          @for(card of cards; track card.id) {
-          <app-event-list-table-row class="row" [card]="card" />
+          @for(card of paginatedEvents.data; track card.id) {
+            <app-event-list-table-row class="row" [card]="card" />
           }
+          <ngb-pagination 
+            class="d-flex justify-content-center"
+            [(page)]="page"
+            [collectionSize]="paginatedEvents.totalRecords"
+            [pageSize]="paginatedEvents.pageSize">
+          </ngb-pagination>
         } @else {
-          <div class="d-flex justify-content-center align-items-center">
-            <span class="loader align-self-center"></span>
-          </div>
+            <div class="d-flex justify-content-center align-items-center">
+              <span class="loader align-self-center"></span>
+            </div>
         }
       </tbody>
     </table>
-    } @else if(viewMode() === 'Cards' && cards.length > 0) {
+    } @else if(viewMode() === 'Cards' && paginatedEvents.data.length > 0) {
     <div class="container mt-5 d-flex justify-content-start flex-wrap">
-      @for(card of cards; track card.id) {
+      @for(card of paginatedEvents.data; track card.id) {
       <app-event-card [card]="card" />
       }
     </div>
